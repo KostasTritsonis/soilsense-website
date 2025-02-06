@@ -1,0 +1,19 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model Polygon {
+  id          String   @id  // Unique ID
+  color       String                     // Polygon color (hex code)
+  area        Float?                      // Polygon area (optional)
+  label       String?                      // Polygon label (optional)
+  coordinates Json                         // Polygon coordinates (as JSON)
+}
