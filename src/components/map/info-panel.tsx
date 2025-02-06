@@ -1,13 +1,12 @@
 type InfoPanelProps = {
   lng: number;
   lat: number;
-  zoom: number;
   polygonArea: number | null;
   selectedColor: string;
   onColorChange: (color: string) => void;
 };
   
-  export default function InfoPanel({ lng, lat, zoom, polygonArea, selectedColor, onColorChange }: InfoPanelProps) {
+  export default function InfoPanel({ lng, lat, polygonArea, selectedColor, onColorChange }: InfoPanelProps) {
     return (
       <div className="bg-zinc-950/90 sm:text-[14px] text-[11px] text-zinc-50 p-3 text-sm rounded-lg absolute sm:bottom-4 sm:left-4 md:bottom-10 md:left-10 z-10">
         <div>Longitude: {lng}</div>

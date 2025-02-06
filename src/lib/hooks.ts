@@ -339,7 +339,6 @@ export const useMapSetup = () => {
 
       // Update the polygons state
       setPolygons((prev) => prev.filter((p) => !deletedIds.includes(p.id)));
-      setPolygonArea((prev) => prev && polygonArea ? polygonArea - prev : null);
     });
 
     return () => {
@@ -357,7 +356,6 @@ export const useMapSetup = () => {
     drawRef,
     lng,
     lat,
-    zoom,
     polygonArea,
     selectedColor,
     setPolygons,

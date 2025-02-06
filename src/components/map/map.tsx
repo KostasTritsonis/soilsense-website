@@ -18,7 +18,6 @@ export default function MapComponent() {
     drawRef,
     lng,
     lat,
-    zoom,
     polygonArea,
     selectedColor,
     setPolygons,
@@ -135,7 +134,6 @@ export default function MapComponent() {
       <InfoPanel
         lng={lng}
         lat={lat}
-        zoom={zoom}
         polygonArea={polygonArea}
         selectedColor={selectedColor}
         onColorChange={setSelectedColor}
