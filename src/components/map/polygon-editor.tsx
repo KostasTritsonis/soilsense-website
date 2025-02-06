@@ -1,5 +1,4 @@
 'use client';
-import { useEffect, useState } from "react";
 import { Polygon } from "@/lib/types";
 
 type PolygonEditorProps = {

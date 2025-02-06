@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { Polygon } from '@/lib/types';
 
 type PolygonListProps = {

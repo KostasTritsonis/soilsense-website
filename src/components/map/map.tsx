@@ -1,5 +1,5 @@
 'use client';
-import React, { useState } from 'react';
+import { useState } from 'react';
 import LoadingSpinner from './loading-spinner';
 import { useMapHandlers, useMapSetup } from '@/lib/hooks';
 import InfoPanel from './info-panel';
