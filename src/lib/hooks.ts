@@ -290,22 +290,30 @@ export const useMapSetup = () => {
       toast.success('Polygon created successfully!');
     });
 
-    mapRef.current.on('draw.update', (e: { features: GeoJSON.Feature[] }) => {
+    mapRef.current.on("draw.update", (e: { features: GeoJSON.Feature[] }) => {
       e.features.forEach((feature) => {
         const polygonId = feature.id as string;
         const updatedCoordinates = (feature.geometry as GeoJSON.Polygon).coordinates;
     
-        // Find the polygon in state to get the correct color
-        setPolygons((prevPolygons) => {
-          return prevPolygons.map((polygon) => {
-            if (polygon.id === polygonId) {
-              // Update the coordinates and area
-              const newArea = area(feature);
-              return { ...polygon, coordinates: updatedCoordinates, area: newArea };
-            }
-            return polygon;
-          });
-        });
+        // ✅ Keep the original color and update only the shape and area
+        setPolygons((prevPolygons) =>
+          prevPolygons.map((polygon) =>
+            polygon.id === polygonId
+              ? { ...polygon, coordinates: updatedCoordinates, area: area(feature) } // Preserve color
+              : polygon
+          )
+        );
+    
+        // ✅ Update the polygon fill in real-time
+        if (mapRef.current?.getSource(polygonId)) {
+          (mapRef.current.getSource(polygonId) as mapboxgl.GeoJSONSource).setData(feature);
+        }
+    
+        // ✅ Update the polygon border in real-time
+        const borderLayerId = `${polygonId}-border`;
+        if (mapRef.current?.getSource(borderLayerId)) {
+          (mapRef.current.getSource(borderLayerId) as mapboxgl.GeoJSONSource).setData(feature);
+        }
       });
     });
 
@@ -315,27 +323,13 @@ export const useMapSetup = () => {
 
       // Remove the custom layer for each deleted polygon
       deletedIds.forEach((id) => {
-        if (mapRef.current?.getLayer(id)) {
-          mapRef.current.removeLayer(id);
-        }
-        if (mapRef.current?.getSource(id)) {
-          mapRef.current.removeSource(id);
-        }
-        const labelLayerId = `${id}-label`;
-        if (mapRef.current?.getLayer(labelLayerId)) {
-          mapRef.current.removeLayer(labelLayerId);
-        }
-        if (mapRef.current?.getSource(labelLayerId)) {
-          mapRef.current.removeSource(labelLayerId);
-        }
-        const borderLayerId = `${id}-border`;
-        if (mapRef.current?.getLayer(borderLayerId)) {
-          mapRef.current.removeLayer(borderLayerId);
-        }
-        if (mapRef.current?.getSource(borderLayerId)) {
-          mapRef.current.removeSource(borderLayerId);
-        }
-      });
+        mapRef.current?.removeLayer(id);
+        mapRef.current?.removeSource(id);
+        mapRef.current?.removeLayer(`${id}-label`);
+        mapRef.current?.removeSource(`${id}-label`);
+        mapRef.current?.removeLayer(`${id}-border`);
+        mapRef.current?.removeSource(`${id}-border`);
+        });
 
       // Update the polygons state
       setPolygons((prev) => prev.filter((p) => !deletedIds.includes(p.id)));
