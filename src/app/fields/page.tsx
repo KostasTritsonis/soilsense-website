@@ -3,7 +3,7 @@ import React from 'react'
 
 export default function Page() {
   return (
-    <main className='mt-10 flex justify-center '>
+    <main className='mt-10 flex justify-center max-h-screen'>
       <MapComponent />
     </main>
   )

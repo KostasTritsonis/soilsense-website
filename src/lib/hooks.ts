@@ -1,359 +1,350 @@
 'use client';
-import { useState, useRef,useEffect  } from 'react';
+import { useState } from 'react';
 import { toast } from 'react-toastify';
-import { createPolygon, getPolygons } from '@/actions/actions';
-import { area } from '@turf/turf';
-import type { Polygon } from './types';
-import mapboxgl from 'mapbox-gl';
+import type { Category, Field } from '@/lib/types';
 import MapboxDraw from '@mapbox/mapbox-gl-draw';
+import "mapbox-gl/dist/mapbox-gl.css";
 import '@mapbox/mapbox-gl-draw/dist/mapbox-gl-draw.css';
-
-mapboxgl.accessToken = process.env.NEXT_PUBLIC_MAPBOX_ACCESS_TOKEN as string;
-
+import { createField, getFieldById, getFieldsByUser, updateField } from '@/actions';
+import { useFields } from '@/context/fields-context';
 
 type handlerProps = {
   mapRef: React.RefObject<mapboxgl.Map | null>;
   drawRef: React.RefObject<MapboxDraw | null>;
-  polygons: Polygon[];
-  setPolygons: React.Dispatch<React.SetStateAction<Polygon[]>>;
 };
 
-export const useMapHandlers = ({mapRef, drawRef,polygons,setPolygons}: handlerProps) => {
+export const useMapHandlers = ({mapRef, drawRef}: handlerProps) => {
   const [isLoading, setIsLoading] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [totalArea, setTotalArea] = useState<number>(0);
+
+  const { fields,setFields } = useFields();
+
+  const addLayers = (id:string,label:string,coordinates:number[][][],categories:Category[]) => {
+    let lng = 0;
+    let lat = 0;
+    coordinates[0].forEach((point) => {
+      lng += point[0];
+      lat += point[1];
+    });
+
+    const center = [lng / coordinates[0].length, lat / coordinates[0].length];
+
+    const iconImage = `${categories?.[0].type}-icon`;
+
+    if (!mapRef.current) return;
+
+    mapRef.current.addLayer({
+      id: `${id}-icon`,
+      type: "symbol",
+      source: {
+        type: "geojson",
+        data: {
+          type: "Feature",
+          geometry: { type: "Point", coordinates: center },
+          properties: { icon: iconImage },
+        },
+      },
+      layout: {
+        "icon-image": iconImage,
+        "icon-size": 0.7,
+        "icon-offset": [-20, 0],
+        "icon-allow-overlap": true,
+      },
+    });
+
+    mapRef.current.addLayer({
+      id: `${id}-label`,
+      type: 'symbol',
+      source: {
+        type: 'geojson',
+        data: {
+          type: 'Feature',
+          geometry: { type: 'Point', coordinates: center },
+          properties: { label: label },
+        },
+      },
+      layout: {
+        'text-field': label,
+        'text-size': 14,
+        "text-offset": [1, 0],
+        "text-anchor": "left",
+        "text-allow-overlap": true,
+        
+      },
+      paint: {
+        'text-color': '#ffffff',
+        'text-halo-color': '#000000',
+        'text-halo-width': 1.5,
+      },
+    });
+  }
 
   const handleReset = () => {
-      if (polygons.length > 0 && !window.confirm('Are you sure you want to reset the map? All unsaved changes will be lost.')) {
-        return;
-      }
-  
-      if (drawRef.current && mapRef.current) {
-        drawRef.current.deleteAll();
-  
-        polygons.map((polygon) => {
-          if (mapRef.current?.getLayer(polygon.id)) {
-            mapRef.current.removeLayer(polygon.id);
-          }
-          if (mapRef.current?.getSource(polygon.id)) {
-            mapRef.current.removeSource(polygon.id);
-          }
-          const labelLayerId = `${polygon.id}-label`;
-          if (mapRef.current?.getLayer(labelLayerId)) {
-            mapRef.current.removeLayer(labelLayerId);
-          }
-          if (mapRef.current?.getSource(labelLayerId)) {
-            mapRef.current.removeSource(labelLayerId);
-          }
-          const borderLayerId = `${polygon.id}-border`;
-          if (mapRef.current?.getLayer(borderLayerId)) {
-            mapRef.current.removeLayer(borderLayerId);
-          }
-          if (mapRef.current?.getSource(borderLayerId)) {
-            mapRef.current.removeSource(borderLayerId);
-          }
-        });
-  
-        setPolygons([]);
-        toast.info('Map reset successfully!');
-      }
-    };
+    if (drawRef.current && mapRef.current) {
+      drawRef.current.deleteAll();
+
+      fields.map((fields) => {
+        if (mapRef.current?.getLayer(fields.id)) {
+          mapRef.current.removeLayer(fields.id);
+        }
+        const labelLayerId = `${fields.id}-label`;
+        if (mapRef.current?.getLayer(labelLayerId)) {
+          mapRef.current.removeLayer(labelLayerId);
+        }
+        
+        const borderLayerId = `${fields.id}-border`;
+        if (mapRef.current?.getLayer(borderLayerId)) {
+          mapRef.current.removeLayer(borderLayerId);
+        }
+        const iconLayerId = `${fields.id}-icon`;
+        if (mapRef.current?.getLayer(iconLayerId)) {
+          mapRef.current.removeLayer(iconLayerId);
+        }
+        
+      });
+
+      fields.map((fields) => {
+        if (mapRef.current?.getSource(fields.id)) {
+          mapRef.current.removeSource(fields.id);
+        }
+        const labelLayerId = `${fields.id}-label`;
+        if (mapRef.current?.getSource(labelLayerId)) {
+          mapRef.current.removeSource(labelLayerId);
+        }
+        const borderLayerId = `${fields.id}-border`;
+        if (mapRef.current?.getSource(borderLayerId)) {
+          mapRef.current.removeSource(borderLayerId);
+        }
+        const iconLayerId = `${fields.id}-icon`;
+        if (mapRef.current?.getSource(iconLayerId)) {
+          mapRef.current.removeSource(iconLayerId);
+        }
+      });
+
+      setFields([]);
+      setTotalArea(0);
+      toast.info('Map reset successfully!');
+    }
+  };
 
   const handleSave = async () => {
+    
     try {
       setIsSaving(true);
-      const results = await Promise.all(polygons.map((polygon) => createPolygon(polygon)));
-      const failed = results.filter((res) => !res.success);
+      const results = await Promise.all(fields.map(async(field)  => {
+        const existingPolygon = await getFieldById(field.id);
+        if (existingPolygon === null) {
+          return await createField(field);
+        }
+      }));
+      const failed = results.filter((res) => !res?.success);
+
+      const validFields = fields.filter(field => 
+        field && field.id && field.coordinates && field.color
+      );
+      if (validFields.length === 0) {
+        throw new Error('No valid fields to save');
+      }
 
       if (failed.length > 0) {
-        throw new Error(`Failed to save ${failed.length} polygons.`);
+        throw new Error(`Failed to save ${failed.length} fields.`);
       }
-      toast.success('All polygons saved successfully!');
+      toast.success('All fields saved successfully!');
     } catch (error) {
-      setError(error instanceof Error ? error.message : 'Failed to save polygons.');
+      setError(error instanceof Error ? error.message : 'Failed to save fields.');
     } finally {
       setIsSaving(false);
     }
   };
 
-  const loadPolygons = async () => {
+  const handleLoad = async () => {
     try {
       setIsLoading(true);
-      const dbPolygons = await getPolygons();
-
-      if (!dbPolygons || dbPolygons.length === 0) {
-        toast.info('No polygons found in database.');
+      const dbFields = await getFieldsByUser();
+  
+      if (!dbFields) {
+        toast.info("No fields found in database.");
         return;
       }
-
-      // Clear existing polygons before loading new ones
+  
       handleReset();
-      setPolygons(dbPolygons);
-
-      dbPolygons.forEach(({ id, color, coordinates, label }) => {
-        let lng = 0;
-        let lat = 0;
-
-        coordinates[0].forEach((point) => {
-          lng += point[0];
-          lat += point[1];
-        });
-        const center = [lng / coordinates[0].length, lat / coordinates[0].length];
-
+      setFields(dbFields);
+  
+      dbFields.forEach(({ id, color, coordinates, label, area, categories }) => {
+        if (drawRef.current) {
+          drawRef.current.add({
+            id,
+            type: "Feature",
+            properties: {},
+            geometry: { type: "Polygon", coordinates },
+          });
+        }
+  
         if (!mapRef.current) return;
 
-        if (mapRef.current.getSource(id)) return;
-
-        mapRef.current.addSource(id, {
-            type: 'geojson',
+        setTotalArea((prev) => (prev + area));
+  
+        if (!mapRef.current.getSource(id)) {
+          mapRef.current.addSource(id, {
+            type: "geojson",
             data: {
-              type: 'Feature',
-              geometry: { type: 'Polygon', coordinates },
+              type: "Feature",
+              geometry: { type: "Polygon", coordinates },
               properties: { color },
             },
-        });
-
-        mapRef.current.addLayer({
+          });
+  
+          mapRef.current.addLayer({
             id,
-            type: 'fill',
+            type: "fill",
             source: id,
-            paint: {
-              'fill-color': color,
-              'fill-opacity': 0.5,
-            },
-        });
-
-        mapRef.current.addLayer({
-            id: `${id}-label`,
-            type: 'symbol',
-            source: {
-              type: 'geojson',
-              data: {
-                  type: 'Feature',
-                  geometry: { type: 'Point', coordinates: center },
-                  properties: { label },
-              },
-            },
-            layout: {
-              'text-field': label || 'Unnamed',
-              'text-size': 14,
-              'text-anchor': 'center',
-            },
-            paint: {
-              'text-color': '#ffffff',
-              'text-halo-color': '#000000',
-              'text-halo-width': 1.5,
-            },
-        });
-
-        // Add the border layer
-        mapRef.current.addLayer({
-          id: `${id}-border`,
-          type: "line",
-          source: id,
-          paint: {
-            "line-color": color,
-            "line-width": 2, // Border thickness
-          },
-        });
+            paint: { "fill-color": color, "fill-opacity": 0.5 },
+          });
+  
+          // Add icon next to label
+          addLayers(id,label,coordinates,categories);
+  
+          mapRef.current.addLayer({
+            id: `${id}-border`,
+            type: "line",
+            source: id,
+            paint: { "line-color": color, "line-width": 2 },
+          });
+        }
       });
-      toast.success('Polygons loaded successfully!');
+      toast.success("Fields loaded successfully!");
     } catch (error) {
-        setError(error instanceof Error ? error.message : 'Failed to load polygons.');
+      setError(error instanceof Error ? error.message : "Failed to load fields.");
     } finally {
-        setIsLoading(false);
+      setIsLoading(false);
     }
   };
+
+  const handleFieldUpdate = async (id: string, updates: Partial<Field>) => {
+    try {
+      if (!id || !updates || Object.keys(updates).length === 0) {
+        throw new Error('Invalid update data');
+      }
+      setFields(currentFields => 
+        currentFields.map(field => 
+          field.id === id ? { ...field, isUpdating: true } : field
+        )
+      );
+      setFields(currentFields => {
+        const newFields = currentFields.map(field => 
+          field.id === id ? { ...field, ...updates, isUpdating: false } : field
+        );
+        
+        // Update map visualization
+        if (mapRef.current) {
+          // Update color if changed
+          if (updates.color && mapRef.current.getLayer(id)) {
+            mapRef.current.setPaintProperty(id, 'fill-color', updates.color);
+
+            const borderLayerId = `${id}-border`;
+            if (mapRef.current.getLayer(borderLayerId)) {
+              mapRef.current.setPaintProperty(borderLayerId, "line-color", updates.color);
+            }
+          }
+  
+          // Update label if changed
+          if (updates.label) {
+            const labelLayerId = `${id}-label`;
+            if (mapRef.current.getLayer(labelLayerId)) {
+              mapRef.current.setLayoutProperty(
+                labelLayerId,
+                'text-field',
+                updates.label
+              );
+            }
+          }
+        }
+        return newFields;
+      });
+    } catch (error) {
+      console.error('Error updating field:', error);
+    
+      // Revert changes in case of error
+      setFields(currentFields => 
+        currentFields.map(field => 
+          field.id === id ? { ...field, isUpdating: false } : field
+        )
+      );
+    
+      toast.error('Failed to update field. Please try again.');
+    }
+  };
+
+  const handleFieldChanges = async (field: Field,updates: Partial<Field>) => {
+    try {
+        // Show loading state for the specific field being updated
+      setFields(currentPolygons => 
+        currentPolygons.map(p => 
+          p.id === field.id ? { ...p, isUpdating: true } : p
+        )
+      );
+      const existingPolygon = await getFieldById(field.id);  
+  
+      let result;
+      if (existingPolygon === null) {
+          // Create a new field
+        if (!field.id || !field.coordinates || !field.color) {
+          throw new Error('Invalid field data');
+        }
+        result = await createField(field);
+      }else{
+        if (!updates || Object.keys(updates).length === 0) {
+          throw new Error('No updates provided');
+        }
+        result = await updateField(field.id, updates);
+      }
+      
+      if (!result?.success) {
+        throw new Error("Failed to save field to database");
+      }  
+    } catch (error) {
+      console.error("Error saving field:", error);
+      toast.error("Failed to save field.");
+    }finally{
+      setFields(currentPolygons => 
+        currentPolygons.map(p => 
+          p.id === field.id ? { ...p, isUpdating: false } : p
+        )
+      );
+    }
+  };
+
+  const handleCategorySelect = (categoryType: string, label:string) => {
+
+    fields[fields.length-1].label = label;
+    fields[fields.length-1].categories = [{type:categoryType}];
+
+    // Create the new field with the category
+    const newField = {
+      ...fields[fields.length-1],
+      categories: [{type:categoryType}],
+      label: label
+    };
+
+    // Add the label to the map if it exists
+    addLayers(newField.id,newField.label,newField.coordinates,newField.categories);
+
+      
+    
+  };
+
   return {
     isLoading,
     isSaving,
     error,
+    totalArea,
     handleReset,
     handleSave,
-    loadPolygons
+    handleLoad,
+    handleFieldUpdate,
+    handleFieldChanges,
+    handleCategorySelect
   };
 };
-
-
-
-export const useMapSetup = () => {
-  const mapContainer = useRef<HTMLDivElement | null>(null);
-  const mapRef = useRef<mapboxgl.Map | null>(null);
-  const drawRef = useRef<MapboxDraw | null>(null);
-  const [lng, setLng] = useState<number>(24.0036);
-  const [lat, setLat] = useState<number>(38.4504);
-  const [zoom, setZoom] = useState<number>(17.86);
-  const [polygons, setPolygons] = useState<Polygon[]>([]);
-  const [selectedColor, setSelectedColor] = useState<string>('#FF0000');
-  const [polygonArea, setPolygonArea] = useState<number | null>(null);
- 
-
-  const selectedColorRef = useRef<string>(selectedColor);
-  
-    // Update the ref whenever selectedColor changes
-  useEffect(() => {
-    selectedColorRef.current = selectedColor;
-  }, [selectedColor]);
-
-  useEffect(() => {
-    if (mapRef.current || !mapContainer.current) return;
-
-    mapRef.current = new mapboxgl.Map({
-      container: mapContainer.current,
-      style: 'mapbox://styles/mapbox/satellite-streets-v12',
-      center: [lng, lat],
-      zoom: zoom,
-      attributionControl: false,
-    });
-
-    drawRef.current = new MapboxDraw({
-      displayControlsDefault: false,
-      controls: {
-        polygon: true,
-        trash: true,
-      },
-    });
-
-    mapRef.current.addControl(drawRef.current);
-
-    mapRef.current.on('move', () => {
-      if (!mapRef.current) return;
-      setLng(parseFloat(mapRef.current.getCenter().lng.toFixed(4)));
-      setLat(parseFloat(mapRef.current.getCenter().lat.toFixed(4)));
-      setZoom(parseFloat(mapRef.current.getZoom().toFixed(2)));
-    });
-
-    // Handle new polygon creation
-    mapRef.current.on('draw.create', (e: { features: GeoJSON.Feature[] }) => {
-      const feature = e.features[0];
-      if (!feature) return;
-
-      const polygonId = feature.id as string;
-      const polyArea = area(feature);
-      const coordinates = (feature.geometry as GeoJSON.Polygon).coordinates;
-      const label = prompt('Enter a label for this polygon:') || `Polygon ${polygons.length + 1}`;
-
-      // Use the latest selectedColor from the ref
-      const currentColor = selectedColorRef.current;
-
-      // Add the new polygon with the currently selected color
-      setPolygons((prev) => [...prev, { id: polygonId, color: currentColor, area: polyArea, coordinates, label }]);
-      setPolygonArea(polyArea);
-
-      // Add the polygon layer to the map with the selected color
-      mapRef.current?.addLayer({
-        id: polygonId,
-        type: 'fill',
-        source: {
-          type: 'geojson',
-          data: feature,
-        },
-        paint: {
-          'fill-color': currentColor,
-          'fill-opacity': 0.5,
-        },
-      });
-
-      mapRef.current?.addLayer({
-        id: `${polygonId}-label`,
-        type: 'symbol',
-        source: {
-          type: 'geojson',
-          data: feature,
-        },
-        layout: {
-          'text-field': label,
-          'text-size': 14,
-          'text-anchor': 'center',
-        },
-        paint: {
-          'text-color': '#ffffff',
-          'text-halo-color': '#000000',
-          'text-halo-width': 1.5,
-        },
-      });
-
-      // Add the border layer
-      mapRef.current?.addLayer({
-        id: `${polygonId}-border`,
-        type: "line",
-        source: {
-          type: "geojson",
-          data: feature,
-        },
-        paint: {
-          "line-color": currentColor,
-          "line-width": 2, // Border thickness
-        },
-      });
-
-      toast.success('Polygon created successfully!');
-    });
-
-    mapRef.current.on("draw.update", (e: { features: GeoJSON.Feature[] }) => {
-      e.features.forEach((feature) => {
-        const polygonId = feature.id as string;
-        const updatedCoordinates = (feature.geometry as GeoJSON.Polygon).coordinates;
-    
-        // ✅ Keep the original color and update only the shape and area
-        setPolygons((prevPolygons) =>
-          prevPolygons.map((polygon) =>
-            polygon.id === polygonId
-              ? { ...polygon, coordinates: updatedCoordinates, area: area(feature) } // Preserve color
-              : polygon
-          )
-        );
-    
-        // ✅ Update the polygon fill in real-time
-        if (mapRef.current?.getSource(polygonId)) {
-          (mapRef.current.getSource(polygonId) as mapboxgl.GeoJSONSource).setData(feature);
-        }
-    
-        // ✅ Update the polygon border in real-time
-        const borderLayerId = `${polygonId}-border`;
-        if (mapRef.current?.getSource(borderLayerId)) {
-          (mapRef.current.getSource(borderLayerId) as mapboxgl.GeoJSONSource).setData(feature);
-        }
-      });
-    });
-
-    // Handle polygon deletion
-    mapRef.current.on('draw.delete', (e: { features: GeoJSON.Feature[] }) => {
-      const deletedIds = e.features.map((f) => f.id as string);
-
-      // Remove the custom layer for each deleted polygon
-      deletedIds.forEach((id) => {
-        mapRef.current?.removeLayer(id);
-        mapRef.current?.removeSource(id);
-        mapRef.current?.removeLayer(`${id}-label`);
-        mapRef.current?.removeSource(`${id}-label`);
-        mapRef.current?.removeLayer(`${id}-border`);
-        mapRef.current?.removeSource(`${id}-border`);
-        });
-
-      // Update the polygons state
-      setPolygons((prev) => prev.filter((p) => !deletedIds.includes(p.id)));
-    });
-
-    return () => {
-      if (mapRef.current) {
-        mapRef.current.remove();
-        mapRef.current = null;
-      }
-    };
-  }, []);
-
-  return {
-    mapContainer,
-    polygons,
-    mapRef,
-    drawRef,
-    lng,
-    lat,
-    polygonArea,
-    selectedColor,
-    setPolygons,
-    setSelectedColor
-  };
-};
-

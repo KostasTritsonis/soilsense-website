@@ -10,10 +10,48 @@ datasource db {
   url  	    = env("DATABASE_URL")
 }
 
-model Polygon {
-  id          String   @id  // Unique ID
-  color       String                     // Polygon color (hex code)
-  area        Float?                      // Polygon area (optional)
-  label       String?                      // Polygon label (optional)
-  coordinates Json                         // Polygon coordinates (as JSON)
+model User{
+  id     String @id @default(cuid())
+  name   String
+  email  String @unique     
+  fields Field[]
+  jobs   Job[]
+}
+
+model Field {
+  id          String   @id               // Unique ID
+  color       String                     // Field color (hex code)
+  area        Float                      // Field area (optional)
+  label       String                    // Field label (optional)
+  coordinates Json                       // Field coordinates (as JSON)
+  author      User     @relation(fields: [authorId], references: [id])
+  authorId    String
+  categories Category[]
+}
+
+model Category {
+  id       String   @id @default(cuid()) 
+  type     String   @unique // e.g., "Corn", "Wheat"
+  fields   Field[]
+}
+
+model Job {
+  id          String    @id @default(cuid())
+  title       String
+  description String
+  status      JobStatus @default(ONGOING)
+  startDate   DateTime
+  endDate     DateTime
+  location    String?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  assignedToId String?
+  assignedTo   User?   @relation(fields: [assignedToId], references: [id])
+}
+
+enum JobStatus {
+  COMPLETED
+  DUE
+  ONGOING
 }

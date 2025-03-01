@@ -1,18 +1,34 @@
 'use client';
+import Link from "next/link";
 import { usePathname } from "next/navigation";
+import {SignedIn, SignedOut, UserButton } from "@clerk/nextjs";
+import { Teko } from "next/font/google";
+import Image from "next/image";
+
+const teko = Teko({
+  subsets: ["latin"],
+});
 
 const navLinks = [
   {
     href: "/",
-    label: "Dashboard"
+    label: "Dashboard",
+    image:"/dashboard.png"
   },
   {
     href: "/fields",
-    label: "Fields"
+    label: "Fields",
+    image:"/fields.png"
+  },
+  {
+    href: "/jobs",
+    label: "Jobs",
+    image:"/jobs.png"
   },
   {
     href: "/weather",
-    label: "Weather"
+    label: "Weather",
+    image:"/weather.png"
   }
 ]
 
@@ -22,16 +38,20 @@ export default function Header() {
 
   return (
     <header>
-      <div className="bg-black flex items-center text-zinc-50 p-4 border-b gap-x-4 border-zinc-700">
-        <h1 className="sm:text-xl text-lg">SoilSense</h1>
+      <div className="bg-zinc-800 flex items-center text-zinc-50 p-4 border-b gap-x-4 border-zinc-700">
+        <Link href="/"><h1 className= {`sm:text-4xl font-teko text-lg ${teko.className}`}>SoilSense</h1></Link>
         <button className="ml-auto bg-zinc-50 text-zinc-900 width-[200px] px-2 py-1 sm:text-[14px] text-[12px] rounded-sm font-semibold hover:bg-zinc-200">UPGRADE</button>
-        <button className="bg-zinc-50 text-zinc-900 width-[200px] px-2 py-1 text-[14px] rounded-sm font-semibold hover:bg-zinc-200">Help?</button>
+        <SignedIn>
+          <UserButton />
+        </SignedIn>
+        <SignedOut><Link href="/sign-in"><button className="bg-zinc-50 text-zinc-900 width-[200px] px-2 py-1 text-[14px] rounded-sm font-semibold hover:bg-zinc-200">Login</button></Link></SignedOut>
       </div>
       <nav className="flex justify-center">
-        <ul className='flex gap-x-3 pt-5 text-[14px] md:text-[16px] border-b border-zinc-300/50 flex-row sm:space-x-5 '>
+        <ul className='flex ite gap-x-3 py-5 text-[14px] md:text-[16px] border-b w-full border-zinc-300/50 flex-row sm:space-x-5 '>
           {navLinks.map((link) => (
             <li key={link.href}>
-              <a className={`${pathname === link.href ? 'text-zinc-900' : 'text-zinc-400 '}`} href={link.href}>
+              <a className={`flex justify-center items-center ${pathname === link.href ? 'text-zinc-900 font-semibold' : 'text-zinc-400 '}`} href={link.href}>
+                <Image src={link.image} alt={link.label} className="mx-2" width={20} height={20} />
                 {link.label}
               </a>
             </li>
