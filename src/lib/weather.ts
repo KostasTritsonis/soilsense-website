@@ -1,8 +1,5 @@
 import { CurrentWeather, ForecastApiResponse, ForecastDay, WeatherApiResponse } from "./types";
 
-
-
-
 export async function fetchWeatherData(lat: number, lon: number, locationName?: string) {
   const API_KEY = process.env.NEXT_PUBLIC_OPENWEATHER_API_KEY;
 

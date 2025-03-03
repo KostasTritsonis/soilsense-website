@@ -1,6 +1,7 @@
 import React from 'react'
 import { Cloud, Droplets, ThermometerSun, Wind, Umbrella } from 'lucide-react';
 import { CurrentWeather } from '@/lib/types';
+import Image from 'next/image';
 
 
 interface CurrentWeatherCardProps {
@@ -33,7 +34,7 @@ export default function CurrentWeatherCard({ currentWeather }: CurrentWeatherCar
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           {/* Main weather display */}
           <div className="flex items-center space-x-4">
-          <img src={currentWeather.icon} alt="Weather icon" width={50} height={50}/>
+          <Image src={currentWeather.icon} alt="Weather icon" width={50} height={50}/>
             <div>
               <h2 className="text-4xl font-bold">{currentWeather.temperature}</h2>
               <p className="text-xl">{currentWeather.forecast}</p>

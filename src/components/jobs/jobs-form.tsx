@@ -13,10 +13,7 @@ type JobFormProps = {
 export default function JobForm({onCancel }: JobFormProps) {
   const router = useRouter();
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const { users } = useFields();
-
-  if (!users) return null;
-  
+  const { users } = useFields(); 
   const [formData, setFormData] = useState<JobFormData>({
     title: '',
     description: '',
@@ -26,6 +23,8 @@ export default function JobForm({onCancel }: JobFormProps) {
     location: '',
     assignedToId: '',
   });
+
+  if (!users) return null;
 
   const handleInputChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>

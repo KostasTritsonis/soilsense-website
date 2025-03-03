@@ -11,11 +11,12 @@ import { createUser, getUserByEmail } from "@/actions";
 import MapReadOnly from "@/components/map/map-read-only";
 import { useFields } from "@/context/fields-context";
 import Link from "next/link";
+import JobsWidget from "@/components/jobs/jobs.widget";
 
 export default function Home() {
 
   const { user, isLoaded } = useUser();
-  const { fields, isLoading,jobs } = useFields();
+  const { fields,jobs } = useFields();
   const [totalArea, setTotalArea] = useState<number>(0);
 
   useEffect(() => {
@@ -30,21 +31,19 @@ export default function Home() {
       };
       
     } 
-    fetchUser();
-  }, [isLoaded]);
-
-  useEffect(() => {
     fields.forEach(field=>{
       setTotalArea((prev) => (prev + field.area))
     })
-  }, [isLoading]);
+    fetchUser();
 
-  
+    
+  }, [isLoaded,user,fields]);
+
   return (
     <main className="flex justify-center items-center">
       <section className="flex flex-col">
         <div className="flex w-[900px] h-[130px] mt-3 justify-evenly">
-          <Link href="/fields" ><Card props={{title:"Total Fields",value:`${fields.length}`,subtitle:`${totalArea.toFixed(2)}\u33A1`}} /></Link>
+          <Link href="/fields" ><Card props={{title:"Total Fields",value:`${fields.length}`,subtitle:`${totalArea.toFixed(2)} \u33A1 (${(totalArea/1000).toFixed(1)} acres)`}} /></Link>
           <Card props={{title:"Jobs Active",value:`${jobs?.filter((job) => job.status === "ONGOING").length}`,image:active}} />
           <Card props={{title:"Jobs Due",value:`${jobs?.filter((job) => job.status === "DUE").length}`,image:due}} />
           <Card props={{title:"Jobs Completed",value:`${jobs?.filter((job) => job.status === "COMPLETED").length}`,image:completed}} />
@@ -63,12 +62,7 @@ export default function Home() {
             <CropDistribution  />
           </div>
         </div>
-        <div className="rounded-md shadow-xl  mt-12 bg-zinc-100/50 w-[400px] h-[250px]">
-          <div className="flex border-b border-zinc-400/20">
-            <h2 className="text-lg font-semibold p-4">Recent due jobs</h2>
-            <p className="border rounded-md border-zinc-200/20 bg-zinc-200/40 p-1 ml-auto m-4 text-[15px] text-green-700 font-semibold">See all</p>
-          </div>
-        </div>
+        <JobsWidget />
         <WeatherWidget />
       </section>   
     </main>

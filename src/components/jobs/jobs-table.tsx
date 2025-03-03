@@ -1,8 +1,6 @@
-
-'use client'
-
+'use client';
 import React from 'react';
-import { Job, JobStatus } from '@/lib/types';
+import { JobStatus } from '@/lib/types';
 import StatusBadge from './status-badge';
 import { deleteJob, updateJobStatus } from '@/actions/index';
 import { useRouter } from 'next/navigation';
@@ -26,6 +24,9 @@ const header = [
   },
   {
     label: 'Actions',
+  },
+  {
+    label: 'Delete',
   }
 
 ]
@@ -96,7 +97,7 @@ export default function JobsTable() {
           <thead className="bg-gray-50">
             <tr>
               {header.map((header) => (
-                <th key={header.label} className="px-6 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider text-center">
+                <th key={header.label} className="py-3 text-xs font-medium text-gray-500 uppercase tracking-wider text-center">
                   {header.label}
                 </th>
               ))}
@@ -105,18 +106,18 @@ export default function JobsTable() {
           <tbody className="bg-white divide-y divide-gray-200">
             {jobs.map((job) => (
               <tr key={job.id} className="hover:bg-gray-50 ">
-                <td className="px-6 py-4">
+                <td className="py-4">
                   <div className="text-sm font-medium text-gray-900">{job.title}</div>
                   <div className="text-sm text-gray-500">{job.description}</div>
                 </td>
-                <td className="px-6 py-4">
+                <td className="py-4">
                   <div className="text-sm text-gray-900">
                     {new Date(job.startDate).toLocaleDateString()} to {new Date(job.endDate).toLocaleDateString()}
                   </div>
                   <div className="text-xs text-gray-500 mt-1">
                     {getDaysRemaining(job.endDate,job.status)}
                   </div>
-                  <div className="mt-2 w-full bg-gray-200 rounded-full h-1.5">
+                  <div className="mx-auto mt-2 w-1/2 bg-gray-200 rounded-full h-1.5">
                     <div 
                       className={`h-1.5 rounded-full ${
                         job.status === 'COMPLETED' ? 'bg-green-500' : 
@@ -128,16 +129,16 @@ export default function JobsTable() {
                     ></div>
                   </div>
                 </td>
-                <td className="px-6 py-4">
+                <td className="py-4">
                   <StatusBadge status={job.status} />
                 </td>
-                <td className="px-6 py-4 text-sm text-gray-500">
+                <td className="py-4 text-sm text-gray-500">
                   {job.location || 'Not specified'}
                 </td>
-                <td className="px-6 py-4 text-sm text-gray-500">
+                <td className="py-4 text-sm text-gray-500">
                   {job.assignedTo?.name || 'Unassigned'}
                 </td>
-                <td className="px-6 py-4  text-sm font-medium">
+                <td className="py-4  text-sm font-medium">
                   <select 
                     value={job.status}
                     onChange={(e) => handleStatusChange(job.id, e.target.value)}

@@ -67,7 +67,8 @@ export const useMapHandlers = ({mapRef, drawRef}: handlerProps) => {
       },
       layout: {
         'text-field': label,
-        'text-size': 14,
+        'text-size': 16,
+        'text-font': ['Open Sans Bold'],
         "text-offset": [1, 0],
         "text-anchor": "left",
         "text-allow-overlap": true,
@@ -75,8 +76,6 @@ export const useMapHandlers = ({mapRef, drawRef}: handlerProps) => {
       },
       paint: {
         'text-color': '#ffffff',
-        'text-halo-color': '#000000',
-        'text-halo-width': 1.5,
       },
     });
   }
@@ -125,7 +124,6 @@ export const useMapHandlers = ({mapRef, drawRef}: handlerProps) => {
 
       setFields([]);
       setTotalArea(0);
-      toast.info('Map reset successfully!');
     }
   };
 
@@ -214,7 +212,6 @@ export const useMapHandlers = ({mapRef, drawRef}: handlerProps) => {
           });
         }
       });
-      toast.success("Fields loaded successfully!");
     } catch (error) {
       setError(error instanceof Error ? error.message : "Failed to load fields.");
     } finally {
@@ -329,10 +326,7 @@ export const useMapHandlers = ({mapRef, drawRef}: handlerProps) => {
     };
 
     // Add the label to the map if it exists
-    addLayers(newField.id,newField.label,newField.coordinates,newField.categories);
-
-      
-    
+    addLayers(newField.id,newField.label,newField.coordinates,newField.categories);  
   };
 
   return {

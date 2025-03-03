@@ -1,6 +1,7 @@
 import React from 'react'
 import { Calendar } from 'lucide-react';
 import { ForecastDay } from '@/lib/types';
+import Image from 'next/image';
 
 
 interface ForecastCardProps {
@@ -39,7 +40,7 @@ const ForecastDayItem: React.FC<ForecastDayItemProps> = ({ day }) => {
       <p className="font-medium">{day.day}</p>
       <p className="text-sm text-gray-500">{day.date}</p>
       <div className="my-2 flex justify-center">
-        <img 
+        <Image 
           src={`${day.icon}`} 
           alt="Weather icon" 
           width={50} 

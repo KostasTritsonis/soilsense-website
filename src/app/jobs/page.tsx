@@ -3,13 +3,19 @@ import React, { useState } from 'react';
 import { PlusCircle } from 'lucide-react';
 import JobsTable from '@/components/jobs/jobs-table';
 import JobForm from '@/components/jobs/jobs-form';
+import { useUser } from '@clerk/nextjs';
 export default function Page() {
 
   const [showJobForm, setShowJobForm] = useState(false);
-
+  const  { isSignedIn } =  useUser();
   return (
     <div className="container flex-row mx-auto px-4 py-8">
       <h1 className="text-2xl text-center font-bold text-gray-800">Agricultural Jobs</h1>
+      {(!isSignedIn) ? (
+          <div className="absolute z-50 inset-0 flex items-center justify-center bg-black/70">
+            <p className="text-lg text-white font-semibold">Please sign in to access the map</p>
+          </div>
+        ) : ''}
       <div>
         <button 
           onClick={() => setShowJobForm(!showJobForm)}

@@ -47,13 +47,14 @@ export default function Header() {
         <SignedOut><Link href="/sign-in"><button className="bg-zinc-50 text-zinc-900 width-[200px] px-2 py-1 text-[14px] rounded-sm font-semibold hover:bg-zinc-200">Login</button></Link></SignedOut>
       </div>
       <nav className="flex justify-center">
-        <ul className='flex ite gap-x-3 py-5 text-[14px] md:text-[16px] border-b w-full border-zinc-300/50 flex-row sm:space-x-5 '>
+        <ul className='flex items-center gap-x-3 p-3 text-[14px] md:text-[16px] border-b w-full border-zinc-400/50 flex-row sm:space-x-5 '>
           {navLinks.map((link) => (
-            <li key={link.href}>
-              <a className={`flex justify-center items-center ${pathname === link.href ? 'text-zinc-900 font-semibold' : 'text-zinc-400 '}`} href={link.href}>
+            <li key={link.href} className="flex flex-col items-center relative">
+              <Link className={`flex justify-center items-center ${pathname === link.href ? 'text-zinc-900 font-semibold' : 'text-zinc-400 '}`} href={link.href}>
                 <Image src={link.image} alt={link.label} className="mx-2" width={20} height={20} />
                 {link.label}
-              </a>
+              </Link>
+              {pathname === link.href ? <hr className={`absolute -bottom-[12px] w-[95%] border-green-700 border-2`}></hr> : null}
             </li>
           ))}
         </ul>

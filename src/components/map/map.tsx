@@ -1,5 +1,5 @@
 'use client';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import LoadingSpinner from './loading-spinner';
 import { MapSetup } from '@/lib/map-creation';
 import InfoPanel from './info-panel';
@@ -17,13 +17,9 @@ import { useFields } from '@/context/fields-context';
 export default function MapComponent() {
 
   const [selectedFieldId, setSelectedFieldId] = useState<string | null>(null);
+  const [isSidebarOpen, setIsSidebarOpen] = useState(true);
   const  { isSignedIn } =  useUser();
   const { fields } = useFields();
-
-   useEffect(() => {
-      handleLoad();
-    }, []);
-
   const {
     mapContainer,
     mapRef,
@@ -33,8 +29,9 @@ export default function MapComponent() {
     fieldArea,
     isModalOpen,
     setIsModalOpen,
+    
   } = MapSetup();
-
+ 
   const {
     isLoading,
     isSaving,
@@ -48,56 +45,85 @@ export default function MapComponent() {
   } = useMapHandlers({mapRef, drawRef});
 
   return (
-    <div className={`relative bg-zinc-50 w-screen h-screen md:mt-2`} >
+    <div className="flex flex-col md:flex-row h-screen w-full bg-zinc-50 relative">
       {(isLoading || isSaving) && <LoadingSpinner />}
-      
-      <div ref={mapContainer} className='w-full h-full'/>
 
-      {(!isSignedIn)?
-        <div className="absolute z-50 inset-0 flex items-center justify-center bg-black/70 ">
-          <p className="text-lg text-white font-semibold">Please sign in to access the map</p>
-        </div>:''
-      }
+      {/* Sidebar toggle button - visible on mobile */}
+      <button 
+        className="md:hidden fixed top-4 left-4 z-20 bg-blue-500 text-white p-2 rounded-lg shadow-lg"
+        onClick={() => setIsSidebarOpen(!isSidebarOpen)}
+      >
+        {isSidebarOpen ? '✕' : '☰'}
+      </button>
 
+      {/* Sidebar */}
+      <div className={`${isSidebarOpen ? 'translate-x-0' : '-translate-x-full'} transition-transform duration-300 fixed md:relative z-10 w-64 md:w-72 lg:w-80 h-screen bg-zinc-800 text-white shadow-lg overflow-y-auto flex flex-col md:translate-x-0`}>
+        <div className="p-4 border-b border-zinc-700">
+          <h1 className="text-xl font-bold">Field Manager</h1>
+        </div>
+
+        {/* Controls section in sidebar */}
+        <MapControls 
+          onReset={handleReset} 
+          onSave={handleSave} 
+          onLoad={handleLoad} 
+          isLoading={isLoading} 
+          isSaving={isSaving} 
+          hasFields={fields.length > 0} 
+        />
+
+        {/* Info panel in sidebar */}
+        <InfoPanel 
+          lng={lng} 
+          lat={lat} 
+          fieldArea={fieldArea > 0 ? fieldArea : totalArea} 
+        />
+
+        {/* Field list in sidebar */}
+        <div className="flex-grow p-4 overflow-y-auto">
+          <h2 className="text-lg font-semibold mb-2">Fields</h2>
+          <FieldList
+            onFieldSelect={setSelectedFieldId}
+            selectedFieldId={selectedFieldId}
+          />
+        </div>
+
+        {/* Input Category in sidebar */}
+        <div className="p-4 border-t border-zinc-700">
+          <InputCategory />
+        </div>
+      </div>
+
+      {/* Main content with map */}
+      <div className="flex-grow h-screen relative">
+  
+        {/* Map container */}
+        <div ref={mapContainer} className="w-full h-full" />
+
+        {/* Auth overlay */}
+        {(!isSignedIn) ? (
+          <div className="absolute z-50 inset-0 flex items-center justify-center bg-black/70">
+            <p className="text-lg text-white font-semibold">Please sign in to access the map</p>
+          </div>
+        ) : ''}
+
+        {/* Field editor - repositioned */}
+        {selectedFieldId && (
+          <FieldEditor
+            field={fields.find(p => p.id === selectedFieldId) || null}
+            onUpdate={handleFieldUpdate}
+            onSave={handleFieldChanges}
+            onClose={() => setSelectedFieldId(null)}
+          />
+        )}
+      </div>
+
+      {/* Category Modal */}
       <CategoryModal 
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
         onConfirm={handleCategorySelect}
       />
-      {!isModalOpen && (
-        <>
-          <InfoPanel
-            lng={lng}
-            lat={lat}
-            fieldArea={fieldArea > 0 ? fieldArea : totalArea}
-          />
-
-          <MapControls
-            onReset={handleReset}
-            onSave={handleSave}
-            onLoad={handleLoad}
-            isLoading={isLoading}
-            isSaving={isSaving}
-            hasFields={fields.length > 0}
-          />
-          
-          <FieldList
-            onFieldSelect={setSelectedFieldId}
-            selectedFieldId={selectedFieldId}
-          />
-
-          {selectedFieldId && (
-            <FieldEditor
-              field={fields.find(p => p.id === selectedFieldId) || null}
-              onUpdate={handleFieldUpdate}
-              onSave={handleFieldChanges}
-              onClose={() => setSelectedFieldId(null)}
-            />
-          )}
-
-          <InputCategory />
-        </>
-      )}
     </div>
   );
 }

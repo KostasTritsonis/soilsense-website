@@ -7,10 +7,13 @@ type InfoPanelProps = {
   export default function InfoPanel({ lng, lat, fieldArea }: InfoPanelProps) {
 
     return (
-      <div className="bg-zinc-950/90 sm:text-[14px] text-[11px] text-zinc-50 p-3 text-sm rounded-lg absolute sm:bottom-4 sm:left-4 md:bottom-16 md:left-2 z-10">
-        <div>Longitude: {lng}</div>
-        <div>Latitude: {lat}</div>
-        {fieldArea !== null && <div>Area: {fieldArea.toFixed(2)} &#13217;</div>}
+      <div className="p-4 border-t border-b border-zinc-700">
+        <h2 className="text-lg font-semibold mb-2">Field Information</h2>
+        <div className="space-y-2 text-sm">
+          <p>Longitude: {lng.toFixed(4)}</p>
+          <p>Latitude: {lat.toFixed(4)}</p>
+          {fieldArea !== null && <p>Area: {fieldArea.toFixed(2)} &#13217;</p>}
+        </div>
       </div>
     );    
   };

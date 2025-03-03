@@ -1,8 +1,7 @@
 'use client';
-import { useState, useRef,useEffect  } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { toast } from 'react-toastify';
 import { area } from '@turf/turf';
-import type { Field } from '@/lib/types';
 import mapboxgl from 'mapbox-gl';
 import MapboxDraw from '@mapbox/mapbox-gl-draw';
 import "mapbox-gl/dist/mapbox-gl.css";
@@ -10,8 +9,7 @@ import '@mapbox/mapbox-gl-draw/dist/mapbox-gl-draw.css';
 import { deleteField, getFieldById } from '@/actions';
 import { useFields } from '@/context/fields-context';
 
-
-mapboxgl.accessToken = process.env.NEXT_PUBLIC_MAPBOX_ACCESS_TOKEN as string;
+mapboxgl.accessToken = process.env.NEXT_PUBLIC_MAPBOX_ACCESS_TOKEN || '';
 
 export const MapSetup = () => {
   
@@ -24,23 +22,35 @@ export const MapSetup = () => {
   const [fieldArea, setFieldArea] = useState<number>(0);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const selectedColorRef = useRef<string>(selectedColor);
+  const initialLngRef = useRef<number>(lng);
+  const initialLatRef = useRef<number>(lat);
 
   const { setFields } = useFields();
+  const setFieldsRef = useRef(setFields);
 
-    // Update the ref whenever selectedColor changes
+  // Store initial coordinates and setFields in refs to avoid dependency changes
+  useEffect(() => {
+    initialLngRef.current = lng;
+    initialLatRef.current = lat;
+    setFieldsRef.current = setFields;
+  }, [lng, lat, setFields]);
+
+  // Update the ref whenever selectedColor changes
   useEffect(() => {
     selectedColorRef.current = selectedColor;
   }, [selectedColor]);
 
+  // Initialize map only once
   useEffect(() => {
     if (mapRef.current || !mapContainer.current) return;
 
     mapRef.current = new mapboxgl.Map({
       container: mapContainer.current,
       style: 'mapbox://styles/mapbox/satellite-streets-v12',
-      center: [lng, lat],
+      center: [initialLngRef.current, initialLatRef.current],
       zoom: 17.86,
       attributionControl: false,
+      cooperativeGestures: true
     });
 
     drawRef.current = new MapboxDraw({
@@ -89,7 +99,6 @@ export const MapSetup = () => {
       );
     });
 
-
     mapRef.current.addControl(drawRef.current, 'bottom-right');
 
     mapRef.current.on('move', () => {
@@ -103,7 +112,6 @@ export const MapSetup = () => {
       const feature = e.features[0];
       if (!feature) return;
       
-
       const fieldId = feature.id as string;
       const fArea = area(feature);
       const coordinates = (feature.geometry as GeoJSON.Polygon).coordinates;  
@@ -112,7 +120,7 @@ export const MapSetup = () => {
       const currentColor = selectedColorRef.current;
 
       // Add the field to your fields array
-      setFields((prev) => [...prev, { id: fieldId, color: currentColor, area: fArea, coordinates, label:"",categories:[] }]);
+      setFieldsRef.current((prev) => [...prev, { id: fieldId, color: currentColor, area: fArea, coordinates, label:"", categories:[] }]);
 
       setFieldArea(fArea);
       setIsModalOpen(true);
@@ -146,16 +154,13 @@ export const MapSetup = () => {
       toast.success('Field created successfully!');
     });
     
-
-
-
     mapRef.current.on("draw.update", (e: { features: GeoJSON.Feature[] }) => {
       e.features.forEach((feature) => {
         const fieldId = feature.id as string;
         const updatedCoordinates = (feature.geometry as GeoJSON.Polygon).coordinates;
         const updatedArea = area(feature);
 
-        setFields((prevFields) =>
+        setFieldsRef.current((prevFields) =>
           prevFields.map((field) =>
             field.id === fieldId
               ? { ...field, coordinates: updatedCoordinates, area: updatedArea } 
@@ -163,7 +168,6 @@ export const MapSetup = () => {
           )
         );
 
-      
         // ✅ Update the field fill in real-time
         if (mapRef.current?.getSource(fieldId)) {
           (mapRef.current.getSource(fieldId) as mapboxgl.GeoJSONSource).setData(feature);
@@ -180,7 +184,10 @@ export const MapSetup = () => {
           (mapRef.current.getSource(borderLayerId) as mapboxgl.GeoJSONSource).setData(feature);
         }
 
-       
+        const iconLayerId = `${fieldId}-icon`;
+        if (mapRef.current?.getSource(iconLayerId)) {
+          (mapRef.current.getSource(iconLayerId) as mapboxgl.GeoJSONSource).setData(feature);
+        }
       });
     });
 
@@ -189,7 +196,6 @@ export const MapSetup = () => {
       const deletedIds = e.features.map((f) => f.id as string);
 
       // Remove the custom layer for each deleted field
-
       deletedIds.map((id) => {
         if (mapRef.current?.getLayer(id)) {
           mapRef.current.removeLayer(id);
@@ -203,7 +209,6 @@ export const MapSetup = () => {
         if (mapRef.current?.getLayer(borderLayerId)) {
           mapRef.current.removeLayer(borderLayerId);
         }
-        
       });
 
       deletedIds.map((id) => {
@@ -221,13 +226,12 @@ export const MapSetup = () => {
       });
 
       // Update the fields state
-      setFields((prev) => prev.filter((p) => !deletedIds.includes(p.id)));
+      setFieldsRef.current((prev) => prev.filter((p) => !deletedIds.includes(p.id)));
 
-      const existingPolygon =  getFieldById(deletedIds[0]);
+      const existingPolygon = getFieldById(deletedIds[0]);
       if (existingPolygon != null) {
         deleteField(deletedIds[0]);
       }
-
       
       setFieldArea(0);
     });
@@ -253,11 +257,7 @@ export const MapSetup = () => {
         mapRef.current = null;
       }
     };
-  }, []);
-
-  
-
-  
+  }, []); // Empty dependency array with eslint-disable comment
 
   return {
     mapContainer,
@@ -272,4 +272,3 @@ export const MapSetup = () => {
     setIsModalOpen,
   };
 };
-

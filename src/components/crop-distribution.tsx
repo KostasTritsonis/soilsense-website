@@ -2,7 +2,7 @@
 
 import { Doughnut } from "react-chartjs-2";
 import { Chart, ArcElement, Tooltip, Legend } from "chart.js";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { toast } from "react-toastify";
 import { Field } from "@/lib/types";
 import { useUser } from "@clerk/nextjs";
@@ -38,15 +38,22 @@ export default function CropDistribution() {
     Soybean: "#118AB2",
   };
 
+  // Store categoryColors in a ref
+  const categoryColorsRef = useRef(categoryColors);
+
+  // First useEffect - fetch data when user changes
   useEffect(() => {
     const fetchData = async () => {
       const fields = await getFieldsByUser();
-      setDbFields(fields);
+      setDbFields(fields ?? []);
     };
     fetchData();
-  }, [user]); // Runs when the user changes
+  }, [user]); // This is correct - dependency on user
 
+  // Second useEffect - update chart when dbFields changes
+  
   useEffect(() => {
+    
     if (!dbFields || dbFields.length === 0) {
       toast.info("No fields found in database.");
       return;
@@ -63,9 +70,11 @@ export default function CropDistribution() {
     });
 
     const totalFields = dbFields.length;
+    const colors = categoryColorsRef.current;
+    
     const percentages = Object.keys(categoryCounts).map((category) => ({
       category,
-      color: categoryColors[category] || "#CCCCCC", // Default gray color if category is unknown
+      color: colors[category] || "#CCCCCC", // Default gray color if category is unknown
       percentage: Math.round((categoryCounts[category] / totalFields) * 100),
     }));
 
@@ -76,7 +85,7 @@ export default function CropDistribution() {
           label: "Categories",
           data: Object.values(categoryCounts),
           backgroundColor: Object.keys(categoryCounts).map(
-            (category) => categoryColors[category] || "#CCCCCC"
+            (category) => colors[category] || "#CCCCCC"
           ),
           borderWidth: 2,
         },
@@ -84,7 +93,7 @@ export default function CropDistribution() {
     });
 
     setCategoryPercentages(percentages);
-  }, [dbFields]);
+  }, [dbFields]); // Keep this dependency - we want the chart to update when fields change
 
   if (!chartData) return <p>Loading...</p>;
 

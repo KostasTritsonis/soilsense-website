@@ -70,7 +70,6 @@ export default function WeatherWidget(){
     <div className="bg-zinc-100 rounded-lg mt-12 shadow-xl overflow-hidden">
       <div className="pl-4 py-4">
         <div className="flex items-center border-b border-zinc-400/20">
-          <Cloud className="mr-2 h-6 w-6" />
           <h2 className="text-xl font-semibold">Weather Conditions</h2>
           <Link href="/weather" className='ml-auto'><p className=" flex border rounded-md border-zinc-200/20 bg-zinc-200/40 p-1  m-4 text-[15px] text-green-700 font-semibold">See all <ArrowRightIcon /></p></Link>
         </div>
