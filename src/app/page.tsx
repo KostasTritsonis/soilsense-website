@@ -49,7 +49,7 @@ export default function Home() {
           </Link>
           <Card props={{ title: "Jobs Active", value: `${jobs?.filter((job) => job.status === "ONGOING").length}`, image: active }} />
           <Card props={{ title: "Jobs Due", value: `${jobs?.filter((job) => job.status === "DUE").length}`, image: due }} />
-          <Card props={{ title: "Jobs Completed", value: `${jobs?.filter((job) => job.status === "COMPLETED").length}`, image: completed }} />
+          <Card props={{ title: "Jobs Done", value: `${jobs?.filter((job) => job.status === "COMPLETED").length}`, image: completed }} />
         </div>
 
         <div className="w-full max-w-[900px] h-auto shadow-xl rounded-md mt-4">
