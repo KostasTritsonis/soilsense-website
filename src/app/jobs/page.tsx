@@ -9,7 +9,7 @@ export default function Page() {
   const [showJobForm, setShowJobForm] = useState(false);
   const  { isSignedIn } =  useUser();
   return (
-    <div className="container mx-auto px-4 py-8 flex flex-col">
+    <div className="container mx-auto px-4 py-8 flex flex-col max-sm:pb-[60px]">
       <h1 className="text-2xl text-center font-bold text-gray-800">Agricultural Jobs</h1>
 
       {(!isSignedIn) && (

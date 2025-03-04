@@ -41,7 +41,7 @@ export default function Home() {
   }, [isLoaded,user,fields]);
 
   return (
-    <main className="flex flex-col xl:flex-row justify-center items-center p-4">
+    <main className="flex flex-col xl:flex-row justify-center items-center p-4 max-sm:pb-[80px]">
       <section className="flex flex-col items-center">
         <div className="flex flex-wrap gap-4 w-full max-sm:justify-center max-w-[900px] mt-3">
           <Link href="/fields">

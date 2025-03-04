@@ -57,7 +57,7 @@ export default function MapComponent() {
     }, []);
 
   return (
-    <div className="flex flex-col md:flex-row h-screen w-full bg-zinc-50 relative">
+    <div className="flex flex-col md:flex-row h-screen w-full bg-zinc-50 max-sm:pb-[60px] relative">
       {(isLoading || isSaving) && <LoadingSpinner />}
 
       {/* Sidebar toggle button - visible on mobile */}
