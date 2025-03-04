@@ -54,7 +54,7 @@ export default function Header() {
                 <Image src={link.image} alt={link.label} className="mx-2" width={20} height={20} />
                 {link.label}
               </Link>
-              {pathname === link.href && <hr className="absolute -bottom-[12px] right-3 w-[50%] border-green-700 border-2"></hr>}
+              {pathname === link.href && <hr className="absolute -bottom-[12px] right-3 w-[50%] border-green-700 rounded-full border-2"></hr>}
             </li>
           ))}
         </ul>
@@ -79,7 +79,7 @@ export default function Header() {
               />
               <span className="text-xs">{link.label}</span>
             </Link>
-            {pathname === link.href &&<hr className=" w-[50%] border-green-700 border-2"></hr>}
+            {pathname === link.href &&<hr className=" w-[50%] border-green-700 rounded-full border-2"></hr>}
           </li>
         ))}
       </ul>
