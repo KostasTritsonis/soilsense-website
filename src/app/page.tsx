@@ -30,7 +30,8 @@ export default function Home() {
         await createUser(user.username??"",user.emailAddresses[0].emailAddress)
       };
       
-    } 
+    }
+    setTotalArea(0); 
     fields.forEach(field=>{
       setTotalArea((prev) => (prev + field.area))
     })
@@ -40,31 +41,41 @@ export default function Home() {
   }, [isLoaded,user,fields]);
 
   return (
-    <main className="flex justify-center items-center">
-      <section className="flex flex-col">
-        <div className="flex w-[900px] h-[130px] mt-3 justify-evenly">
-          <Link href="/fields" ><Card props={{title:"Total Fields",value:`${fields.length}`,subtitle:`${totalArea.toFixed(2)} \u33A1 (${(totalArea/1000).toFixed(1)} acres)`}} /></Link>
-          <Card props={{title:"Jobs Active",value:`${jobs?.filter((job) => job.status === "ONGOING").length}`,image:active}} />
-          <Card props={{title:"Jobs Due",value:`${jobs?.filter((job) => job.status === "DUE").length}`,image:due}} />
-          <Card props={{title:"Jobs Completed",value:`${jobs?.filter((job) => job.status === "COMPLETED").length}`,image:completed}} />
+    <main className="flex flex-col xl:flex-row justify-center items-center p-4">
+      <section className="flex flex-col items-center">
+        <div className="flex flex-wrap gap-4 w-full max-sm:justify-center max-w-[900px] mt-3">
+          <Link href="/fields">
+            <Card props={{ title: "Total Fields", value: `${fields.length}`, subtitle: `${totalArea.toFixed(2)} \u33A1 (${(totalArea / 1000).toFixed(1)} acres)` }} />
+          </Link>
+          <Card props={{ title: "Jobs Active", value: `${jobs?.filter((job) => job.status === "ONGOING").length}`, image: active }} />
+          <Card props={{ title: "Jobs Due", value: `${jobs?.filter((job) => job.status === "DUE").length}`, image: due }} />
+          <Card props={{ title: "Jobs Completed", value: `${jobs?.filter((job) => job.status === "COMPLETED").length}`, image: completed }} />
         </div>
-        <div className="w-[900px] h-[700px] shadow-xl rounded-md">
+
+        <div className="w-full max-w-[900px] h-auto shadow-xl rounded-md mt-4">
           <MapReadOnly />
         </div>
       </section>
-      <section className="flex flex-col ml-12 mt-7">
-        <div className="rounded-md shadow-xl  bg-zinc-100/50 w-[400px] h-[330px]">
-          <div className="flex border-b border-zinc-400/20">
-            <h2 className="text-lg font-semibold p-4">Crop distribution</h2>
-            <p className="border rounded-md border-zinc-200/20 bg-zinc-200/40 p-1 ml-auto m-4 text-[15px] text-green-700 font-semibold">2025</p>
+      <section className="flex flex-col items-center lg:items-start lg:ml-12 mt-7 w-full max-w-[400px]">
+        <div className="rounded-md shadow-xl bg-zinc-100/50 w-full h-auto">
+          <div className="flex border-b border-zinc-400/20 p-4">
+            <h2 className="text-lg font-semibold">Crop Distribution</h2>
+            <p className="border rounded-md border-zinc-200/20 bg-zinc-200/40 p-1 ml-auto text-[15px] text-green-700 font-semibold">2025</p>
           </div>
-          <div className="w-44 h-44 mx-auto my-9">
-            <CropDistribution  />
+          <div className="w-44 h-44 mx-auto my-4">
+            <CropDistribution />
           </div>
         </div>
-        <JobsWidget />
-        <WeatherWidget />
-      </section>   
-    </main>
+
+        <div className="w-full mt-4">
+          <JobsWidget />
+        </div>
+
+        <div className="w-full mt-4">
+          <WeatherWidget />
+        </div>
+      </section>
+  </main>
+
   );
 }

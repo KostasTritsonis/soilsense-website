@@ -49,7 +49,7 @@ export default function Header() {
       <nav className="flex justify-center">
         <ul className='flex items-center gap-x-3 p-3 text-[14px] md:text-[16px] border-b w-full border-zinc-400/50 flex-row sm:space-x-5 '>
           {navLinks.map((link) => (
-            <li key={link.href} className="flex flex-col items-center relative">
+            <li key={link.href} className="flex flex-col  items-center relative">
               <Link className={`flex justify-center items-center ${pathname === link.href ? 'text-zinc-900 font-semibold' : 'text-zinc-400 '}`} href={link.href}>
                 <Image src={link.image} alt={link.label} className="mx-2" width={20} height={20} />
                 {link.label}

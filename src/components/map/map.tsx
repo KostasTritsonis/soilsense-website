@@ -1,5 +1,5 @@
 'use client';
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import LoadingSpinner from './loading-spinner';
 import { MapSetup } from '@/lib/map-creation';
 import InfoPanel from './info-panel';
@@ -17,7 +17,7 @@ import { useFields } from '@/context/fields-context';
 export default function MapComponent() {
 
   const [selectedFieldId, setSelectedFieldId] = useState<string | null>(null);
-  const [isSidebarOpen, setIsSidebarOpen] = useState(true);
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const  { isSignedIn } =  useUser();
   const { fields } = useFields();
   const {
@@ -44,20 +44,32 @@ export default function MapComponent() {
     handleCategorySelect
   } = useMapHandlers({mapRef, drawRef});
 
+  const handleResetRef = useRef(handleReset);
+    
+    // Update the ref when handleLoad changes
+    useEffect(() => {
+      handleResetRef.current = handleReset;
+    }, [handleReset]);
+  
+    // Use the ref in the effect with an empty dependency array
+    useEffect(() => {
+      handleResetRef.current();
+    }, []);
+
   return (
     <div className="flex flex-col md:flex-row h-screen w-full bg-zinc-50 relative">
       {(isLoading || isSaving) && <LoadingSpinner />}
 
       {/* Sidebar toggle button - visible on mobile */}
       <button 
-        className="md:hidden fixed top-4 left-4 z-20 bg-blue-500 text-white p-2 rounded-lg shadow-lg"
+        className={`md:hidden absolute ${isSidebarOpen? "left-44 rounded-r-lg":"rounded-lg top-1 left-12"}  z-20 bg-zinc-700 text-white p-2  shadow-lg`}
         onClick={() => setIsSidebarOpen(!isSidebarOpen)}
       >
         {isSidebarOpen ? '✕' : '☰'}
       </button>
 
       {/* Sidebar */}
-      <div className={`${isSidebarOpen ? 'translate-x-0' : '-translate-x-full'} transition-transform duration-300 fixed md:relative z-10 w-64 md:w-72 lg:w-80 h-screen bg-zinc-800 text-white shadow-lg overflow-y-auto flex flex-col md:translate-x-0`}>
+      <div className={`${isSidebarOpen ? 'translate-x-0' : '-translate-x-full'} transition-transform duration-300 absolute md:relative z-10 w-44 sm:w-60 md:w-72 lg:w-80 h-screen bg-zinc-800 text-white shadow-lg overflow-y-auto flex flex-col md:translate-x-0`}>
         <div className="p-4 border-b border-zinc-700">
           <h1 className="text-xl font-bold">Field Manager</h1>
         </div>

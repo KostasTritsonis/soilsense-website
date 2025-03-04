@@ -23,7 +23,7 @@ export default function ForecastCard({ forecast }: ForecastCardProps) {
         </div>
       </div>
       <div className="px-6 pb-6">
-        <div className="flex  justify-center gap-10">
+        <div className="flex  justify-center gap-10 overflow-x-auto">
           {forecast.map((day, index) => (
             <ForecastDayItem key={index} day={day} />
           ))}
