@@ -70,7 +70,7 @@ export default function Weather() {
   }, [location]);
 
   return (
-    <div className="p-6 space-y-6 max-sm:pb-[60px]">
+    <div className="p-6 space-y-6 max-sm:pb-[80px]">
       <h1 className="text-2xl font-bold">Weather Dashboard</h1>
 
       {/* 🔍 Search Bar */}
