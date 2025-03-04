@@ -55,7 +55,6 @@ export default function CropDistribution() {
   useEffect(() => {
     
     if (!dbFields || dbFields.length === 0) {
-      toast.info("No fields found in database.");
       return;
     }
 

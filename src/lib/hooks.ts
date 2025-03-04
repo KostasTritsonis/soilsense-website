@@ -163,7 +163,6 @@ export const useMapHandlers = ({mapRef, drawRef}: handlerProps) => {
       const dbFields = await getFieldsByUser();
   
       if (!dbFields) {
-        toast.info("No fields found in database.");
         return;
       }
   
