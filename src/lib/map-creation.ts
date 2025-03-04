@@ -209,6 +209,11 @@ export const MapSetup = () => {
         if (mapRef.current?.getLayer(borderLayerId)) {
           mapRef.current.removeLayer(borderLayerId);
         }
+
+        const iconLayerId = `${id}-icon`;
+        if (mapRef.current?.getLayer(iconLayerId)) {
+          mapRef.current.removeLayer(iconLayerId);
+        }
       });
 
       deletedIds.map((id) => {
@@ -222,6 +227,10 @@ export const MapSetup = () => {
         const borderLayerId = `${id}-border`;
         if (mapRef.current?.getSource(borderLayerId)) {
           mapRef.current.removeSource(borderLayerId);
+        }
+        const iconLayerId = `${id}-icon`;
+        if (mapRef.current?.getSource(iconLayerId)) {
+          mapRef.current.removeSource(iconLayerId);
         }
       });
 
