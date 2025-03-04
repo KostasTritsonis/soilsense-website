@@ -3,7 +3,6 @@
 import { Doughnut } from "react-chartjs-2";
 import { Chart, ArcElement, Tooltip, Legend } from "chart.js";
 import { useEffect, useState, useRef } from "react";
-import { toast } from "react-toastify";
 import { Field } from "@/lib/types";
 import { useUser } from "@clerk/nextjs";
 import { getFieldsByUser } from "@/actions";
