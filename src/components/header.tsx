@@ -39,7 +39,7 @@ export default function Header() {
   return (
     <header>
       <div className="bg-zinc-800 flex items-center text-zinc-50 p-4 border-b gap-x-4 border-zinc-700">
-        <Link href="/"><h1 className= {`sm:text-4xl font-teko text-lg ${teko.className}`}>SoilSense</h1></Link>
+        <Link href="/"><h1 className= {`sm:text-4xl font-teko text-2xl ${teko.className}`}>SoilSense</h1></Link>
         <button className="ml-auto bg-zinc-50 text-zinc-900 width-[200px] px-2 py-1 sm:text-[14px] text-[12px] rounded-sm font-semibold hover:bg-zinc-200">UPGRADE</button>
         <SignedIn>
           <UserButton />
