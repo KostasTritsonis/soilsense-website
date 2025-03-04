@@ -7,12 +7,9 @@ import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { FieldsProvider } from "@/context/fields-context";
 
-
-
 const inter = Inter({
   subsets: ["latin"],
 });
-
 
 export const metadata: Metadata = {
   title: "SoilSense",
@@ -28,6 +25,9 @@ export default function RootLayout({
     <ClerkProvider>
       <FieldsProvider>
         <html lang="en">
+          <head>
+            <link rel="manifest" href="/manifest.json" />
+          </head>
           <body className={`${inter.className} bg-zinc-100 text-zinc-900 min-h-screen`}>
             <Header />
             <ToastContainer />

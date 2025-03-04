@@ -30,13 +30,36 @@ export default function Weather() {
     }
   };
 
-  const handleSearch = async () => {
-    const [lat, lon] = location.split(',').map(Number);
-    if (!lat || !lon) {
-      setError('Invalid coordinates. Please enter latitude and longitude.');
-      return;
+  const fetchCoordinatesFromCity = async (city: string) => {
+    try {
+      const response = await fetch(
+        `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(city)}`
+      );
+      const data = await response.json();
+      if (data.length === 0) {
+        setError('City not found. Try again.');
+        return;
+      }
+      const { lat, lon } = data[0];
+      setLocation(`${lat},${lon}`);
+      fetchWeather(parseFloat(lat), parseFloat(lon));
+    } catch (err) {
+      setError('Error fetching location. Try again.');
+      console.error(err);
     }
-    await fetchWeather(lat, lon);
+  };
+
+  const handleSearch = async () => {
+    if (location.includes(',')) {
+      const [lat, lon] = location.split(',').map(Number);
+      if (!lat || !lon) {
+        setError('Invalid coordinates. Use format: lat,lon');
+        return;
+      }
+      fetchWeather(lat, lon);
+    } else {
+      await fetchCoordinatesFromCity(location);
+    }
   };
 
   useEffect(() => {
@@ -56,7 +79,7 @@ export default function Weather() {
           type="text"
           value={location}
           onChange={(e) => setLocation(e.target.value)}
-          placeholder="Enter Lat,Lon (e.g., 37.7749,-122.4194)"
+          placeholder="Enter city or lat,lon (e.g., New York or 37.7749,-122.4194)"
           className="border p-2 rounded w-full"
         />
         <button onClick={handleSearch} className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600">
