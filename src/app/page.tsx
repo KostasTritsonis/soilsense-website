@@ -41,7 +41,7 @@ export default function Home() {
   }, [isLoaded,user,fields]);
 
   return (
-    <main className="flex flex-col xl:flex-row justify-center items-center p-4 max-sm:pb-[80px]">
+    <main className="flex flex-col lg:flex-row justify-center items-center p-4 max-sm:pb-[80px]">
       <section className="flex flex-col items-center">
         <div className="flex flex-wrap gap-4 w-full max-sm:justify-center max-w-[900px] mt-3">
           <Link href="/fields">
@@ -56,7 +56,7 @@ export default function Home() {
           <MapReadOnly />
         </div>
       </section>
-      <section className="flex flex-col items-center lg:items-start lg:ml-12 mt-7 w-full max-w-[400px]">
+      <section className="flex flex-col items-center lg:items-start lg:ml-12 md:ml-8 mt-7 w-full max-w-[400px] md:w-[350px]">
         <div className="rounded-md shadow-xl bg-zinc-100/50 w-full h-auto">
           <div className="flex border-b border-zinc-400/20 p-4">
             <h2 className="text-lg font-semibold">Crop Distribution</h2>
@@ -67,11 +67,11 @@ export default function Home() {
           </div>
         </div>
 
-        <div className="w-full mt-4">
+        <div className="w-full sm:mt-4">
           <JobsWidget />
         </div>
 
-        <div className="w-full mt-4">
+        <div className="w-full sm:mt-4">
           <WeatherWidget />
         </div>
       </section>

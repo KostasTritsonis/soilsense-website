@@ -58,71 +58,80 @@ export default function MapComponent() {
 
   return (
     <div className="flex flex-col md:flex-row h-screen w-full bg-zinc-50 max-sm:pb-[60px] relative">
+      {/* Loading spinner */}
       {(isLoading || isSaving) && <LoadingSpinner />}
 
       {/* Sidebar toggle button - visible on mobile */}
-      <button 
-        className={`md:hidden absolute ${isSidebarOpen? "left-44 rounded-r-lg":"rounded-lg top-1 left-12"}  z-20 bg-zinc-700 text-white p-2  shadow-lg`}
+      <button
+        className={`md:hidden absolute ${
+          isSidebarOpen ? 'left-44 rounded-r-lg' : 'rounded-lg top-1 left-12'
+        } z-20 bg-zinc-700 text-white p-2 shadow-lg`}
         onClick={() => setIsSidebarOpen(!isSidebarOpen)}
       >
         {isSidebarOpen ? '✕' : '☰'}
       </button>
 
-      {/* Sidebar */}
-      <div className={`${isSidebarOpen ? 'translate-x-0' : '-translate-x-full'} transition-transform duration-300 absolute md:relative z-10 w-44 sm:w-60 md:w-72 lg:w-80 h-screen bg-zinc-800 text-white shadow-lg overflow-y-auto flex flex-col md:translate-x-0`}>
-        <div className="p-4 border-b border-zinc-700">
-          <h1 className="text-xl font-bold">Field Manager</h1>
-        </div>
-
-        {/* Controls section in sidebar */}
-        <MapControls 
-          onReset={handleReset} 
-          onSave={handleSave} 
-          onLoad={handleLoad} 
-          isLoading={isLoading} 
-          isSaving={isSaving} 
-          hasFields={fields.length > 0} 
-        />
-
-        {/* Info panel in sidebar */}
-        <InfoPanel 
-          lng={lng} 
-          lat={lat} 
-          fieldArea={fieldArea > 0 ? fieldArea : totalArea} 
-        />
-
-        {/* Field list in sidebar */}
-        <div className="flex-grow p-4 overflow-y-auto">
-          <h2 className="text-lg font-semibold mb-2">Fields</h2>
-          <FieldList
-            onFieldSelect={setSelectedFieldId}
-            selectedFieldId={selectedFieldId}
-          />
-        </div>
-
-        {/* Input Category in sidebar */}
-        <div className="p-4 border-t border-zinc-700">
-          <InputCategory />
-        </div>
-      </div>
-
       {/* Main content with map */}
       <div className="flex-grow h-screen relative">
-  
         {/* Map container */}
-        <div ref={mapContainer} className="w-full h-full" />
+        <div ref={mapContainer} className="w-full h-full relative">
+          {/* Sidebar */}
+          <div
+            className={`${
+              isSidebarOpen ? 'translate-x-0' : '-translate-x-full'
+            } transition-transform duration-300 absolute z-10 w-44 sm:w-60 md:w-72 lg:w-80 h-full bg-zinc-800 text-white shadow-lg overflow-y-auto flex flex-col`}
+          >
+            {/* Sidebar Header */}
+            <div className="p-4 border-b border-zinc-700">
+              <h1 className="text-xl font-bold">Field Manager</h1>
+            </div>
+
+            {/* Controls section in sidebar */}
+            <MapControls
+              onReset={handleReset}
+              onSave={handleSave}
+              onLoad={handleLoad}
+              isLoading={isLoading}
+              isSaving={isSaving}
+              hasFields={fields.length > 0}
+            />
+
+            {/* Info panel in sidebar */}
+            <InfoPanel
+              lng={lng}
+              lat={lat}
+              fieldArea={fieldArea > 0 ? fieldArea : totalArea}
+            />
+
+            {/* Field list in sidebar */}
+            <div className="flex-grow p-4 overflow-y-auto">
+              <h2 className="text-lg font-semibold mb-2">Fields</h2>
+              <FieldList
+                onFieldSelect={setSelectedFieldId}
+                selectedFieldId={selectedFieldId}
+              />
+            </div>
+
+            {/* Input Category in sidebar */}
+            <div className="p-4 border-t border-zinc-700">
+              <InputCategory />
+            </div>
+          </div>
+        </div>
 
         {/* Auth overlay */}
-        {(!isSignedIn) ? (
+        {!isSignedIn && (
           <div className="absolute z-50 inset-0 flex items-center justify-center bg-black/70">
-            <p className="text-lg text-white font-semibold">Please sign in to access the map</p>
+            <p className="text-lg text-white font-semibold">
+              Please sign in to access the map
+            </p>
           </div>
-        ) : ''}
+        )}
 
         {/* Field editor - repositioned */}
         {selectedFieldId && (
           <FieldEditor
-            field={fields.find(p => p.id === selectedFieldId) || null}
+            field={fields.find((p) => p.id === selectedFieldId) || null}
             onUpdate={handleFieldUpdate}
             onSave={handleFieldChanges}
             onClose={() => setSelectedFieldId(null)}
@@ -131,7 +140,7 @@ export default function MapComponent() {
       </div>
 
       {/* Category Modal */}
-      <CategoryModal 
+      <CategoryModal
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
         onConfirm={handleCategorySelect}

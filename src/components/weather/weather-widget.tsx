@@ -36,7 +36,7 @@ export default function WeatherWidget(){
 
   if (loading) {
     return (
-      <div className="bg-zinc-100 rounded-lg mt-12 shadow-xl overflow-hidden">
+      <div className="bg-zinc-100 rounded-lg sm:mt-12 mt-4 shadow-xl overflow-hidden">
         <div className="px-6 py-4">
           <div className="flex items-center">
             <Cloud className="mr-2 h-6 w-6" />
@@ -52,7 +52,7 @@ export default function WeatherWidget(){
 
   if (!weather) {
     return (
-      <div className="bg-zinc-100 rounded-lg mt-12 shadow-xl overflow-hidden">
+      <div className="bg-zinc-100 rounded-lg sm:mt-12 mt-4 shadow-xl overflow-hidden">
         <div className="px-6 py-4">
           <div className="flex items-center">
             <Cloud className="mr-2 h-6 w-6" />
@@ -67,7 +67,7 @@ export default function WeatherWidget(){
   }
 
   return (
-    <div className="bg-zinc-100 rounded-lg mt-12 shadow-xl overflow-hidden">
+    <div className="bg-zinc-100 rounded-lg sm:mt-12 mt-4 shadow-xl overflow-hidden">
       <div className="pl-4 py-4">
         <div className="flex items-center border-b border-zinc-400/20">
           <h2 className="text-xl font-semibold">Weather Conditions</h2>

@@ -30,7 +30,7 @@ export default function MapReadOnly() {
   }, []);
   
   return (
-    <div className="relative bg-zinc-50 w-full h-[700px] p-2 md:mt-8">
+    <div className="relative bg-zinc-50 w-full sm:h-[700px] h-[600px] p-2 md:mt-8">
       {isLoading && <LoadingSpinner />}
       
       <div ref={mapContainer} className="w-full h-full"/>

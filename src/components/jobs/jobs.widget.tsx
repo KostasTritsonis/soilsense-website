@@ -24,7 +24,7 @@ export default function JobsWidget() {
 
   
   return (
-    <section className="bg-zinc-100 rounded-lg mt-12 shadow-xl ">
+    <section className="bg-zinc-100 rounded-lg sm:mt-12 mt-4 shadow-xl ">
       <div className="pl-4 pt-4">
         <div className="flex items-center border-b border-zinc-400/20">
           <h2 className="text-xl font-semibold">Due Jobs</h2>

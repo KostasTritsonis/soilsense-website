@@ -61,13 +61,13 @@ export default function Header() {
       </nav>
 
       <nav className="fixed bottom-0 left-0 right-0 bg-white border-t z-50 border-zinc-200 sm:hidden">
-      <ul className="flex justify-around items-center p-2">
+      <ul className="flex justify-around items-center py-0.5">
         {navLinks.map((link) => (
           <li key={link.href} className="flex flex-col items-center">
             <Link
               href={link.href}
               className={`flex flex-col items-center ${
-                pathname === link.href ? 'text-zinc-900' : 'text-zinc-400'
+                pathname === link.href ? 'text-zinc-900 font-semibold' : 'text-zinc-400'
               }`}
             >
               <Image
