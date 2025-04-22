@@ -9,7 +9,7 @@ type MapControlsProps = {
   
 export default function MapControls ({ onReset, onSave, onLoad, isLoading, isSaving, hasFields }: MapControlsProps)  {
   return (
-    <div className="p-4 space-y-4">
+    <div className="p-4 space-y-4 text-sm">
       <h2 className="text-lg font-semibold mb-2">Map Controls</h2>
       <div className="flex flex-col space-y-2">
         <button
