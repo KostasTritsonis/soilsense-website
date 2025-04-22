@@ -9,13 +9,14 @@ import 'react-big-calendar/lib/css/react-big-calendar.css';
 import { format, parse, startOfWeek, getDay } from 'date-fns';
 import {enUS} from 'date-fns/locale/en-US';
 import { useFields } from '@/context/fields-context';
+import { Job } from '@/lib/types';
 
 // Define type for calendar event
 interface CalendarEvent {
   title: string;
   start: Date;
   end: Date;
-  resource: any;
+  resource: Job;
 }
 
 export default function Page() {
@@ -55,7 +56,7 @@ export default function Page() {
   };
 
   // Define a custom event style getter to color events based on job properties
-  const eventStyleGetter = (event: CalendarEvent) => {
+  const eventStyleGetter = () => {
     return {
       style: {
         backgroundColor: '#4CAF50', // Green for agricultural jobs
