@@ -4,34 +4,68 @@ import { PlusCircle } from 'lucide-react';
 import JobsTable from '@/components/jobs/jobs-table';
 import JobForm from '@/components/jobs/jobs-form';
 import { useUser } from '@clerk/nextjs';
-import { Calendar, dateFnsLocalizer, Views } from 'react-big-calendar';
+import { Calendar, dateFnsLocalizer, View, Views } from 'react-big-calendar';
 import 'react-big-calendar/lib/css/react-big-calendar.css';
 import { format, parse, startOfWeek, getDay } from 'date-fns';
+import {enUS} from 'date-fns/locale/en-US';
 import { useFields } from '@/context/fields-context';
+
+// Define type for calendar event
+interface CalendarEvent {
+  title: string;
+  start: Date;
+  end: Date;
+  resource: any;
+}
 
 export default function Page() {
   const [showJobForm, setShowJobForm] = useState(false);
-  const {jobs} = useFields();
+  const { jobs } = useFields();
   const { isSignedIn } = useUser();
-  const [view, setView] = useState(Views.MONTH);
+  const [view, setView] = useState<View>(Views.MONTH);
 
   const locales = {
-    'en-US': require('date-fns/locale/en-US'),
+    'en-US': enUS,
   };
+
   const localizer = dateFnsLocalizer({
     format,
     parse,
-    startOfWeek: () => startOfWeek(new Date(), { weekStartsOn: 1 }),
+    startOfWeek,
     getDay,
     locales,
   });
 
-
-  const events = jobs?.map(job => ({
+  // Ensure jobs exist and handle potential null/undefined endDate values
+  const events: CalendarEvent[] = jobs?.map((job) => ({
     title: job.title,
     start: new Date(job.startDate),
-    end: new Date(job.endDate), // Set the end date same as start for single-day jobs
-  }))
+    end: job.endDate ? new Date(job.endDate) : new Date(job.startDate),
+    resource: job, // This allows accessing the full job data in event handlers
+  })) || [];
+
+  const handleSelectEvent = (event: CalendarEvent) => {
+    // You can handle event clicks here, e.g., show job details in a modal
+    console.log('Selected job:', event.resource);
+  };
+
+  // Define custom handler for view changes
+  const handleViewChange = (newView: View) => {
+    setView(newView);
+  };
+
+  // Define a custom event style getter to color events based on job properties
+  const eventStyleGetter = (event: CalendarEvent) => {
+    return {
+      style: {
+        backgroundColor: '#4CAF50', // Green for agricultural jobs
+        color: 'white',
+        borderRadius: '4px',
+        border: 'none',
+        padding: '2px 5px'
+      }
+    };
+  };
 
   return (
     <div className="container mx-auto px-4 py-8 flex flex-col max-sm:pb-[60px]">
@@ -39,11 +73,11 @@ export default function Page() {
 
       {!isSignedIn && (
         <div className="absolute z-50 inset-0 flex items-center justify-center bg-black/70">
-          <p className="text-lg text-white font-semibold">Please sign in to access the map</p>
+          <p className="text-lg text-white font-semibold">Please sign in to access the jobs</p>
         </div>
       )}
 
-      <div className="mt-4 lg:w-[50%] w-[35%] flex flex-col sm:flex-row sm:justify-between items-center">
+      <div className="mt-4 flex flex-col sm:flex-row sm:justify-between items-start">
         <button
           onClick={() => setShowJobForm(!showJobForm)}
           className="flex items-center gap-2 bg-green-600 hover:bg-green-700 text-white md:text-[14px] text-[12px] px-4 py-2 rounded-md transition w-full sm:w-auto">
@@ -67,10 +101,14 @@ export default function Page() {
             events={events}
             startAccessor="start"
             endAccessor="end"
-            defaultView={view}
-            views={['month', 'week', 'day', 'agenda']}
+            view={view}
+            onView={handleViewChange}
+            views={[Views.MONTH, Views.WEEK, Views.DAY, Views.AGENDA]}
             style={{ height: 500 }}
             className="border rounded-lg shadow-md"
+            onSelectEvent={handleSelectEvent}
+            eventPropGetter={eventStyleGetter}
+            tooltipAccessor={(event: CalendarEvent) => event.title}
           />
         </div>
       </div>
