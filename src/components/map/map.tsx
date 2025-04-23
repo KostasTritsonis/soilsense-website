@@ -8,7 +8,6 @@ import FieldList from './field-list';
 import FieldEditor from './field-editor';
 import { useUser } from '@clerk/nextjs';
 import CategoryModal from './caterogy-modal';
-import InputCategory from './input-category';
 import { useMapHandlers } from '@/lib/hooks';
 import { useFields } from '@/context/fields-context';
 
