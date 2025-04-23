@@ -1,8 +1,6 @@
 'use server'
-
 import { prisma } from '@/lib/db';
 import { JobFormData, JobStatus } from '@/lib/types';
-import { revalidatePath } from 'next/cache';
 
 // Create a new job
 export async function createJob(data: JobFormData) {
@@ -18,8 +16,6 @@ export async function createJob(data: JobFormData) {
         assignedToId: data.assignedToId,
       },
     });
-    
-    revalidatePath('/jobs');
     return { success: true, job };
   } catch (error) {
     console.error('Failed to create job:', error);
@@ -54,7 +50,6 @@ export async function updateJobStatus(id: string, status: JobStatus) {
       data: { status },
     });
     
-    revalidatePath('/jobs');
     return { success: true, job };
   } catch (error) {
     console.error('Failed to update job status:', error);
@@ -81,7 +76,6 @@ export async function getUsers() {
 export async function deleteJob(id: string) {
   try {
     await prisma.job.delete({ where: { id } });
-    revalidatePath('/jobs');
     return { success: true, message: 'Job deleted successfully!' };
   } catch (error) {
     console.error('Error deleting job:', error);

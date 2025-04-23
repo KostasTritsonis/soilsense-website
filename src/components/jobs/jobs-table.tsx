@@ -55,7 +55,7 @@ export default function JobsTable() {
   const handleStatusChange = async (id: string, newStatus: string) => {
     const result = await updateJobStatus(id, newStatus as JobStatus);
     if (result.success) {
-      router.refresh();
+      setTimeout(() => router.refresh(), 300);
     } else {
       alert('Failed to update job status');
     }
@@ -76,7 +76,7 @@ export default function JobsTable() {
   const handleDelete = async (id: string) => {
    const result = await deleteJob(id);
    if (result.success) {
-    router.refresh();
+    setTimeout(() => router.refresh(), 100);
    } else {
     alert('Failed to delete job');
    }

@@ -45,7 +45,7 @@ export default function Home() {
       <section className="flex flex-col items-center">
         <div className="flex flex-wrap gap-4 w-full max-sm:justify-center max-w-[900px] mt-3">
           <Link href="/fields">
-            <Card props={{ title: "Total Fields", value: `${fields.length}`, subtitle: `${totalArea.toFixed(2)} \u33A1 (${(totalArea / 1000).toFixed(1)} acres)` }} />
+            <Card props={{ title: "Total Fields", value: `${fields.length}`, subtitle: `${totalArea.toFixed(2)} \u33A1` }} />
           </Link>
           <Card props={{ title: "Jobs Active", value: `${jobs?.filter((job) => job.status === "ONGOING").length}`, image: active }} />
           <Card props={{ title: "Jobs Due", value: `${jobs?.filter((job) => job.status === "DUE").length}`, image: due }} />

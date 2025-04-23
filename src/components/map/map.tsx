@@ -16,7 +16,7 @@ import { useFields } from '@/context/fields-context';
 export default function MapComponent() {
 
   const [selectedFieldId, setSelectedFieldId] = useState<string | null>(null);
-  const [isSidebarOpen, setIsSidebarOpen] = useState(true);
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const  { isSignedIn } =  useUser();
   const { fields } = useFields();
   const {

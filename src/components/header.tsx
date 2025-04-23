@@ -39,9 +39,9 @@ export default function Header() {
 
   return (
     <header>
-      <div className="bg-green-700 flex items-center text-zinc-50 p-4 border-b gap-x-4 border-zinc-700">
+      <div className="bg-green-800 flex items-center text-zinc-50 p-4 border-b gap-x-4 border-zinc-700">
         <Link href="/"><h1 className= {`sm:text-3xl font-semibold text-xl ${poppins.className}`}>SoilSense</h1></Link>
-        <button className="ml-auto bg-amber-200 text-green-700 width-[200px] px-2 py-1 sm:text-[14px] text-[12px] rounded-sm font-semibold hover:bg-zinc-200">UPGRADE</button>
+        <button className="ml-auto bg-white text-green-700 width-[200px] px-2 py-1 sm:text-[14px] text-[12px] rounded-md font-semibold hover:bg-zinc-200">UPGRADE</button>
         <SignedIn>
           <UserButton />
         </SignedIn>
