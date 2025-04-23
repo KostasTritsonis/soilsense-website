@@ -10,25 +10,24 @@ type MapControlsProps = {
 export default function MapControls ({ onReset, onSave, onLoad, isLoading, isSaving, hasFields }: MapControlsProps)  {
   return (
     <div className="p-4 space-y-4 text-sm">
-      <h2 className="text-lg font-semibold mb-2">Map Controls</h2>
       <div className="flex flex-col space-y-2">
         <button
           onClick={onReset}
-          className="bg-red-500 enabled:hover:bg-red-600 text-white p-2 rounded-lg transition-colors disabled:opacity-50 w-full"
+          className="bg-[#EB5757] enabled:hover:bg-[#D64545] text-white p-2 rounded-lg transition-colors disabled:opacity-50 w-full"
           disabled={isLoading || isSaving || !hasFields}
         >
           Reset Map
         </button>
         <button
           onClick={onSave}
-          className="bg-blue-500 enabled:hover:bg-blue-600 text-white p-2 rounded-lg transition-colors disabled:opacity-50 w-full"
+          className="bg-[#2A9D8F] enabled:hover:bg-[#258A7D] text-white p-2 rounded-lg transition-colors disabled:opacity-50 w-full"
           disabled={isLoading || isSaving || !hasFields}
         >
-          {isSaving ? 'Creating...' : 'Create Fields'}
+          {isSaving ? 'Creating...' : 'Create/Save Fields'}
         </button>
         <button
           onClick={onLoad}
-          className="bg-amber-950 hover:bg-amber-900 text-white p-2 rounded-lg transition-colors disabled:opacity-50 w-full"
+          className="bg-[#8B4513] hover:bg-[#7A3A0E] text-white p-2 rounded-lg transition-colors disabled:opacity-50 w-full"
           disabled={isLoading || isSaving}
         >
           {isLoading ? 'Loading...' : 'Load Fields'}

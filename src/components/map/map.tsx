@@ -57,15 +57,15 @@ export default function MapComponent() {
     }, []);
 
   return (
-    <div className="flex flex-col md:flex-row h-screen w-full bg-zinc-50 max-sm:pb-[60px] relative">
+    <div className="flex flex-col md:flex-row h-screen w-full max-sm:pb-[60px] relative">
       {/* Loading spinner */}
       {(isLoading || isSaving) && <LoadingSpinner />}
 
       {/* Sidebar toggle button - visible on mobile */}
       <button
-        className={`md:hidden absolute ${
-          isSidebarOpen ? 'left-44 rounded-r-lg' : 'rounded-lg top-1 left-12'
-        } z-20 bg-zinc-700 text-white p-2 shadow-lg`}
+        className={`absolute ${
+          isSidebarOpen ? 'left-44 sm:left-60 md:left-72 lg:left-80 rounded-r-lg' : 'rounded-lg top-1 left-12'
+        } z-20 bg-[#2A3330] text-white p-2 shadow-lg trasition duration-300`}
         onClick={() => setIsSidebarOpen(!isSidebarOpen)}
       >
         {isSidebarOpen ? '✕' : '☰'}
@@ -79,7 +79,7 @@ export default function MapComponent() {
           <div
             className={`${
               isSidebarOpen ? 'translate-x-0' : '-translate-x-full'
-            } transition-transform duration-300 absolute z-10 w-44 sm:w-60 md:w-72 lg:w-80 h-full bg-zinc-800 text-white shadow-lg overflow-y-auto flex flex-col`}
+            } transition-transform duration-300 absolute z-10 w-44 sm:w-60 md:w-72 lg:w-80 h-full bg-[#2A3330] text-white shadow-lg overflow-y-auto flex flex-col`}
           >
             {/* Sidebar Header */}
             <div className="p-4 border-b border-zinc-700">
@@ -113,9 +113,9 @@ export default function MapComponent() {
             </div>
 
             {/* Input Category in sidebar */}
-            <div className="p-4 border-t border-zinc-700">
+            {/* <div className="p-4 border-t border-zinc-700">
               <InputCategory />
-            </div>
+            </div> */}
           </div>
         </div>
 

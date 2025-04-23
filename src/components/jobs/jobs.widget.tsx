@@ -24,11 +24,11 @@ export default function JobsWidget() {
 
   
   return (
-    <section className="bg-zinc-100 rounded-lg sm:mt-12 mt-4 shadow-xl ">
-      <div className="pl-4 pt-4">
+    <section className="bg-white rounded-lg sm:mt-12 mt-4 shadow-xl ">
+      <div className="pl-4 pt-1">
         <div className="flex items-center border-b border-zinc-400/20">
           <h2 className="text-xl font-semibold">Due Jobs</h2>
-          <Link href="/jobs" className='ml-auto'><p className=" flex border rounded-md border-zinc-200/20 bg-zinc-200/40 p-1  m-4 text-[15px] text-green-700 font-semibold">See all <ArrowRightIcon /></p></Link>
+          <Link href="/jobs" className='ml-auto'><p className="flex p-3 text-[15px] text-green-700 font-semibold">See all <ArrowRightIcon /></p></Link>
         </div>
       </div>
       <div>
@@ -40,15 +40,16 @@ export default function JobsWidget() {
               <p className="text-sm text-zinc-600">AssignedTo: {job.assignedTo?.name}</p>
             </div>
             <div className='flex items-center ml-auto'>
-              <div className={`h-3 w-3 rounded-full ${
-                job.status === 'COMPLETED' ? 'bg-green-500' : 
-                job.status === 'DUE' ? 'bg-red-500' : 'bg-blue-500'
-              }`}></div>
               <p className='pl-2 pr-5'>{getDaysRemaining(job.endDate,job.status)}</p>
             </div>
             
           </div>
         ))}
+        {sortedJobs?.length === 0 && (
+          <div className="px-4 py-2 text-center text-gray-500">
+            No jobs due
+          </div>
+        )}
       </div>
 
     </section>

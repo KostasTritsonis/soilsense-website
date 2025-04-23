@@ -1,3 +1,4 @@
+import { deleteField } from '@/actions';
 import { useFields } from '@/context/fields-context';
 
 type FieldListProps = {
@@ -23,7 +24,7 @@ export default function FieldList({ onFieldSelect, selectedFieldId }: FieldListP
               className={`cursor-pointer p-2 rounded transition-colors ${
                 selectedFieldId === field.id 
                   ? 'bg-blue-600 text-white' 
-                  : 'bg-zinc-700 text-zinc-100 hover:bg-zinc-600'
+                  : 'bg-[#2A3330] border border-white/30 text-zinc-100 hover:bg-[#556962]'
               }`}
             >
               <div className="flex items-center gap-2">
@@ -34,6 +35,7 @@ export default function FieldList({ onFieldSelect, selectedFieldId }: FieldListP
                 <span className="text-sm sm:text-base truncate">
                   {field.label || 'Unnamed Field'}
                 </span>
+                <button className='ml-auto z-10' onClick={() =>deleteField(field.id)}>❌</button>
               </div>
               <div className="text-xs mt-1 opacity-80">
                 Area: {((field.area || 0)).toFixed(2)} &#13217; <br />

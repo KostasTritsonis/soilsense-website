@@ -28,7 +28,7 @@ export default function RootLayout({
           <head>
             <link rel="manifest" href="/manifest.json" />
           </head>
-          <body className={`${inter.className} bg-zinc-100 text-zinc-900 min-h-screen`}>
+          <body className={`${inter.className} bg-[#F9F5EA] text-zinc-900 min-h-screen`}>
             <Header />
             <ToastContainer />
             {children}

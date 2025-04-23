@@ -20,7 +20,7 @@ export default function FieldEditor({ field, onUpdate, onSave, onClose }: FieldE
 
   if (!field) return null;
   return (
-    <div className="absolute bottom-3 right-14 z-10 bg-zinc-800/90 p-4 rounded-lg min-w-[250px] shadow-lg border border-zinc-800">
+    <div className="absolute bottom-3 right-14 z-10 bg-[#2A3330]/70 p-4 rounded-lg sm:w-[250px] w-[200px] h-[330px] shadow-lg border border-zinc-800">
       <div className="space-y-4">
         
         {/* Label Input */}
@@ -30,7 +30,7 @@ export default function FieldEditor({ field, onUpdate, onSave, onClose }: FieldE
             type="text"
             value={field.label || ''}
             onChange={(e) => onUpdate(field.id, { label: e.target.value })}
-            className="w-full px-2 py-1 rounded bg-zinc-900 text-white border border-zinc-700 focus:border-blue-500 focus:outline-none"
+            className="w-full px-2 py-1 rounded bg-[#2A3330] text-white border text-center border-zinc-700 focus:border-blue-500 focus:outline-none"
             disabled={field.isUpdating}
           />
         </div>
@@ -38,7 +38,7 @@ export default function FieldEditor({ field, onUpdate, onSave, onClose }: FieldE
         <div>
           <label className="block text-zinc-300 text-sm mb-1">Category</label>
           <select
-            className="w-full px-2 py-1 rounded bg-zinc-900 text-white border border-zinc-700 focus:border-blue-500 focus:outline-none"
+            className="w-full px-2 py-1 rounded bg-[#2A3330] text-white text-center border border-zinc-700 focus:border-blue-500 focus:outline-none"
             value={field.categories?.[0]?.type || ""}
             onChange={(e) => onUpdate(field.id, { categories: [{ type: e.target.value }] })}
             disabled={field.isUpdating}
@@ -74,7 +74,7 @@ export default function FieldEditor({ field, onUpdate, onSave, onClose }: FieldE
         )}
 
         {/* Area Display */}
-        <div className="text-zinc-400 text-sm">
+        <div className="text-zinc-100 text-sm">
           Area: {field.area?.toFixed(2) || 0} &#13217; <br />
           Category: {field.categories?.[0].type || 'Uncategorized'}
         </div>
@@ -82,7 +82,7 @@ export default function FieldEditor({ field, onUpdate, onSave, onClose }: FieldE
         {/* Action Buttons */}
         <div className="flex gap-2 mt-3">
           <button
-            className="w-full bg-blue-600 text-white px-3 py-1 rounded hover:bg-blue-500 disabled:opacity-50"
+            className="w-full bg-[#3B82F6] text-white px-3 py-1 rounded hover:bg-blue-500 disabled:opacity-50"
             onClick={() => {onSave(field, {
               label: field.label, 
               color: field.color,
@@ -92,7 +92,7 @@ export default function FieldEditor({ field, onUpdate, onSave, onClose }: FieldE
             })}}
             disabled={field.isUpdating}
           >
-            Save
+            Update
           </button>
 
           <button

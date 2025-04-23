@@ -19,7 +19,7 @@ interface ChartData {
   }[];
 }
 
-export default function CropDistribution() {
+export default function CropWidget() {
   const { user } = useUser();
   const [chartData, setChartData] = useState<ChartData | null>(null);
   const [dbFields, setDbFields] = useState<Field[]>([]);
@@ -93,38 +93,58 @@ export default function CropDistribution() {
     setCategoryPercentages(percentages);
   }, [dbFields]); // Keep this dependency - we want the chart to update when fields change
 
-  if (!chartData) return <p>Loading...</p>;
+  if(!chartData) {
+    return (
+      <section className="bg-white rounded-lg mb-4 shadow-xl">
+        <div className="flex border-b border-zinc-400/20 pt-3 px-3">
+          <h2 className="text-lg font-semibold">Crop Distribution</h2>
+          <p className=" p-1 ml-auto text-[15px] text-green-700 font-semibold">2025</p>
+        </div>
+        <div className="flex flex-col items-center justify-center h-44">
+          <p className="text-gray-500">No data available</p>
+        </div>
+      </section>    
+    )
+  }
 
   return (
-    <div className="flex justify-center items-center">
-      <Doughnut
-        data={chartData}
-        options={{
-          cutout: "70%",
-          responsive: true,
-          plugins: {
-            legend: {
-              display: false,
-            },
-            tooltip: {
-              enabled: true,
-            },
-          },
-        }}
-      />
-      <div className="ml-8">
-        {categoryPercentages.map((item, index) => (
-          <div key={index} className="flex items-center mb-2">
-            <div
-              className="w-4 h-4 mr-2 rounded-full"
-              style={{ backgroundColor: item.color }}
-            ></div>
-            <span className="text-sm">
-              {item.category} - {item.percentage}%
-            </span>
-          </div>
-        ))}
+    <section className="bg-white rounded-lg mb-4 shadow-xl">
+      <div className="pl-4 pt-1">
+        <div className="flex items-center border-b border-zinc-400/20">
+          <h2 className="text-lg font-semibold">Crop Distribution</h2>
+          <p className="p-3 ml-auto text-[15px] text-green-700 font-semibold">2025</p>
+        </div>
       </div>
-    </div>
+      <div className="flex justify-center items-center w-44 h-auto mx-auto py-3">
+        <Doughnut
+          data={chartData}
+          options={{
+            cutout: "70%",
+            responsive: true,
+            plugins: {
+              legend: {
+                display: false,
+              },
+              tooltip: {
+                enabled: true,
+              },
+            },
+          }}
+        />
+        <div className="ml-8">
+          {categoryPercentages.map((item, index) => (
+            <div key={index} className="flex items-center mb-2">
+              <div
+                className="w-4 h-4 mr-2 rounded-full"
+                style={{ backgroundColor: item.color }}
+              ></div>
+              <span className="text-sm">
+                {item.category} - {item.percentage}%
+              </span>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
   );
 }

@@ -15,14 +15,14 @@ export default function ForecastCard({ forecast }: ForecastCardProps) {
   return (
     <div className="bg-white rounded-lg shadow-md">
       <div className="px-6 py-4">
-        <div className="flex items-center">
+        <div className="flex items-center justify-center">
           <Calendar className="mr-2 h-6 w-6" />
           <h2 className="text-xl font-semibold">5-Day Forecast</h2>
         </div>
       </div>
       <div className="px-4 pb-6">
         {/* Container for forecast items */}
-        <div className="flex gap-4 overflow-x-auto scroll-smooth  py-2 w-full">
+        <div className="flex  justify-center gap-4 overflow-x-auto scroll-smooth  py-2 w-full">
           {forecast.map((day, index) => (
             <ForecastDayItem key={index} day={day} />
           ))}
