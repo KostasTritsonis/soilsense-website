@@ -7,8 +7,15 @@ type FieldListProps = {
 };
 
 export default function FieldList({ onFieldSelect, selectedFieldId }: FieldListProps) {
-  const { fields } = useFields();
+  const { fields,setFields } = useFields();
   
+
+  const handleDeleteField = (e: React.MouseEvent,fieldId: string) => {
+    e.stopPropagation();
+    deleteField(fieldId);
+    setFields((prev) => prev.filter((f) => f.id !== fieldId));
+  }
+
   return (
     <div className="w-full">
       {fields.length === 0 ? (
@@ -35,7 +42,7 @@ export default function FieldList({ onFieldSelect, selectedFieldId }: FieldListP
                 <span className="text-sm sm:text-base truncate">
                   {field.label || 'Unnamed Field'}
                 </span>
-                <button className='ml-auto z-10' onClick={() =>deleteField(field.id)}>❌</button>
+                <button className='ml-auto w-8' onClick={(e) => handleDeleteField(e, field.id)}>❌</button>
               </div>
               <div className="text-xs mt-1 opacity-80">
                 Area: {((field.area || 0)).toFixed(2)} &#13217; <br />

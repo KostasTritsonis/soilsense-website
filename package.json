@@ -45,6 +45,7 @@
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",
+    "@svgr/webpack": "^8.1.0",
     "@types/mapbox__mapbox-gl-draw": "^1.4.8",
     "@types/mapbox__mapbox-gl-geocoder": "^5.0.0",
     "@types/node": "^20",

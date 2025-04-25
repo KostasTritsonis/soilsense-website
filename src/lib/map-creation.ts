@@ -18,6 +18,7 @@ export const MapSetup = () => {
   const drawRef = useRef<MapboxDraw | null>(null);
   const [lng, setLng] = useState<number>(24.0036);
   const [lat, setLat] = useState<number>(38.4504);
+  const [zoom, setZoom] = useState<number>(15);
   const [selectedColor, setSelectedColor] = useState<string>('#FF0000');
   const [fieldArea, setFieldArea] = useState<number>(0);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -69,6 +70,7 @@ export const MapSetup = () => {
         Wheat: '/wheat.png',
         Tomato: '/tomato.png',
         Olive: '/olive.png',
+        default: '',
       };
 
       // Load and add images
@@ -105,6 +107,7 @@ export const MapSetup = () => {
       if (!mapRef.current) return;
       setLng(parseFloat(mapRef.current.getCenter().lng.toFixed(4)));
       setLat(parseFloat(mapRef.current.getCenter().lat.toFixed(4)));
+      setZoom(parseFloat(mapRef.current.getZoom().toFixed(2)));
     });
 
     // Handle new field creation
@@ -274,6 +277,7 @@ export const MapSetup = () => {
     drawRef,
     lng,
     lat,
+    zoom,
     selectedColor,
     fieldArea,
     isModalOpen,

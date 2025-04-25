@@ -3,7 +3,6 @@ import React from 'react';
 import { JobStatus } from '@/lib/types';
 import StatusBadge from './status-badge';
 import { deleteJob, updateJobStatus } from '@/actions/index';
-import { useRouter } from 'next/navigation';
 import { useFields } from '@/context/fields-context';
 
 const header = [
@@ -32,8 +31,7 @@ const header = [
 ]
 
 export default function JobsTable() {
-  const router = useRouter();
-  const {jobs} = useFields();
+  const {jobs,setJobs} = useFields();
   if (!jobs) return null
 
   // Calculate days remaining or overdue
@@ -53,12 +51,15 @@ export default function JobsTable() {
 
   // Handle status change
   const handleStatusChange = async (id: string, newStatus: string) => {
-    const result = await updateJobStatus(id, newStatus as JobStatus);
-    if (result.success) {
-      setTimeout(() => router.refresh(), 300);
-    } else {
-      alert('Failed to update job status');
-    }
+    setJobs((prevJobs) => {
+      return prevJobs?.map((job) => {
+        if (job.id === id) {
+          return { ...job, status: newStatus as JobStatus };
+        }
+        return job;
+      });
+    });
+    await updateJobStatus(id, newStatus as JobStatus);
   };
 
   // Calculate progress for timeline visualization
@@ -74,12 +75,8 @@ export default function JobsTable() {
   };
 
   const handleDelete = async (id: string) => {
-   const result = await deleteJob(id);
-   if (result.success) {
-    setTimeout(() => router.refresh(), 100);
-   } else {
-    alert('Failed to delete job');
-   }
+    setJobs((prev) => prev?.filter((f) => f.id !== id));
+    await deleteJob(id);
   }
 
   if (jobs.length === 0) {

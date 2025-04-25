@@ -1,6 +1,6 @@
 'use client';
 import React, { useState } from 'react';
-import { PlusCircle } from 'lucide-react';
+import { Backpack, PlusCircle } from 'lucide-react';
 import JobsTable from '@/components/jobs/jobs-table';
 import JobForm from '@/components/jobs/jobs-form';
 import { useUser } from '@clerk/nextjs';
@@ -15,6 +15,7 @@ import { Job } from '@/lib/types';
 interface CalendarEvent {
   title: string;
   start: Date;
+  color: string;
   end: Date;
   resource: Job;
 }
@@ -42,8 +43,10 @@ export default function Page() {
     title: job.title,
     start: new Date(job.startDate),
     end: job.endDate ? new Date(job.endDate) : new Date(job.startDate),
+    color: job.status === 'COMPLETED' ? '#22c55e' : job.status === 'DUE' ? '#ef4444' : '#3b82f6',
     resource: job, // This allows accessing the full job data in event handlers
   })) || [];
+
 
   const handleSelectEvent = (event: CalendarEvent) => {
     // You can handle event clicks here, e.g., show job details in a modal
@@ -56,10 +59,10 @@ export default function Page() {
   };
 
   // Define a custom event style getter to color events based on job properties
-  const eventStyleGetter = () => {
+  const eventStyleGetter = (event:CalendarEvent) => {
     return {
       style: {
-        backgroundColor: '#4CAF50', // Green for agricultural jobs
+        backgroundColor: event.color,
         color: 'white',
         borderRadius: '4px',
         border: 'none',
@@ -81,7 +84,7 @@ export default function Page() {
       <div className="mt-4 flex flex-col sm:flex-row sm:justify-between items-start">
         <button
           onClick={() => setShowJobForm(!showJobForm)}
-          className="flex items-center gap-2 bg-green-600 hover:bg-green-700 text-white md:text-[14px] text-[12px] px-4 py-2 rounded-md transition w-full sm:w-auto">
+          className="flex items-center gap-2 bg-green-600 hover:bg-green-700 text-white md:text-[14px] text-[12px] px-4 py-2 rounded-md transition w-auto">
           <PlusCircle className="w-5 h-5" />
           Add New Job
         </button>

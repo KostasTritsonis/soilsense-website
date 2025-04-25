@@ -48,10 +48,11 @@ export const useMapHandlers = ({mapRef, drawRef}: handlerProps) => {
       },
       layout: {
         "icon-image": iconImage,
-        "icon-size": 0.7,
+        "icon-size": 1,
         "icon-offset": [-20, 0],
         "icon-allow-overlap": true,
       },
+      minzoom: 17,
     });
 
     mapRef.current.addLayer({
@@ -67,7 +68,7 @@ export const useMapHandlers = ({mapRef, drawRef}: handlerProps) => {
       },
       layout: {
         'text-field': label,
-        'text-size': 16,
+        'text-size': 14,
         'text-font': ['Open Sans Bold'],
         "text-offset": [1, 0],
         "text-anchor": "left",
@@ -77,6 +78,7 @@ export const useMapHandlers = ({mapRef, drawRef}: handlerProps) => {
       paint: {
         'text-color': '#ffffff',
       },
+      minzoom: 17,
     });
   }
 

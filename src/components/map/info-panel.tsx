@@ -1,10 +1,11 @@
 type InfoPanelProps = {
   lng: number;
   lat: number;
+  zoom: number;
   fieldArea: number;
 };
   
-  export default function InfoPanel({ lng, lat, fieldArea }: InfoPanelProps) {
+  export default function InfoPanel({ lng, lat,zoom, fieldArea }: InfoPanelProps) {
 
     return (
       <div className="p-4 border-t border-b border-zinc-700">
@@ -16,6 +17,10 @@ type InfoPanelProps = {
           <div className="flex">
             <p>Latitude:</p>
             <p className="ml-auto">{lat.toFixed(4)}</p>
+          </div>
+          <div className="flex">
+            <p>Zoom:</p>
+            <p className="ml-auto">{zoom.toFixed(2)}</p>
           </div>
           <div className="flex">
             <p>Area:</p>

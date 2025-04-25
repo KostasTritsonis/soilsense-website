@@ -25,6 +25,7 @@ export default function MapComponent() {
     drawRef,
     lng,
     lat,
+    zoom,
     fieldArea,
     isModalOpen,
     setIsModalOpen,
@@ -99,6 +100,7 @@ export default function MapComponent() {
             <InfoPanel
               lng={lng}
               lat={lat}
+              zoom={zoom}
               fieldArea={fieldArea > 0 ? fieldArea : totalArea}
             />
 
