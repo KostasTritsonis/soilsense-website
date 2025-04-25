@@ -3,7 +3,6 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import {SignedIn, SignedOut, UserButton } from "@clerk/nextjs";
 import { Poppins } from "next/font/google";
-import Image from "next/image";
 import Dashboard from "../../public/dashboard.svg";
 import Fields from "../../public/fields.svg";
 import Jobs from "../../public/jobs.svg";

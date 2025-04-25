@@ -1,6 +1,6 @@
 'use client';
 import React, { useState } from 'react';
-import { Backpack, PlusCircle } from 'lucide-react';
+import { PlusCircle } from 'lucide-react';
 import JobsTable from '@/components/jobs/jobs-table';
 import JobForm from '@/components/jobs/jobs-form';
 import { useUser } from '@clerk/nextjs';
