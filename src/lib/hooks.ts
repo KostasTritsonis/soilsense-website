@@ -48,11 +48,11 @@ export const useMapHandlers = ({mapRef, drawRef}: handlerProps) => {
       },
       layout: {
         "icon-image": iconImage,
-        "icon-size": 1,
+        "icon-size": 0.8,
         "icon-offset": [-20, 0],
         "icon-allow-overlap": true,
       },
-      minzoom: 17,
+      minzoom: 16,
     });
 
     mapRef.current.addLayer({
@@ -78,7 +78,7 @@ export const useMapHandlers = ({mapRef, drawRef}: handlerProps) => {
       paint: {
         'text-color': '#ffffff',
       },
-      minzoom: 17,
+      minzoom: 16,
     });
   }
 
@@ -133,12 +133,12 @@ export const useMapHandlers = ({mapRef, drawRef}: handlerProps) => {
     
     try {
       setIsSaving(true);
-      const results = await Promise.all(fields.map(async(field)  => {
-        const existingPolygon = await getFieldById(field.id);
-        if (existingPolygon === null) {
-          return await createField(field);
-        }
-      }));
+      const existingFields = await getFieldsByUser();
+      const results = await Promise.all(fields.map(async (field) =>
+        existingFields?.some(f => f.id === field.id)
+          ? updateField(field.id, field)
+          : createField(field)
+      ));
       const failed = results.filter((res) => !res?.success);
 
       const validFields = fields.filter(field => 

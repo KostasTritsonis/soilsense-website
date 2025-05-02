@@ -26,7 +26,7 @@ export const MapSetup = () => {
   const initialLngRef = useRef<number>(lng);
   const initialLatRef = useRef<number>(lat);
 
-  const { setFields } = useFields();
+  const {setFields } = useFields();
   const setFieldsRef = useRef(setFields);
 
   // Store initial coordinates and setFields in refs to avoid dependency changes
@@ -123,6 +123,7 @@ export const MapSetup = () => {
       const currentColor = selectedColorRef.current;
 
       // Add the field to your fields array
+      
       setFieldsRef.current((prev) => [...prev, { id: fieldId, color: currentColor, area: fArea, coordinates, label:"", categories:[] }]);
 
       setFieldArea(fArea);

@@ -9,11 +9,13 @@ import { useUser } from "@clerk/nextjs";
 interface FieldsContextType {
   fields: Field[];
   isLoading: boolean;
+  tempFields: Field[];
   jobs: Job[] | undefined;
   users: User[] | undefined;
   setFields: React.Dispatch<React.SetStateAction<Field[]>>;
   setJobs: React.Dispatch<React.SetStateAction<Job[] | undefined>>;
   setUsers: React.Dispatch<React.SetStateAction<User[] | undefined>>;
+  setTempFields: React.Dispatch<React.SetStateAction<Field[]>>;
 }
 
 // Create context
@@ -26,6 +28,7 @@ export function FieldsProvider({ children }: { children: React.ReactNode }) {
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [jobs,setJobs] = useState<Job[] | undefined>([]);
   const [users,setUsers] = useState<User[] | undefined>([]);
+  const [tempFields, setTempFields] = useState<Field[]>([]);
 
   useEffect(() => {
     const fetchFields = async () => {
@@ -48,10 +51,11 @@ export function FieldsProvider({ children }: { children: React.ReactNode }) {
         };
 
     if (user) fetchFields(); fetchJobs();
+
   }, [user]);
 
   return (
-    <FieldsContext.Provider value={{ fields, isLoading, jobs, users, setFields, setJobs, setUsers }}>
+    <FieldsContext.Provider value={{ fields, isLoading, jobs, users,tempFields,setTempFields, setFields, setJobs, setUsers }}>
       {children}
     </FieldsContext.Provider>
   );
