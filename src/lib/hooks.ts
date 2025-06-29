@@ -11,8 +11,8 @@ import { useFields } from "@/context/fields-context";
 type handlerProps = {
   mapRef: React.RefObject<mapboxgl.Map | null>;
   drawRef: React.RefObject<MapboxDraw | null>;
-  startPointMarkerRef: React.RefObject<mapboxgl.Marker | null>;
-  setStartPoint: React.Dispatch<React.SetStateAction<[number, number] | null>>;
+  startPointMarkerRef?: React.RefObject<mapboxgl.Marker | null>;
+  setStartPoint?: React.Dispatch<React.SetStateAction<[number, number] | null>>;
 };
 
 export const useMapHandlers = ({
@@ -107,11 +107,13 @@ export const useMapHandlers = ({
       }
 
       // Clear the start point marker and state
-      if (startPointMarkerRef.current) {
+      if (startPointMarkerRef?.current) {
         startPointMarkerRef.current.remove();
         startPointMarkerRef.current = null;
       }
-      setStartPoint(null);
+      if (setStartPoint) {
+        setStartPoint(null);
+      }
 
       fields.map((fields) => {
         if (mapRef.current?.getLayer(fields.id)) {
