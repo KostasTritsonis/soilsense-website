@@ -1,27 +1,39 @@
-'use client';
-import { useState } from 'react';
-import { toast } from 'react-toastify';
-import type { Category, Field } from '@/lib/types';
-import MapboxDraw from '@mapbox/mapbox-gl-draw';
+"use client";
+import { useState } from "react";
+import { toast } from "react-toastify";
+import type { Category, Field } from "@/lib/types";
+import MapboxDraw from "@mapbox/mapbox-gl-draw";
 import "mapbox-gl/dist/mapbox-gl.css";
-import '@mapbox/mapbox-gl-draw/dist/mapbox-gl-draw.css';
-import { createField, getFieldById, getFieldsByUser, updateField } from '@/actions';
-import { useFields } from '@/context/fields-context';
+import "@mapbox/mapbox-gl-draw/dist/mapbox-gl-draw.css";
+import { createField, getFieldsByUser, updateField } from "@/actions";
+import { useFields } from "@/context/fields-context";
 
 type handlerProps = {
   mapRef: React.RefObject<mapboxgl.Map | null>;
   drawRef: React.RefObject<MapboxDraw | null>;
+  startPointMarkerRef: React.RefObject<mapboxgl.Marker | null>;
+  setStartPoint: React.Dispatch<React.SetStateAction<[number, number] | null>>;
 };
 
-export const useMapHandlers = ({mapRef, drawRef}: handlerProps) => {
+export const useMapHandlers = ({
+  mapRef,
+  drawRef,
+  startPointMarkerRef,
+  setStartPoint,
+}: handlerProps) => {
   const [isLoading, setIsLoading] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [totalArea, setTotalArea] = useState<number>(0);
 
-  const { fields,setFields } = useFields();
+  const { fields, setFields } = useFields();
 
-  const addLayers = (id:string,label:string,coordinates:number[][][],categories:Category[]) => {
+  const addLayers = (
+    id: string,
+    label: string,
+    coordinates: number[][][],
+    categories: Category[]
+  ) => {
     let lng = 0;
     let lat = 0;
     coordinates[0].forEach((point) => {
@@ -57,34 +69,49 @@ export const useMapHandlers = ({mapRef, drawRef}: handlerProps) => {
 
     mapRef.current.addLayer({
       id: `${id}-label`,
-      type: 'symbol',
+      type: "symbol",
       source: {
-        type: 'geojson',
+        type: "geojson",
         data: {
-          type: 'Feature',
-          geometry: { type: 'Point', coordinates: center },
+          type: "Feature",
+          geometry: { type: "Point", coordinates: center },
           properties: { label: label },
         },
       },
       layout: {
-        'text-field': label,
-        'text-size': 14,
-        'text-font': ['Open Sans Bold'],
+        "text-field": label,
+        "text-size": 14,
+        "text-font": ["Open Sans Bold"],
         "text-offset": [1, 0],
         "text-anchor": "left",
         "text-allow-overlap": true,
-        
       },
       paint: {
-        'text-color': '#ffffff',
+        "text-color": "#ffffff",
       },
       minzoom: 16,
     });
-  }
+  };
 
   const handleReset = () => {
     if (drawRef.current && mapRef.current) {
       drawRef.current.deleteAll();
+
+      // Clear the directions route if it exists
+      const directionsRouteId = "directions-route";
+      if (mapRef.current.getLayer(directionsRouteId)) {
+        mapRef.current.removeLayer(directionsRouteId);
+      }
+      if (mapRef.current.getSource(directionsRouteId)) {
+        mapRef.current.removeSource(directionsRouteId);
+      }
+
+      // Clear the start point marker and state
+      if (startPointMarkerRef.current) {
+        startPointMarkerRef.current.remove();
+        startPointMarkerRef.current = null;
+      }
+      setStartPoint(null);
 
       fields.map((fields) => {
         if (mapRef.current?.getLayer(fields.id)) {
@@ -94,7 +121,7 @@ export const useMapHandlers = ({mapRef, drawRef}: handlerProps) => {
         if (mapRef.current?.getLayer(labelLayerId)) {
           mapRef.current.removeLayer(labelLayerId);
         }
-        
+
         const borderLayerId = `${fields.id}-border`;
         if (mapRef.current?.getLayer(borderLayerId)) {
           mapRef.current.removeLayer(borderLayerId);
@@ -103,7 +130,6 @@ export const useMapHandlers = ({mapRef, drawRef}: handlerProps) => {
         if (mapRef.current?.getLayer(iconLayerId)) {
           mapRef.current.removeLayer(iconLayerId);
         }
-        
       });
 
       fields.map((fields) => {
@@ -130,30 +156,33 @@ export const useMapHandlers = ({mapRef, drawRef}: handlerProps) => {
   };
 
   const handleSave = async () => {
-    
     try {
       setIsSaving(true);
       const existingFields = await getFieldsByUser();
-      const results = await Promise.all(fields.map(async (field) =>
-        existingFields?.some(f => f.id === field.id)
-          ? updateField(field.id, field)
-          : createField(field)
-      ));
+      const results = await Promise.all(
+        fields.map(async (field) =>
+          existingFields?.some((f) => f.id === field.id)
+            ? updateField(field.id, field)
+            : createField(field)
+        )
+      );
       const failed = results.filter((res) => !res?.success);
 
-      const validFields = fields.filter(field => 
-        field && field.id && field.coordinates && field.color
+      const validFields = fields.filter(
+        (field) => field && field.id && field.coordinates && field.color
       );
       if (validFields.length === 0) {
-        throw new Error('No valid fields to save');
+        throw new Error("No valid fields to save");
       }
 
       if (failed.length > 0) {
         throw new Error(`Failed to save ${failed.length} fields.`);
       }
-      toast.success('All fields saved successfully!');
+      toast.success("All fields saved successfully!");
     } catch (error) {
-      setError(error instanceof Error ? error.message : 'Failed to save fields.');
+      setError(
+        error instanceof Error ? error.message : "Failed to save fields."
+      );
     } finally {
       setIsSaving(false);
     }
@@ -163,58 +192,62 @@ export const useMapHandlers = ({mapRef, drawRef}: handlerProps) => {
     try {
       setIsLoading(true);
       const dbFields = await getFieldsByUser();
-  
+
       if (!dbFields) {
         return;
       }
-  
+
       handleReset();
       setFields(dbFields);
-  
-      dbFields.forEach(({ id, color, coordinates, label, area, categories }) => {
-        if (drawRef.current) {
-          drawRef.current.add({
-            id,
-            type: "Feature",
-            properties: {},
-            geometry: { type: "Polygon", coordinates },
-          });
-        }
-  
-        if (!mapRef.current) return;
 
-        setTotalArea((prev) => (prev + area));
-  
-        if (!mapRef.current.getSource(id)) {
-          mapRef.current.addSource(id, {
-            type: "geojson",
-            data: {
+      dbFields.forEach(
+        ({ id, color, coordinates, label, area, categories }) => {
+          if (drawRef.current) {
+            drawRef.current.add({
+              id,
               type: "Feature",
+              properties: {},
               geometry: { type: "Polygon", coordinates },
-              properties: { color },
-            },
-          });
-  
-          mapRef.current.addLayer({
-            id,
-            type: "fill",
-            source: id,
-            paint: { "fill-color": color, "fill-opacity": 0.5 },
-          });
-  
-          // Add icon next to label
-          addLayers(id,label,coordinates,categories);
-  
-          mapRef.current.addLayer({
-            id: `${id}-border`,
-            type: "line",
-            source: id,
-            paint: { "line-color": color, "line-width": 2 },
-          });
+            });
+          }
+
+          if (!mapRef.current) return;
+
+          setTotalArea((prev) => prev + area);
+
+          if (!mapRef.current.getSource(id)) {
+            mapRef.current.addSource(id, {
+              type: "geojson",
+              data: {
+                type: "Feature",
+                geometry: { type: "Polygon", coordinates },
+                properties: { color },
+              },
+            });
+
+            mapRef.current.addLayer({
+              id,
+              type: "fill",
+              source: id,
+              paint: { "fill-color": color, "fill-opacity": 0.5 },
+            });
+
+            // Add icon next to label
+            addLayers(id, label, coordinates, categories);
+
+            mapRef.current.addLayer({
+              id: `${id}-border`,
+              type: "line",
+              source: id,
+              paint: { "line-color": color, "line-width": 2 },
+            });
+          }
         }
-      });
+      );
     } catch (error) {
-      setError(error instanceof Error ? error.message : "Failed to load fields.");
+      setError(
+        error instanceof Error ? error.message : "Failed to load fields."
+      );
     } finally {
       setIsLoading(false);
     }
@@ -223,37 +256,41 @@ export const useMapHandlers = ({mapRef, drawRef}: handlerProps) => {
   const handleFieldUpdate = async (id: string, updates: Partial<Field>) => {
     try {
       if (!id || !updates || Object.keys(updates).length === 0) {
-        throw new Error('Invalid update data');
+        throw new Error("Invalid update data");
       }
-      setFields(currentFields => 
-        currentFields.map(field => 
+      setFields((currentFields) =>
+        currentFields.map((field) =>
           field.id === id ? { ...field, isUpdating: true } : field
         )
       );
-      setFields(currentFields => {
-        const newFields = currentFields.map(field => 
+      setFields((currentFields) => {
+        const newFields = currentFields.map((field) =>
           field.id === id ? { ...field, ...updates, isUpdating: false } : field
         );
-        
+
         // Update map visualization
         if (mapRef.current) {
           // Update color if changed
           if (updates.color && mapRef.current.getLayer(id)) {
-            mapRef.current.setPaintProperty(id, 'fill-color', updates.color);
+            mapRef.current.setPaintProperty(id, "fill-color", updates.color);
 
             const borderLayerId = `${id}-border`;
             if (mapRef.current.getLayer(borderLayerId)) {
-              mapRef.current.setPaintProperty(borderLayerId, "line-color", updates.color);
+              mapRef.current.setPaintProperty(
+                borderLayerId,
+                "line-color",
+                updates.color
+              );
             }
           }
-  
+
           // Update label if changed
           if (updates.label) {
             const labelLayerId = `${id}-label`;
             if (mapRef.current.getLayer(labelLayerId)) {
               mapRef.current.setLayoutProperty(
                 labelLayerId,
-                'text-field',
+                "text-field",
                 updates.label
               );
             }
@@ -262,72 +299,58 @@ export const useMapHandlers = ({mapRef, drawRef}: handlerProps) => {
         return newFields;
       });
     } catch (error) {
-      console.error('Error updating field:', error);
-    
-      // Revert changes in case of error
-      setFields(currentFields => 
-        currentFields.map(field => 
-          field.id === id ? { ...field, isUpdating: false } : field
-        )
+      setError(
+        error instanceof Error ? error.message : "Failed to update field."
       );
-    
-      toast.error('Failed to update field. Please try again.');
     }
   };
 
-  const handleFieldChanges = async (field: Field,updates: Partial<Field>) => {
+  const handleFieldChanges = async (field: Field, updates: Partial<Field>) => {
     try {
-        // Show loading state for the specific field being updated
-      setFields(currentPolygons => 
-        currentPolygons.map(p => 
-          p.id === field.id ? { ...p, isUpdating: true } : p
-        )
-      );
-      const existingPolygon = await getFieldById(field.id);  
-  
-      let result;
-      if (existingPolygon === null) {
-          // Create a new field
-        if (!field.id || !field.coordinates || !field.color) {
-          throw new Error('Invalid field data');
-        }
-        result = await createField(field);
-      }else{
-        if (!updates || Object.keys(updates).length === 0) {
-          throw new Error('No updates provided');
-        }
-        result = await updateField(field.id, updates);
+      setIsSaving(true);
+      const updatedField = { ...field, ...updates };
+      const result = await updateField(field.id, updatedField);
+
+      if (result.success) {
+        setFields((currentFields) =>
+          currentFields.map((f) => (f.id === field.id ? updatedField : f))
+        );
+        toast.success(`Field "${updatedField.label}" updated successfully.`);
+      } else {
+        const errorMessage = (result as { error?: unknown }).error;
+        throw new Error(String(errorMessage) || "Failed to update field.");
       }
-      
-      if (!result?.success) {
-        throw new Error("Failed to save field to database");
-      }  
     } catch (error) {
-      console.error("Error saving field:", error);
-      toast.error("Failed to save field.");
-    }finally{
-      setFields(currentPolygons => 
-        currentPolygons.map(p => 
-          p.id === field.id ? { ...p, isUpdating: false } : p
-        )
+      toast.error(
+        error instanceof Error ? error.message : "An unknown error occurred."
       );
+    } finally {
+      setIsSaving(false);
     }
   };
 
-  const handleCategorySelect = (categoryType: string, label:string) => {
+  const handleCategorySelect = (categoryType: string, label: string) => {
+    if (drawRef.current) {
+      drawRef.current.getAll();
+      const all = drawRef.current.getAll();
+      if (all.features.length > 0) {
+        const fieldId = all.features[all.features.length - 1].id as string;
+        setFields((prev) =>
+          prev.map((f) =>
+            f.id === fieldId
+              ? { ...f, label: label, categories: [{ type: categoryType }] }
+              : f
+          )
+        );
 
-    fields[fields.length-1].label = label;
-    fields[fields.length-1].categories = [{type:categoryType}];
-
-    // Create the new field with the category
-    const newField = {
-      ...fields[fields.length-1],
-      categories: [{type:categoryType}],
-      label: label
-    };
-
-    // Add the label to the map if it exists
-    addLayers(newField.id,newField.label,newField.coordinates,newField.categories);  
+        const field = fields.find((f) => f.id === fieldId);
+        if (field) {
+          addLayers(field.id, label, field.coordinates, [
+            { type: categoryType },
+          ]);
+        }
+      }
+    }
   };
 
   return {
@@ -340,6 +363,6 @@ export const useMapHandlers = ({mapRef, drawRef}: handlerProps) => {
     handleLoad,
     handleFieldUpdate,
     handleFieldChanges,
-    handleCategorySelect
+    handleCategorySelect,
   };
 };

@@ -1,4 +1,4 @@
-'use client';
+"use client";
 import { getAllCategories } from "@/actions";
 import { Field } from "@/lib/types";
 import { Category } from "@prisma/client";
@@ -11,7 +11,12 @@ type FieldEditorProps = {
   onClose: () => void;
 };
 
-export default function FieldEditor({ field, onUpdate, onSave, onClose }: FieldEditorProps) {
+export default function FieldEditor({
+  field,
+  onUpdate,
+  onSave,
+  onClose,
+}: FieldEditorProps) {
   const [categories, setCategories] = useState<Category[]>([]);
 
   useEffect(() => {
@@ -22,13 +27,12 @@ export default function FieldEditor({ field, onUpdate, onSave, onClose }: FieldE
   return (
     <div className="absolute bottom-3 right-14 z-10 bg-[#2A3330]/70 p-4 rounded-lg sm:w-[250px] w-[200px] h-[330px] shadow-lg border border-zinc-800">
       <div className="space-y-4">
-        
         {/* Label Input */}
         <div>
           <label className="block text-zinc-300 text-sm mb-1">Label</label>
           <input
             type="text"
-            value={field.label || ''}
+            value={field.label || ""}
             onChange={(e) => onUpdate(field.id, { label: e.target.value })}
             className="w-full px-2 py-1 rounded bg-[#2A3330] text-white border text-center border-zinc-700 focus:border-blue-500 focus:outline-none"
             disabled={field.isUpdating}
@@ -40,7 +44,9 @@ export default function FieldEditor({ field, onUpdate, onSave, onClose }: FieldE
           <select
             className="w-full px-2 py-1 rounded bg-[#2A3330] text-white text-center border border-zinc-700 focus:border-blue-500 focus:outline-none"
             value={field.categories?.[0]?.type || ""}
-            onChange={(e) => onUpdate(field.id, { categories: [{ type: e.target.value }] })}
+            onChange={(e) =>
+              onUpdate(field.id, { categories: [{ type: e.target.value }] })
+            }
             disabled={field.isUpdating}
           >
             {categories.map((category) => (
@@ -50,8 +56,6 @@ export default function FieldEditor({ field, onUpdate, onSave, onClose }: FieldE
             ))}
           </select>
         </div>
-
-        
 
         {/* Color Picker */}
         <div>
@@ -76,20 +80,22 @@ export default function FieldEditor({ field, onUpdate, onSave, onClose }: FieldE
         {/* Area Display */}
         <div className="text-zinc-100 text-sm">
           Area: {field.area?.toFixed(2) || 0} &#13217; <br />
-          Category: {field.categories?.[0].type || 'Uncategorized'}
+          Category: {field.categories?.[0].type || "Uncategorized"}
         </div>
 
         {/* Action Buttons */}
         <div className="flex gap-2 mt-3">
           <button
             className="w-full bg-[#3B82F6] text-white px-3 py-1 rounded hover:bg-blue-500 disabled:opacity-50"
-            onClick={() => {onSave(field, {
-              label: field.label, 
-              color: field.color,
-              area: field.area,
-              coordinates: field.coordinates,
-              categories: field.categories ?? [{type: 'Uncategorized'}],
-            })}}
+            onClick={() => {
+              onSave(field, {
+                label: field.label,
+                color: field.color,
+                area: field.area,
+                coordinates: field.coordinates,
+                categories: field.categories ?? [{ type: "Uncategorized" }],
+              });
+            }}
             disabled={field.isUpdating}
           >
             Update
