@@ -1,24 +1,28 @@
-import Image, { StaticImageData } from 'next/image';
-import React from 'react'
+import React from "react";
+import type { ReactNode } from "react";
 
 type CardProps = {
   props: {
     title: string;
     value: string;
     subtitle?: string;
-    image?: StaticImageData;
+    icon?: ReactNode;
   };
 };
 
-export default function Card({props}:CardProps) {
+export default function Card({ props }: CardProps) {
   return (
-    <div className="flex flex-col gap-2 rounded-xl shadow-xl bg-white  text-zinc-900 hover:bg-green-700/60 p-3 xl:w-[200px] sm:w-[130px] w-[120px] h-[130px]">
-      <h3 className='flex gap-1 items-center text-transparent/60'>{props.title} {props.image && <Image src={props.image} alt={props.title}  className="block" width={15} height={15} />}</h3>
-      <div className='mt-auto flex items-center gap-1'>
-        <p className=" text-2xl font-bold">{props.value}</p>
-        <p className="text-[12px]">{props.subtitle}</p>
+    <div className="bg-white/40 backdrop-blur-md rounded-2xl shadow-2xl shadow-green-100/40 p-6 flex flex-col items-center transition-transform hover:scale-105 hover:shadow-green-200/60">
+      <h3 className="flex gap-2 items-center text-green-900 text-md font-extrabold">
+        {props.icon}
+        {props.title}
+      </h3>
+      <div className="mt-auto flex items-center gap-2">
+        <p className="text-2xl font-extrabold text-green-800">{props.value}</p>
+        {props.subtitle && (
+          <p className="text-lg text-green-700">{props.subtitle}</p>
+        )}
       </div>
-      
     </div>
-  )
+  );
 }

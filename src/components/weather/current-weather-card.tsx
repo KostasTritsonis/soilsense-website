@@ -1,8 +1,7 @@
-import React from 'react'
-import { Cloud, Droplets, ThermometerSun, Wind, Umbrella } from 'lucide-react';
-import { CurrentWeather } from '@/lib/types';
-import Image from 'next/image';
-
+import React from "react";
+import { Cloud, Droplets, ThermometerSun, Wind, Umbrella } from "lucide-react";
+import { CurrentWeather } from "@/lib/types";
+import Image from "next/image";
 
 interface CurrentWeatherCardProps {
   currentWeather: CurrentWeather;
@@ -15,15 +14,25 @@ interface WeatherDetailItemProps {
   value: string;
 }
 
-
-export default function CurrentWeatherCard({ currentWeather }: CurrentWeatherCardProps) {
+export default function CurrentWeatherCard({
+  currentWeather,
+}: CurrentWeatherCardProps) {
+  if (!currentWeather) {
+    return (
+      <div className="bg-white/40 backdrop-blur-md rounded-2xl shadow-2xl shadow-green-100/40 p-6 text-center text-gray-500 transition-transform hover:scale-105 hover:shadow-green-200/60 overflow-hidden">
+        Weather data not available.
+      </div>
+    );
+  }
   return (
-    <div className="bg-white rounded-lg shadow-md overflow-hidden">
+    <div className="bg-white/40 backdrop-blur-md rounded-2xl shadow-2xl shadow-green-100/40 p-6 transition-transform hover:scale-105 hover:shadow-green-200/60 overflow-hidden">
       <div className="px-6 py-4">
         <div className="flex items-center justify-between">
           <div className="flex items-center">
             <Cloud className="mr-2 h-6 w-6" />
-            <h2 className="text-xl font-semibold">Current Weather at {currentWeather.location}</h2>
+            <h2 className="text-xl font-semibold">
+              Current Weather at {currentWeather.location}
+            </h2>
           </div>
           <p className="text-sm text-gray-500">
             Last updated: {currentWeather.lastUpdated}
@@ -34,13 +43,20 @@ export default function CurrentWeatherCard({ currentWeather }: CurrentWeatherCar
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           {/* Main weather display */}
           <div className="flex items-center space-x-4">
-          <Image src={currentWeather.icon} alt="Weather icon" width={50} height={50}/>
+            <Image
+              src={currentWeather.icon}
+              alt="Weather icon"
+              width={50}
+              height={50}
+            />
             <div>
-              <h2 className="text-4xl font-bold">{currentWeather.temperature}</h2>
+              <h2 className="text-4xl font-bold">
+                {currentWeather.temperature}
+              </h2>
               <p className="text-xl">{currentWeather.forecast}</p>
             </div>
           </div>
-          
+
           {/* Weather details grid */}
           <div className="grid grid-cols-2 gap-4">
             <WeatherDetailItem
@@ -70,7 +86,11 @@ export default function CurrentWeatherCard({ currentWeather }: CurrentWeatherCar
   );
 }
 
-const WeatherDetailItem: React.FC<WeatherDetailItemProps> = ({ icon, label, value }) => {
+const WeatherDetailItem: React.FC<WeatherDetailItemProps> = ({
+  icon,
+  label,
+  value,
+}) => {
   return (
     <div className="flex items-center">
       {icon}
@@ -81,4 +101,3 @@ const WeatherDetailItem: React.FC<WeatherDetailItemProps> = ({ icon, label, valu
     </div>
   );
 };
-

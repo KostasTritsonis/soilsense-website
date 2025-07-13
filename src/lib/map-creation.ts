@@ -11,6 +11,37 @@ import { useFields } from "@/context/fields-context";
 
 mapboxgl.accessToken = process.env.NEXT_PUBLIC_MAPBOX_ACCESS_TOKEN || "";
 
+// Function to create a simple placeholder image
+const createPlaceholderImage = (
+  text: string,
+  size: number = 32
+): HTMLImageElement => {
+  const canvas = document.createElement("canvas");
+  canvas.width = size;
+  canvas.height = size;
+  const ctx = canvas.getContext("2d");
+
+  if (!ctx) {
+    throw new Error("Could not get canvas context");
+  }
+
+  // Create a simple colored background
+  ctx.fillStyle = "#4CAF50";
+  ctx.fillRect(0, 0, size, size);
+
+  // Add text
+  ctx.fillStyle = "#ffffff";
+  ctx.font = `${size * 0.4}px Arial`;
+  ctx.textAlign = "center";
+  ctx.textBaseline = "middle";
+  ctx.fillText(text.charAt(0).toUpperCase(), size / 2, size / 2);
+
+  // Convert to image
+  const img = new Image();
+  img.src = canvas.toDataURL();
+  return img;
+};
+
 export const MapSetup = () => {
   const mapContainer = useRef<HTMLDivElement | null>(null);
   const mapRef = useRef<mapboxgl.Map | null>(null);
@@ -46,7 +77,7 @@ export const MapSetup = () => {
 
     mapRef.current = new mapboxgl.Map({
       container: mapContainer.current,
-      style: "mapbox://styles/mapbox/satellite-streets-v12",
+      style: "mapbox://styles/mapbox/satellite-v9",
       center: [initialLngRef.current, initialLatRef.current],
       zoom: 17.86,
       attributionControl: false,
@@ -72,32 +103,88 @@ export const MapSetup = () => {
         default: "",
       };
 
-      // Load and add images
-      await Promise.all(
-        Object.entries(imagesToLoad).map(async ([name, url]) => {
-          const imageName = `${name}-icon`;
+      // Load and add images with better error handling
+      for (const [name, url] of Object.entries(imagesToLoad)) {
+        if (name === "default" || !url) continue;
 
-          // Skip if the image already exists
-          if (mapRef.current?.hasImage(imageName)) {
-            console.log(`Image already exists: ${imageName}`);
-            return;
-          }
+        const imageName = `${name}-icon`;
 
-          // Load the image
+        // Skip if the image already exists
+        if (mapRef.current?.hasImage(imageName)) {
+          console.log(`Image already exists: ${imageName}`);
+          continue;
+        }
+
+        try {
+          // Load the image with timeout and better error handling
           await new Promise<void>((resolve, reject) => {
+            const timeout = setTimeout(() => {
+              reject(new Error(`Timeout loading image: ${imageName}`));
+            }, 10000); // 10 second timeout
+
             mapRef.current?.loadImage(url, (error, image) => {
-              if (error || !image) {
+              clearTimeout(timeout);
+
+              if (error) {
                 console.error(`Failed to load image: ${imageName}`, error);
                 reject(error);
-              } else {
+                return;
+              }
+
+              if (!image) {
+                console.error(`No image data received for: ${imageName}`);
+                reject(new Error(`No image data for: ${imageName}`));
+                return;
+              }
+
+              try {
                 mapRef.current?.addImage(imageName, image);
-                console.log(`Added image: ${imageName}`);
+                console.log(`Successfully added image: ${imageName}`);
                 resolve();
+              } catch (addError) {
+                console.error(
+                  `Failed to add image to map: ${imageName}`,
+                  addError
+                );
+                reject(addError);
               }
             });
           });
-        })
-      );
+        } catch (error) {
+          console.warn(`Skipping image ${imageName} due to error:`, error);
+          // Try to create a placeholder image as fallback
+          try {
+            const placeholderImg = createPlaceholderImage(name);
+            await new Promise<void>((resolve) => {
+              placeholderImg.onload = () => {
+                try {
+                  mapRef.current?.addImage(imageName, placeholderImg);
+                  console.log(`Added placeholder image: ${imageName}`);
+                  resolve();
+                } catch (addError) {
+                  console.error(
+                    `Failed to add placeholder image: ${imageName}`,
+                    addError
+                  );
+                  resolve(); // Don't fail completely
+                }
+              };
+              placeholderImg.onerror = () => {
+                console.error(
+                  `Failed to create placeholder image: ${imageName}`
+                );
+                resolve(); // Don't fail completely
+              };
+            });
+          } catch (placeholderError) {
+            console.error(
+              `Failed to create placeholder for ${imageName}:`,
+              placeholderError
+            );
+            // Continue with other images instead of failing completely
+          }
+        }
+      }
     });
 
     mapRef.current.addControl(drawRef.current, "bottom-right");

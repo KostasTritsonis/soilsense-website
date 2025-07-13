@@ -50,9 +50,8 @@ export default function CropWidget() {
   }, [user]); // This is correct - dependency on user
 
   // Second useEffect - update chart when dbFields changes
-  
+
   useEffect(() => {
-    
     if (!dbFields || dbFields.length === 0) {
       return;
     }
@@ -62,14 +61,15 @@ export default function CropWidget() {
     dbFields.forEach((field: Field) => {
       if (field.categories && field.categories.length > 0) {
         field.categories.forEach((category) => {
-          categoryCounts[category.type] = (categoryCounts[category.type] || 0) + 1;
+          categoryCounts[category.type] =
+            (categoryCounts[category.type] || 0) + 1;
         });
       }
     });
 
     const totalFields = dbFields.length;
     const colors = categoryColorsRef.current;
-    
+
     const percentages = Object.keys(categoryCounts).map((category) => ({
       category,
       color: colors[category] || "#CCCCCC", // Default gray color if category is unknown
@@ -93,26 +93,30 @@ export default function CropWidget() {
     setCategoryPercentages(percentages);
   }, [dbFields]); // Keep this dependency - we want the chart to update when fields change
 
-  if(!chartData) {
+  if (!chartData) {
     return (
-      <section className="bg-white rounded-lg mb-4 shadow-xl">
-        <div className="flex border-b border-zinc-400/20 pt-3 px-3">
+      <section className="bg-white/40 backdrop-blur-md rounded-2xl shadow-2xl shadow-green-100/40 p-6 transition-transform hover:scale-105 hover:shadow-green-200/60">
+        <div className="flex border-b border-zinc-400/20 pb-3 px-3">
           <h2 className="text-lg font-semibold">Crop Distribution</h2>
-          <p className=" p-1 ml-auto text-[15px] text-green-700 font-semibold">2025</p>
+          <p className=" p-1 ml-auto text-[15px] text-green-700 font-semibold">
+            2025
+          </p>
         </div>
         <div className="flex flex-col items-center justify-center h-44">
           <p className="text-gray-500">No data available</p>
         </div>
-      </section>    
-    )
+      </section>
+    );
   }
 
   return (
-    <section className="bg-white rounded-lg mb-4 shadow-xl">
-      <div className="pl-4 pt-1">
-        <div className="flex items-center border-b border-zinc-400/20">
+    <section className="bg-white/40 backdrop-blur-md rounded-2xl shadow-2xl shadow-green-100/40 p-6 transition-transform hover:scale-105 hover:shadow-green-200/60">
+      <div className="pb-1">
+        <div className="flex items-center border-b border-zinc-400/20 pb-3">
           <h2 className="text-lg font-semibold">Crop Distribution</h2>
-          <p className="p-3 ml-auto text-[15px] text-green-700 font-semibold">2025</p>
+          <p className="p-3 ml-auto text-[15px] text-green-700 font-semibold">
+            2025
+          </p>
         </div>
       </div>
       <div className="flex justify-center items-center w-44 h-auto mx-auto py-3">

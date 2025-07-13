@@ -11,20 +11,24 @@ import CategoryModal from "./caterogy-modal";
 import { useMapHandlers } from "@/lib/hooks";
 import { useFields } from "@/context/fields-context";
 import { Field } from "@/lib/types";
-import { getDirections } from "@/lib/directions";
+import { getDirections, RouteInfo } from "@/lib/directions";
 import { centroid } from "@turf/turf";
 import mapboxgl from "mapbox-gl";
 import FieldEditor from "./field-editor";
+import DirectionsPanel from "./directions-panel";
 
 export default function MapComponent() {
   const [selectedField, setSelectedField] = useState<Field | null>(null);
   const [editingFieldId, setEditingFieldId] = useState<string | null>(null);
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
-  const [isDirectionMode, setIsDirectionMode] = useState(false);
-  const [startPoint, setStartPoint] = useState<[number, number] | null>(null);
+  const [routeInfo, setRouteInfo] = useState<RouteInfo | null>(null);
+  const [showDirectionsPanel, setShowDirectionsPanel] = useState(false);
+  const [isGettingDirections, setIsGettingDirections] = useState(false);
   const { isSignedIn } = useUser();
   const { fields } = useFields();
+  const startPointCoordsRef = useRef<[number, number] | null>(null);
   const startPointMarkerRef = useRef<mapboxgl.Marker | null>(null);
+
   const {
     mapContainer,
     mapRef,
@@ -51,7 +55,6 @@ export default function MapComponent() {
     mapRef,
     drawRef,
     startPointMarkerRef,
-    setStartPoint,
   });
 
   const handleResetRef = useRef(handleReset);
@@ -66,32 +69,53 @@ export default function MapComponent() {
     handleResetRef.current();
   }, []);
 
+  // Custom reset function that also clears the pin
+  const handleCustomReset = () => {
+    // Clear the pin marker and coordinates
+    if (startPointMarkerRef.current) {
+      startPointMarkerRef.current.remove();
+      startPointMarkerRef.current = null;
+    }
+    startPointCoordsRef.current = null;
+
+    // Call the original reset function
+    handleReset();
+  };
+
+  // Add stable click handler to map
   useEffect(() => {
     const map = mapRef.current;
-    if (!map || !isDirectionMode) return;
+    if (!map) return;
 
-    const handleClick = (e: mapboxgl.MapMouseEvent) => {
+    const handleMapClick = (e: mapboxgl.MapMouseEvent) => {
       const coords: [number, number] = [e.lngLat.lng, e.lngLat.lat];
-      setStartPoint(coords);
+
+      // Store coordinates
+      startPointCoordsRef.current = coords;
 
       // Remove previous marker if it exists
       if (startPointMarkerRef.current) {
         startPointMarkerRef.current.remove();
       }
 
-      // Add a new marker
-      const marker = new mapboxgl.Marker().setLngLat(coords).addTo(map);
-      startPointMarkerRef.current = marker;
+      // Create new marker
+      const marker = new mapboxgl.Marker({
+        color: "#DC2626",
+        scale: 1.2,
+      })
+        .setLngLat(coords)
+        .addTo(map);
 
-      setIsDirectionMode(false); // Exit direction mode after selecting a point
+      startPointMarkerRef.current = marker;
+      console.log("Pin placed at:", coords);
     };
 
-    map.on("click", handleClick);
+    map.on("click", handleMapClick);
 
     return () => {
-      map.off("click", handleClick);
+      map.off("click", handleMapClick);
     };
-  }, [isDirectionMode, mapRef]);
+  }, [mapRef]);
 
   const handleFieldSelect = (fieldId: string | null) => {
     if (fieldId) {
@@ -105,6 +129,8 @@ export default function MapComponent() {
   const handleGetDirections = async (field: Field) => {
     if (!mapRef.current) return;
 
+    setIsGettingDirections(true);
+
     const getRoute = async (startLngLat: [number, number]) => {
       // Get field's center
       const fieldPolygon = {
@@ -117,19 +143,23 @@ export default function MapComponent() {
         number
       ];
 
-      // Fetch directions
-      const route = await getDirections(startLngLat, fieldLngLat);
+      // Fetch directions with enhanced route info
+      const routeInfo = await getDirections(startLngLat, fieldLngLat);
 
-      // Draw route on map
+      // Store route info for the directions panel
+      setRouteInfo(routeInfo);
+      setShowDirectionsPanel(true);
+
+      // Draw route on map using the geometry from routeInfo
       const routeId = "directions-route";
       if (mapRef.current?.getSource(routeId)) {
         (mapRef.current.getSource(routeId) as mapboxgl.GeoJSONSource).setData(
-          route
+          routeInfo.geometry as unknown as GeoJSON.Feature
         );
       } else {
         mapRef.current?.addSource(routeId, {
           type: "geojson",
-          data: route,
+          data: routeInfo.geometry as unknown as GeoJSON.Feature,
         });
         mapRef.current?.addLayer({
           id: routeId,
@@ -148,32 +178,48 @@ export default function MapComponent() {
       }
     };
 
-    if (startPoint) {
-      getRoute(startPoint).catch((error) => {
-        console.error("Failed to get directions from selected point:", error);
-        alert("Error: Could not get directions from the selected point.");
-      });
-    } else {
-      // Fallback to geolocation if no start point is set
-      const geolocate = new mapboxgl.GeolocateControl();
-      new Promise<GeolocationPosition>((resolve, reject) => {
-        geolocate.on("geolocate", resolve);
-        geolocate.on("error", reject);
-        geolocate.trigger();
-      })
-        .then((position) => {
-          const userLngLat: [number, number] = [
-            position.coords.longitude,
-            position.coords.latitude,
-          ];
-          getRoute(userLngLat);
-        })
-        .catch((error) => {
-          console.error("Failed to get directions using geolocation:", error);
-          alert(
-            "Error: Could not get directions. Please ensure you have enabled location services."
-          );
-        });
+    try {
+      let userLngLat: [number, number];
+
+      // Use placed start point if available, otherwise get current location
+      if (startPointCoordsRef.current) {
+        userLngLat = startPointCoordsRef.current;
+        console.log("Using placed start point:", userLngLat);
+      } else {
+        // Get current location using browser geolocation
+        const position = await new Promise<GeolocationPosition>(
+          (resolve, reject) => {
+            if (!navigator.geolocation) {
+              reject(
+                new Error("Geolocation is not supported by this browser.")
+              );
+              return;
+            }
+
+            navigator.geolocation.getCurrentPosition(resolve, reject, {
+              enableHighAccuracy: true,
+              timeout: 10000,
+              maximumAge: 60000,
+            });
+          }
+        );
+
+        userLngLat = [position.coords.longitude, position.coords.latitude];
+
+        // Update start point state for the directions panel
+        startPointCoordsRef.current = userLngLat;
+        console.log("Using current location:", userLngLat);
+      }
+
+      // Get the route
+      await getRoute(userLngLat);
+    } catch (error) {
+      console.error("Failed to get location:", error);
+      alert(
+        "Error: Could not get your location. Please ensure you have enabled location services or place a start point on the map."
+      );
+    } finally {
+      setIsGettingDirections(false);
     }
   };
 
@@ -211,14 +257,12 @@ export default function MapComponent() {
 
             {/* Controls section in sidebar */}
             <MapControls
-              onReset={handleReset}
+              onReset={handleCustomReset}
               onSave={handleSave}
               onLoad={handleLoad}
               isLoading={isLoading}
               isSaving={isSaving}
               hasFields={fields.length > 0}
-              onToggleDirectionMode={() => setIsDirectionMode(!isDirectionMode)}
-              isDirectionMode={isDirectionMode}
             />
 
             {/* Info panel in sidebar */}
@@ -261,6 +305,8 @@ export default function MapComponent() {
             selectedField={selectedField}
             onGetDirections={handleGetDirections}
             onDeselect={() => setSelectedField(null)}
+            isLoading={isGettingDirections}
+            hasCustomStartPoint={startPointCoordsRef.current !== null}
           />
         )}
         {editingFieldId && (
@@ -279,6 +325,31 @@ export default function MapComponent() {
         onClose={() => setIsModalOpen(false)}
         onConfirm={handleCategorySelect}
       />
+
+      {/* Directions Panel */}
+      {showDirectionsPanel && routeInfo && (
+        <DirectionsPanel
+          routeInfo={routeInfo}
+          onClose={() => {
+            setShowDirectionsPanel(false);
+            setRouteInfo(null);
+            // Clear the route from the map
+            if (mapRef.current?.getSource("directions-route")) {
+              (
+                mapRef.current.getSource(
+                  "directions-route"
+                ) as mapboxgl.GeoJSONSource
+              ).setData({
+                type: "Feature",
+                properties: {},
+                geometry: { type: "LineString", coordinates: [] },
+              });
+            }
+          }}
+          startPoint={startPointCoordsRef.current}
+          destination={selectedField?.label || "Field"}
+        />
+      )}
     </div>
   );
 }

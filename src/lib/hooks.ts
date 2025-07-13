@@ -47,25 +47,60 @@ export const useMapHandlers = ({
 
     if (!mapRef.current) return;
 
-    mapRef.current.addLayer({
-      id: `${id}-icon`,
-      type: "symbol",
-      source: {
-        type: "geojson",
-        data: {
-          type: "Feature",
-          geometry: { type: "Point", coordinates: center },
-          properties: { icon: iconImage },
+    // Check if the icon image exists before trying to use it
+    const hasIcon = mapRef.current.hasImage(iconImage);
+
+    if (hasIcon) {
+      mapRef.current.addLayer({
+        id: `${id}-icon`,
+        type: "symbol",
+        source: {
+          type: "geojson",
+          data: {
+            type: "Feature",
+            geometry: { type: "Point", coordinates: center },
+            properties: { icon: iconImage },
+          },
         },
-      },
-      layout: {
-        "icon-image": iconImage,
-        "icon-size": 0.8,
-        "icon-offset": [-20, 0],
-        "icon-allow-overlap": true,
-      },
-      minzoom: 16,
-    });
+        layout: {
+          "icon-image": iconImage,
+          "icon-size": 0.8,
+          "icon-offset": [-20, 0],
+          "icon-allow-overlap": true,
+        },
+        minzoom: 16,
+      });
+    } else {
+      // Fallback: use text instead of icon if image is not available
+      console.warn(`Icon image ${iconImage} not found, using text fallback`);
+      mapRef.current.addLayer({
+        id: `${id}-icon`,
+        type: "symbol",
+        source: {
+          type: "geojson",
+          data: {
+            type: "Feature",
+            geometry: { type: "Point", coordinates: center },
+            properties: {
+              text: categories?.[0].type?.charAt(0).toUpperCase() || "F",
+            },
+          },
+        },
+        layout: {
+          "text-field": categories?.[0].type?.charAt(0).toUpperCase() || "F",
+          "text-size": 16,
+          "text-font": ["Open Sans Bold"],
+          "text-offset": [-20, 0],
+          "text-allow-overlap": true,
+        },
+        paint: {
+          "text-color": "#ffffff",
+          "text-halo-color": "#000000",
+          "text-halo-width": 1,
+        },
+        minzoom: 16,
+      });
+    }
 
     mapRef.current.addLayer({
       id: `${id}-label`,

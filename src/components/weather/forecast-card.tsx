@@ -1,7 +1,7 @@
-import React from 'react';
-import { Calendar } from 'lucide-react';
-import { ForecastDay } from '@/lib/types';
-import Image from 'next/image';
+import React from "react";
+import { Calendar } from "lucide-react";
+import { ForecastDay } from "@/lib/types";
+import Image from "next/image";
 
 interface ForecastCardProps {
   forecast: ForecastDay[];
@@ -13,7 +13,7 @@ interface ForecastDayItemProps {
 
 export default function ForecastCard({ forecast }: ForecastCardProps) {
   return (
-    <div className="bg-white rounded-lg shadow-md">
+    <div className="bg-white/40 backdrop-blur-md rounded-2xl shadow-2xl shadow-green-100/40 p-6 transition-transform hover:scale-105 hover:shadow-green-200/60">
       <div className="px-6 py-4">
         <div className="flex items-center justify-center">
           <Calendar className="mr-2 h-6 w-6" />
@@ -38,12 +38,7 @@ const ForecastDayItem: React.FC<ForecastDayItemProps> = ({ day }) => {
       <p className="font-medium">{day.day}</p>
       <p className="text-sm text-gray-500">{day.date}</p>
       <div className="my-2 flex justify-center">
-        <Image 
-          src={`${day.icon}`} 
-          alt="Weather icon" 
-          width={50} 
-          height={50}
-        />
+        <Image src={`${day.icon}`} alt="Weather icon" width={50} height={50} />
       </div>
       <p className="text-sm">{day.forecast}</p>
       <div className="mt-2">
