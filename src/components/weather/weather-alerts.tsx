@@ -1,8 +1,8 @@
-import React from 'react'
-
+import React from "react";
+import { AlertTriangle, Info } from "lucide-react";
 
 export interface WeatherAlert {
-  type: 'warning' | 'info';
+  type: "warning" | "info";
   message: string;
 }
 
@@ -11,31 +11,62 @@ interface WeatherAlertsProps {
 }
 
 export default function WeatherAlerts({ alerts }: WeatherAlertsProps) {
-  return (
-    <div className="space-y-3">
-      {alerts.map((alert, index) => (
-        <div 
-          key={index} 
-          className={`p-4 rounded-md ${
-            alert.type === 'warning' 
-              ? 'bg-yellow-50 border border-yellow-200 text-yellow-800' 
-              : 'bg-blue-50 border border-blue-200 text-blue-800'
-          }`}
-        >
-          <div className="flex">
-            {alert.type === 'warning' ? (
-              <svg className="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
-                <path fillRule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clipRule="evenodd" />
-              </svg>
-            ) : (
-              <svg className="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
-                <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clipRule="evenodd" />
-              </svg>
-            )}
-            <p>{alert.message}</p>
+  if (alerts.length === 0) {
+    return (
+      <div className="bg-white/90 backdrop-blur-sm rounded-3xl shadow-soft border border-white/60 p-6">
+        <div className="flex items-center gap-3 pb-4">
+          <div className="w-10 h-10 bg-green-100 rounded-2xl flex items-center justify-center">
+            <Info className="w-5 h-5 text-green-600" />
           </div>
+          <h2 className="text-xl font-semibold text-neutral-900">
+            Weather Alerts
+          </h2>
         </div>
-      ))}
+        <div className="text-center py-8">
+          <p className="text-neutral-500">No weather alerts at this time</p>
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <div className="bg-white/90 backdrop-blur-sm rounded-3xl shadow-soft border border-white/60 p-6">
+      <div className="flex items-center gap-3 pb-4">
+        <div className="w-10 h-10 bg-orange-100 rounded-2xl flex items-center justify-center">
+          <AlertTriangle className="w-5 h-5 text-orange-600" />
+        </div>
+        <h2 className="text-xl font-semibold text-neutral-900">
+          Weather Alerts
+        </h2>
+      </div>
+
+      <div className="space-y-3">
+        {alerts.map((alert, index) => (
+          <div
+            key={index}
+            className={`p-4 rounded-2xl border ${
+              alert.type === "warning"
+                ? "bg-orange-50 border-orange-200"
+                : "bg-blue-50 border-blue-200"
+            }`}
+          >
+            <div className="flex items-start gap-3">
+              {alert.type === "warning" ? (
+                <AlertTriangle className="w-5 h-5 text-orange-600 flex-shrink-0 mt-0.5" />
+              ) : (
+                <Info className="w-5 h-5 text-blue-600 flex-shrink-0 mt-0.5" />
+              )}
+              <p
+                className={`text-sm font-medium ${
+                  alert.type === "warning" ? "text-orange-800" : "text-blue-800"
+                }`}
+              >
+                {alert.message}
+              </p>
+            </div>
+          </div>
+        ))}
+      </div>
     </div>
-  )
+  );
 }

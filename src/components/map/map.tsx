@@ -224,7 +224,7 @@ export default function MapComponent() {
   };
 
   return (
-    <div className="flex flex-col md:flex-row h-screen w-full max-sm:pb-[60px] relative">
+    <div className="flex flex-col md:flex-row h-screen w-full max-sm:pb-[60px] relative bg-neutral-100">
       {/* Loading spinner */}
       {(isLoading || isSaving) && <LoadingSpinner />}
 
@@ -232,12 +232,12 @@ export default function MapComponent() {
       <button
         className={`absolute ${
           isSidebarOpen
-            ? "left-44 sm:left-60 md:left-72 lg:left-80 rounded-r-lg"
-            : "rounded-lg top-1 left-12"
-        } z-20 bg-[#2A3330] text-white p-2 shadow-lg trasition duration-300`}
+            ? "left-44 sm:left-60 md:left-72 lg:left-80 rounded-r-xl"
+            : "rounded-2xl top-1 left-12"
+        } z-20 bg-primary-600 text-white p-2 shadow-soft transition-all duration-300 hover:bg-primary-700 focus:outline-none `}
         onClick={() => setIsSidebarOpen(!isSidebarOpen)}
       >
-        {isSidebarOpen ? "✕" : "☰"}
+        {isSidebarOpen ? <span> ✕</span> : <span>☰</span>}
       </button>
 
       {/* Main content with map */}
@@ -248,11 +248,13 @@ export default function MapComponent() {
           <div
             className={`${
               isSidebarOpen ? "translate-x-0" : "-translate-x-full"
-            } transition-transform duration-300 absolute z-10 w-44 sm:w-60 md:w-72 lg:w-80 h-full bg-[#2A3330] text-white shadow-lg overflow-y-auto flex flex-col`}
+            } transition-transform duration-300 absolute z-10 w-44 sm:w-60 md:w-72 lg:w-80 h-full bg-white/95 backdrop-blur-sm  shadow-large border-r border-white/60 overflow-y-auto flex flex-col`}
           >
             {/* Sidebar Header */}
-            <div className="p-4 border-b border-zinc-700">
-              <h1 className="text-xl font-bold">Field Manager</h1>
+            <div className="p-6 border-b border-neutral-200 bg-gradient-to-r from-primary-50 to-blue-50 rounded-tr-3xl">
+              <h1 className="text-2xl font-bold text-primary-700 tracking-tight">
+                Field Manager
+              </h1>
             </div>
 
             {/* Controls section in sidebar */}
@@ -275,27 +277,26 @@ export default function MapComponent() {
 
             {/* Field list in sidebar */}
             <div className="flex-grow p-4 overflow-y-auto">
-              <h2 className="text-lg font-semibold mb-2">Fields</h2>
+              <h2 className="text-lg font-semibold text-neutral-900 mb-4">
+                Fields
+              </h2>
               <FieldList
                 onFieldSelect={handleFieldSelect}
                 selectedFieldId={selectedField?.id || null}
                 onEditField={setEditingFieldId}
               />
             </div>
-
-            {/* Input Category in sidebar */}
-            {/* <div className="p-4 border-t border-zinc-700">
-              <InputCategory />
-            </div> */}
           </div>
         </div>
 
         {/* Auth overlay */}
         {!isSignedIn && (
           <div className="absolute z-50 inset-0 flex items-center justify-center bg-black/70">
-            <p className="text-lg text-white font-semibold">
-              Please sign in to access the map
-            </p>
+            <div className="bg-white/95 backdrop-blur-sm rounded-3xl shadow-large border border-white/60 p-8">
+              <p className="text-lg text-neutral-900 font-semibold text-center">
+                Please sign in to access the map
+              </p>
+            </div>
           </div>
         )}
 

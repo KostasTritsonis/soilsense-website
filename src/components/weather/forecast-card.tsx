@@ -13,20 +13,22 @@ interface ForecastDayItemProps {
 
 export default function ForecastCard({ forecast }: ForecastCardProps) {
   return (
-    <div className="bg-white/40 backdrop-blur-md rounded-2xl shadow-2xl shadow-green-100/40 p-6 transition-transform hover:scale-105 hover:shadow-green-200/60">
-      <div className="px-6 py-4">
-        <div className="flex items-center justify-center">
-          <Calendar className="mr-2 h-6 w-6" />
-          <h2 className="text-xl font-semibold">5-Day Forecast</h2>
+    <div className="bg-white/90 backdrop-blur-sm rounded-3xl shadow-soft border border-white/60 p-6">
+      {/* Header */}
+      <div className="flex items-center gap-3 pb-6">
+        <div className="w-10 h-10 bg-purple-100 rounded-2xl flex items-center justify-center">
+          <Calendar className="w-5 h-5 text-purple-600" />
         </div>
+        <h2 className="text-xl font-semibold text-neutral-900">
+          5-Day Forecast
+        </h2>
       </div>
-      <div className="px-4 pb-6">
-        {/* Container for forecast items */}
-        <div className="flex  sm:justify-center gap-4 overflow-x-auto scroll-smooth  py-2 w-full">
-          {forecast.map((day, index) => (
-            <ForecastDayItem key={index} day={day} />
-          ))}
-        </div>
+
+      {/* Forecast Items */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
+        {forecast.map((day, index) => (
+          <ForecastDayItem key={index} day={day} />
+        ))}
       </div>
     </div>
   );
@@ -34,18 +36,34 @@ export default function ForecastCard({ forecast }: ForecastCardProps) {
 
 const ForecastDayItem: React.FC<ForecastDayItemProps> = ({ day }) => {
   return (
-    <div className="flex-shrink-0 p-3 text-center border rounded-md min-w-[120px] sm:min-w-[140px]">
-      <p className="font-medium">{day.day}</p>
-      <p className="text-sm text-gray-500">{day.date}</p>
-      <div className="my-2 flex justify-center">
-        <Image src={`${day.icon}`} alt="Weather icon" width={50} height={50} />
+    <div className="p-4 bg-neutral-50/80 rounded-2xl border border-neutral-100 text-center">
+      <p className="font-semibold text-neutral-900 text-sm pb-1">{day.day}</p>
+      <p className="text-xs text-neutral-500 pb-3">{day.date}</p>
+
+      <div className="flex justify-center pb-3">
+        <div className="w-12 h-12 bg-white rounded-2xl flex items-center justify-center">
+          <Image
+            src={`${day.icon}`}
+            alt="Weather icon"
+            width={32}
+            height={32}
+            className="w-8 h-8"
+          />
+        </div>
       </div>
-      <p className="text-sm">{day.forecast}</p>
-      <div className="mt-2">
-        <p className="font-medium">{day.high}</p>
-        <p className="text-sm text-gray-500">{day.low}</p>
+
+      <p className="text-sm font-medium text-neutral-700 pb-2">
+        {day.forecast}
+      </p>
+
+      <div className="flex justify-center gap-2 pb-2">
+        <span className="text-sm font-semibold text-neutral-900">
+          {day.high}
+        </span>
+        <span className="text-sm text-neutral-500">{day.low}</span>
       </div>
-      <p className="mt-2 text-sm text-blue-500">{day.rainChance}</p>
+
+      <p className="text-xs text-blue-600 font-medium">{day.rainChance}</p>
     </div>
   );
 };

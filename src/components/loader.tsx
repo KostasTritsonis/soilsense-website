@@ -1,9 +1,8 @@
 "use client";
 
-import { Poppins } from "next/font/google";
+import { Inter } from "next/font/google";
 
-const poppins = Poppins({
-  weight: ["600", "700"],
+const inter = Inter({
   subsets: ["latin"],
 });
 
@@ -24,41 +23,54 @@ export default function Loader({
   return (
     <div className="flex items-center justify-center">
       <div
-        className={`${sizeClasses[size]} animate-spin rounded-full border-2 border-gray-300 border-t-green-600`}
+        className={`${sizeClasses[size]} animate-spin rounded-full border-2 border-neutral-200 border-t-primary-600`}
       ></div>
-      {text && <span className="ml-2 text-sm text-gray-600">{text}</span>}
+      {text && <span className="ml-2 text-sm text-neutral-600">{text}</span>}
     </div>
   );
 }
 
 // Full screen loader
-export function FullScreenLoader({ text = "soilSense" }: { text?: string }) {
+export function FullScreenLoader({ text = "SoilSense" }: { text?: string }) {
   return (
-    <div className="fixed inset-0 flex items-center justify-center z-50">
-      <div className="bg-white/60 backdrop-blur-md rounded-2xl shadow-2xl border border-white/30 px-12 py-10 flex flex-col items-center space-y-8">
-        {/* Main text with gradient */}
-        <div className={`${poppins.className} font-extrabold text-center`}>
-          <span className="bg-gradient-to-r text-4xl md:text-5xl from-green-600 via-green-700 to-green-800 bg-clip-text text-transparent">
-            {text}
-          </span>
+    <div className="flex flex-col items-center space-y-8">
+      {/* Logo and Brand */}
+      <div className="flex items-center gap-4">
+        <div className="w-16 h-16 bg-gradient-to-br from-primary-500 to-primary-600 rounded-3xl flex items-center justify-center shadow-medium">
+          <span className="text-white font-bold text-2xl">S</span>
         </div>
-
-        {/* Animated dots */}
-        <div className="flex space-x-4 mt-2">
-          <div
-            className="w-5 h-5 bg-green-600 rounded-full animate-bounce"
-            style={{ animationDelay: "0ms" }}
-          ></div>
-          <div
-            className="w-5 h-5 bg-green-700 rounded-full animate-bounce"
-            style={{ animationDelay: "150ms" }}
-          ></div>
-          <div
-            className="w-5 h-5 bg-green-800 rounded-full animate-bounce"
-            style={{ animationDelay: "300ms" }}
-          ></div>
+        <div className="text-center">
+          <h1
+            className={`${inter.className} text-3xl font-bold text-neutral-900`}
+          >
+            {text}
+          </h1>
+          <p className="text-base text-neutral-500">
+            Agricultural Intelligence
+          </p>
         </div>
       </div>
+
+      {/* Loading Animation */}
+      <div className="flex items-center gap-3">
+        <div
+          className="w-3 h-3 bg-primary-600 rounded-full animate-bounce"
+          style={{ animationDelay: "0ms" }}
+        ></div>
+        <div
+          className="w-3 h-3 bg-primary-600 rounded-full animate-bounce"
+          style={{ animationDelay: "150ms" }}
+        ></div>
+        <div
+          className="w-3 h-3 bg-primary-600 rounded-full animate-bounce"
+          style={{ animationDelay: "300ms" }}
+        ></div>
+      </div>
+
+      {/* Loading Text */}
+      <p className="text-base text-neutral-500 font-medium">
+        Loading your agricultural data...
+      </p>
     </div>
   );
 }

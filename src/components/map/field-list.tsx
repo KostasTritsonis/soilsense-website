@@ -1,6 +1,6 @@
 import { deleteField } from "@/actions";
 import { useFields } from "@/context/fields-context";
-import { FaPencilAlt } from "react-icons/fa";
+import { Edit, X, MapPin, Ruler } from "lucide-react";
 
 type FieldListProps = {
   onFieldSelect: (fieldId: string) => void;
@@ -24,50 +24,76 @@ export default function FieldList({
   return (
     <div className="w-full">
       {fields.length === 0 ? (
-        <div className="text-zinc-400 text-center py-4">
-          No fields created yet
+        <div className="text-center py-8">
+          <div className="w-12 h-12 bg-neutral-100 rounded-2xl flex items-center justify-center mx-auto mb-3">
+            <MapPin className="w-6 h-6 text-neutral-400" />
+          </div>
+          <p className="text-neutral-500 font-medium">No fields created yet</p>
+          <p className="text-sm text-neutral-400">
+            Create your first field to get started
+          </p>
         </div>
       ) : (
-        <div className="relative space-y-2">
+        <div className="space-y-3">
           {fields.map((field) => (
             <div
               key={field.id}
               onClick={() => onFieldSelect(field.id)}
-              className={`cursor-pointer p-2 rounded transition-colors relative ${
+              className={`cursor-pointer p-4 rounded-2xl transition-all duration-200 relative ${
                 selectedFieldId === field.id
-                  ? "bg-blue-600 text-white"
-                  : "bg-[#2A3330] border border-white/30 text-zinc-100 hover:bg-[#556962]"
+                  ? "bg-primary-100 border-2 border-primary-200 shadow-medium"
+                  : "bg-white/80 backdrop-blur-sm border border-white/60 hover:bg-white/90 hover:shadow-soft"
               }`}
             >
-              <div className="flex items-center gap-2">
+              <div className="flex items-center gap-3">
                 <div
-                  className="w-3 h-3 sm:w-4 sm:h-4 rounded-full"
+                  className="w-4 h-4 rounded-full flex-shrink-0"
                   style={{ backgroundColor: field.color }}
                 />
-                <span className="text-sm sm:text-base truncate">
+                <span
+                  className={`text-sm font-semibold truncate flex-1 ${
+                    selectedFieldId === field.id
+                      ? "text-primary-900"
+                      : "text-neutral-900"
+                  }`}
+                >
                   {field.label || "Unnamed Field"}
                 </span>
                 <button
-                  className="ml-auto w-8"
+                  className="w-6 h-6 bg-red-100 hover:bg-red-200 rounded-lg flex items-center justify-center transition-colors flex-shrink-0"
                   onClick={(e) => handleDeleteField(e, field.id)}
                 >
-                  ❌
+                  <X className="w-3 h-3 text-red-600" />
                 </button>
               </div>
 
-              <div className="text-xs mt-1 opacity-80">
-                Area: {(field.area || 0).toFixed(2)} &#13217; <br />
-                Category: {field.categories?.[0]?.type || "Uncategorized"}
+              <div className="flex items-center gap-4 mt-3">
+                <div className="flex items-center gap-2">
+                  <Ruler className="w-3 h-3 text-neutral-500" />
+                  <span className="text-xs text-neutral-600">
+                    {(field.area || 0).toFixed(2)} m²
+                  </span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <MapPin className="w-3 h-3 text-neutral-500" />
+                  <span className="text-xs text-neutral-600">
+                    {field.categories?.[0]?.type || "Uncategorized"}
+                  </span>
+                </div>
               </div>
 
               <button
-                className="absolute bottom-2 right-3 w-6 h-6 flex items-center justify-center text-white/70 hover:text-white"
+                className={`absolute top-4 right-12 w-6 h-6 flex items-center justify-center rounded-lg transition-colors ${
+                  selectedFieldId === field.id
+                    ? "bg-primary-200 text-primary-700 hover:bg-primary-300"
+                    : "bg-neutral-100 text-neutral-600 hover:bg-neutral-200"
+                }`}
                 onClick={(e) => {
                   e.stopPropagation();
                   onEditField(field.id);
                 }}
               >
-                <FaPencilAlt />
+                <Edit className="w-3 h-3" />
               </button>
             </div>
           ))}

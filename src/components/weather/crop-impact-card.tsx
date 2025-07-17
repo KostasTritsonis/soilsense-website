@@ -1,5 +1,6 @@
 import { CurrentWeather, ForecastDay } from "@/lib/types";
 import React from "react";
+import { Sprout, Thermometer, Droplets, AlertTriangle } from "lucide-react";
 
 interface CropImpactCardProps {
   currentWeather: CurrentWeather;
@@ -12,34 +13,39 @@ export default function CropImpactCard({
 }: CropImpactCardProps) {
   if (!currentWeather) {
     return (
-      <div className="bg-white/40 backdrop-blur-md rounded-2xl shadow-2xl shadow-green-100/40 p-6 text-center text-gray-500 transition-transform hover:scale-105 hover:shadow-green-200/60 overflow-hidden">
-        Weather data not available.
+      <div className="bg-white/90 backdrop-blur-sm rounded-3xl shadow-soft border border-white/60 p-6 text-center">
+        <p className="text-neutral-500">Weather data not available.</p>
       </div>
     );
   }
-  return (
-    <div className="bg-white/40 backdrop-blur-md rounded-2xl shadow-2xl shadow-green-100/40 p-6 transition-transform hover:scale-105 hover:shadow-green-200/60 overflow-hidden">
-      <div className="px-6 py-4">
-        <h2 className="text-xl font-semibold">Weather Impact on Crops</h2>
-      </div>
-      <div className="px-6 pb-6">
-        <div className="space-y-4">
-          <CropImpactItem
-            cropName="Corn (Field 3)"
-            currentWeather={currentWeather}
-            forecast={forecast}
-            optimalTempRange={[18, 25]}
-            highHumidityThreshold={70}
-          />
 
-          <CropImpactItem
-            cropName="Wheat (Field 1)"
-            currentWeather={currentWeather}
-            forecast={forecast}
-            optimalTempRange={[15, 24]}
-            highHumidityThreshold={75}
-          />
+  return (
+    <div className="bg-white/90 backdrop-blur-sm rounded-3xl shadow-soft border border-white/60 p-6">
+      <div className="flex items-center gap-3 pb-6">
+        <div className="w-10 h-10 bg-green-100 rounded-2xl flex items-center justify-center">
+          <Sprout className="w-5 h-5 text-green-600" />
         </div>
+        <h2 className="text-xl font-semibold text-neutral-900">
+          Crop Impact Analysis
+        </h2>
+      </div>
+
+      <div className="space-y-4">
+        <CropImpactItem
+          cropName="Corn (Field 3)"
+          currentWeather={currentWeather}
+          forecast={forecast}
+          optimalTempRange={[18, 25]}
+          highHumidityThreshold={70}
+        />
+
+        <CropImpactItem
+          cropName="Wheat (Field 1)"
+          currentWeather={currentWeather}
+          forecast={forecast}
+          optimalTempRange={[15, 24]}
+          highHumidityThreshold={75}
+        />
       </div>
     </div>
   );
@@ -70,42 +76,76 @@ const CropImpactItem: React.FC<CropImpactItemProps> = ({
     .some((day) => parseFloat(day.rainChance) > 60);
 
   return (
-    <div className="p-4 border rounded-md">
-      <h3 className="font-medium mb-2">{cropName}</h3>
-      {isOptimalTemp ? (
-        <p className="text-sm text-gray-700 mb-2">
-          Current conditions are{" "}
-          <span className="text-green-600 font-medium">favorable</span> for
-          growth.
-        </p>
-      ) : (
-        <p className="text-sm text-gray-700 mb-2">
-          Current conditions are{" "}
-          <span className="text-yellow-600 font-medium">
-            moderately favorable
-          </span>{" "}
-          for growth.
-        </p>
-      )}
-      <ul className="text-sm list-disc pl-5 space-y-1">
-        <li>
-          Optimal temperature range: {optimalTempRange[0]}-{optimalTempRange[1]}
-          °C (Current: {currentWeather.temperature})
-        </li>
-        {isHighHumidity ? (
-          <li className="text-yellow-600">
-            High humidity levels - monitor for fungal diseases
-          </li>
-        ) : (
-          <li>Adequate moisture levels</li>
+    <div className="p-4 bg-neutral-50/80 rounded-2xl border border-neutral-100">
+      <h3 className="font-semibold text-neutral-900 text-sm pb-3">
+        {cropName}
+      </h3>
+
+      <div className="space-y-3">
+        {/* Temperature Status */}
+        <div className="flex items-center gap-3">
+          <Thermometer className="w-4 h-4 text-red-500" />
+          <div className="flex-1">
+            <p className="text-xs text-neutral-600">Temperature</p>
+            <p className="text-sm font-medium text-neutral-900">
+              {currentWeather.temperature}°C (Optimal: {optimalTempRange[0]}-
+              {optimalTempRange[1]}°C)
+            </p>
+          </div>
+          <div
+            className={`px-2 py-1 rounded-full text-xs font-medium ${
+              isOptimalTemp
+                ? "bg-green-100 text-green-700"
+                : "bg-yellow-100 text-yellow-700"
+            }`}
+          >
+            {isOptimalTemp ? "Optimal" : "Moderate"}
+          </div>
+        </div>
+
+        {/* Humidity Status */}
+        <div className="flex items-center gap-3">
+          <Droplets className="w-4 h-4 text-blue-500" />
+          <div className="flex-1">
+            <p className="text-xs text-neutral-600">Humidity</p>
+            <p className="text-sm font-medium text-neutral-900">
+              {currentWeather.humidity}%
+            </p>
+          </div>
+          <div
+            className={`px-2 py-1 rounded-full text-xs font-medium ${
+              isHighHumidity
+                ? "bg-orange-100 text-orange-700"
+                : "bg-green-100 text-green-700"
+            }`}
+          >
+            {isHighHumidity ? "High" : "Normal"}
+          </div>
+        </div>
+
+        {/* Recommendations */}
+        {(isHighHumidity || heavyRainExpected) && (
+          <div className="flex items-start gap-3 p-3 bg-orange-50 rounded-xl border border-orange-100">
+            <AlertTriangle className="w-4 h-4 text-orange-600 flex-shrink-0 mt-0.5" />
+            <div className="text-xs text-orange-800">
+              {isHighHumidity && (
+                <p className="pb-1">
+                  Monitor for fungal diseases due to high humidity
+                </p>
+              )}
+              {heavyRainExpected && (
+                <p>Heavy rain expected - consider protective measures</p>
+              )}
+            </div>
+          </div>
         )}
-        {heavyRainExpected && (
-          <li className="text-yellow-600">
-            Warning: Heavy rain expected in next few days
-          </li>
+
+        {!isHighHumidity && !heavyRainExpected && (
+          <div className="text-xs text-green-700 font-medium">
+            ✓ Conditions are favorable for growth
+          </div>
         )}
-        {isHighHumidity && <li>Recommendation: Monitor for fungal diseases</li>}
-      </ul>
+      </div>
     </div>
   );
 };

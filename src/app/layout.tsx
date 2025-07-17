@@ -10,11 +10,12 @@ import GlobalLoader from "@/components/global-loader";
 
 const inter = Inter({
   subsets: ["latin"],
+  variable: "--font-inter",
 });
 
 export const metadata: Metadata = {
-  title: "SoilSense",
-  description: "App for Agricultural Monitoring",
+  title: "SoilSense - Agricultural Monitoring Platform",
+  description: "Professional agricultural monitoring and management platform",
 };
 
 export default function RootLayout({
@@ -30,15 +31,26 @@ export default function RootLayout({
             <link rel="manifest" href="/manifest.json" />
           </head>
           <body
-            className={`${inter.className} bg-gradient-to-tr from-[#f9f5ea] via-[#f3ede1] to-[#e6f4ea] text-zinc-900 min-h-screen`}
+            className={`${inter.className} bg-gradient-to-br from-neutral-50 via-primary-50/30 to-neutral-100 text-neutral-900 min-h-screen antialiased`}
           >
-            <div className="w-full max-w-7xl mx-auto px-4 py-2">
-              <div className="bg-gradient-to-tr from-[#f9f5ea] via-[#f3ede1] to-[#e6f4ea] backdrop-blur-md rounded-2xl shadow-2xl shadow-green-100/40 p-2 mb-6 border border-white/30">
+            <div className="w-full max-w-7xl mx-auto px-6 py-6">
+              <div className="bg-white/80 backdrop-blur-md rounded-3xl shadow-soft border border-white/60 p-4 pb-6">
                 <Header />
               </div>
-              <ToastContainer />
+              <ToastContainer
+                position="top-right"
+                autoClose={5000}
+                hideProgressBar={false}
+                newestOnTop={false}
+                closeOnClick
+                rtl={false}
+                pauseOnFocusLoss
+                draggable
+                pauseOnHover
+                theme="light"
+              />
               <GlobalLoader />
-              <main className="bg-gradient-to-tr from-[#f9f5ea] via-[#f3ede1] to-[#e6f4ea] backdrop-blur-md rounded-2xl shadow-xl p-6">
+              <main className="bg-white/80 backdrop-blur-md rounded-3xl shadow-soft border border-white/60 p-8 mt-6">
                 {children}
               </main>
             </div>

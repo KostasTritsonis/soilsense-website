@@ -25,8 +25,8 @@ export default function GlobalLoader() {
   // Show full screen loader for app initialization
   if (isAppLoading) {
     return (
-      <div className="fixed inset-0 flex items-center justify-center z-50">
-        <div className="bg-white/40 backdrop-blur-md rounded-2xl shadow-2xl shadow-green-100/40 p-8 flex flex-col items-center">
+      <div className="fixed inset-0 flex items-center justify-center z-50 bg-black/20 backdrop-blur-sm">
+        <div className="bg-white/95 backdrop-blur-md rounded-3xl shadow-large border border-white/60 p-8 flex flex-col items-center">
           <FullScreenLoader text={loadingMessage} />
         </div>
       </div>
@@ -43,8 +43,8 @@ export default function GlobalLoader() {
 
   if (isAnyLoading) {
     return (
-      <div className="fixed inset-0 flex items-center justify-center z-50">
-        <div className="bg-white/40 backdrop-blur-md rounded-2xl shadow-2xl shadow-green-100/40 p-8 flex flex-col items-center">
+      <div className="fixed inset-0 flex items-center justify-center z-50 bg-black/20 backdrop-blur-sm">
+        <div className="bg-white/95 backdrop-blur-md rounded-3xl shadow-large border border-white/60 p-8 flex flex-col items-center">
           <FullScreenLoader text={loadingMessage} />
         </div>
       </div>

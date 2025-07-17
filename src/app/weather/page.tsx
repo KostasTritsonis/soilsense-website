@@ -8,9 +8,10 @@ import CropImpactCard from "@/components/weather/crop-impact-card";
 import { generateWeatherAlerts } from "@/utils/generate-weather-alerts";
 import { CurrentWeather, ForecastDay } from "@/lib/types";
 import { useLoadingStore } from "@/lib/stores/loading-store";
+import { Search, MapPin } from "lucide-react";
 
 export default function Weather() {
-  const [location, setLocation] = useState<string>("38.4504,24.0036"); // Default coordinates
+  const [location, setLocation] = useState<string>("38.4504,24.0036");
   const [currentWeather, setCurrentWeather] = useState<CurrentWeather | null>(
     null
   );
@@ -79,48 +80,78 @@ export default function Weather() {
   }, [location]);
 
   return (
-    <div className="p-6 space-y-6 max-sm:pb-[80px] mx-auto">
-      <h1 className="text-center text-2xl font-bold">Weather Dashboard</h1>
+    <div className="w-full">
+      {/* Header Section */}
+      <div className="pb-8">
+        <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
+          <div>
+            <h1 className="text-4xl font-bold text-neutral-900 pb-2">
+              Weather Dashboard
+            </h1>
+            <p className="text-lg text-neutral-600">
+              Monitor weather conditions for your agricultural operations
+            </p>
+          </div>
+        </div>
+      </div>
 
-      {/* 🔍 Search Bar */}
-      <div className="flex justify-center gap-2">
-        <input
-          type="text"
-          value={location}
-          onChange={(e) => setLocation(e.target.value)}
-          placeholder="Enter city or lat,lon (e.g., New York or 37.7749,-122.4194)"
-          className="border p-2 rounded w-72"
-        />
-        <button
-          onClick={handleSearch}
-          className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
-        >
-          Search
-        </button>
+      {/* Search Section */}
+      <div className="pb-8">
+        <div className="bg-white/90 backdrop-blur-sm rounded-3xl shadow-soft border border-white/60 p-6">
+          <h2 className="text-xl font-semibold text-neutral-900 pb-4 flex items-center gap-2">
+            <MapPin className="w-5 h-5 text-primary-600" />
+            Location Search
+          </h2>
+          <div className="flex flex-col sm:flex-row gap-4">
+            <div className="flex-1">
+              <input
+                type="text"
+                value={location}
+                onChange={(e) => setLocation(e.target.value)}
+                placeholder="Enter city or coordinates (e.g., New York or 37.7749,-122.4194)"
+                className="w-full px-4 py-3 border border-neutral-200 rounded-2xl focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+              />
+            </div>
+            <button
+              onClick={handleSearch}
+              className="flex items-center gap-2 bg-primary-600 hover:bg-primary-700 text-white px-6 py-3 rounded-2xl font-semibold transition-colors shadow-soft hover:shadow-medium"
+            >
+              <Search className="w-5 h-5" />
+              Search
+            </button>
+          </div>
+        </div>
       </div>
 
       {error ? (
-        <div className="text-center text-red-500">
-          <p>{error}</p>
+        <div className="bg-red-50 border border-red-200 rounded-3xl p-6 text-center">
+          <p className="text-red-700 font-medium pb-4">{error}</p>
           <button
             onClick={handleSearch}
-            className="mt-4 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
+            className="bg-red-600 hover:bg-red-700 text-white px-6 py-3 rounded-2xl font-semibold transition-colors"
           >
             Retry
           </button>
         </div>
       ) : (
-        <section className="w-[70%] mx-auto flex flex-col gap-y-6">
-          <CurrentWeatherCard currentWeather={currentWeather!} />
-          <ForecastCard forecast={forecast} />
-          <WeatherAlerts
-            alerts={generateWeatherAlerts(currentWeather!, forecast)}
-          />
-          <CropImpactCard
-            currentWeather={currentWeather!}
-            forecast={forecast}
-          />
-        </section>
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+          {/* Main Weather Content */}
+          <div className="lg:col-span-2 space-y-8">
+            <CurrentWeatherCard currentWeather={currentWeather!} />
+            <ForecastCard forecast={forecast} />
+            <WeatherAlerts
+              alerts={generateWeatherAlerts(currentWeather!, forecast)}
+            />
+          </div>
+
+          {/* Sidebar */}
+          <div className="lg:col-span-1">
+            <CropImpactCard
+              currentWeather={currentWeather!}
+              forecast={forecast}
+            />
+          </div>
+        </div>
       )}
     </div>
   );

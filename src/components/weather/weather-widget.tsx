@@ -19,7 +19,6 @@ export default function WeatherWidget() {
     const loadWeatherData = async () => {
       try {
         setLoading(true);
-        // Replace with your farm's coordinates
         const farmLat = 38.4504;
         const farmLon = 24.0036;
         const farmName = "Example Farm, USA";
@@ -38,23 +37,23 @@ export default function WeatherWidget() {
     };
 
     loadWeatherData();
-
-    // Refresh every hour
     const intervalId = setInterval(loadWeatherData, 60 * 60 * 1000);
     return () => clearInterval(intervalId);
   }, []);
 
   if (loading) {
     return (
-      <div className="bg-white/40 backdrop-blur-md rounded-2xl shadow-2xl shadow-green-100/40 p-6 transition-transform hover:scale-105 hover:shadow-green-200/60 overflow-hidden">
-        <div className="pb-4">
-          <div className="flex items-center pb-3 border-b border-zinc-400/20">
-            <Cloud className="mr-2 h-6 w-6" />
-            <h2 className="text-xl font-semibold">Weather Conditions</h2>
+      <div className="bg-white/90 backdrop-blur-sm rounded-3xl shadow-soft border border-white/60 p-6">
+        <div className="flex items-center justify-between pb-4">
+          <div className="flex items-center gap-3">
+            <div className="w-10 h-10 bg-blue-100 rounded-2xl flex items-center justify-center">
+              <Cloud className="w-5 h-5 text-blue-600" />
+            </div>
+            <h2 className="text-lg font-semibold text-neutral-900">Weather</h2>
           </div>
         </div>
-        <div className="flex justify-center items-center h-32">
-          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-gray-900"></div>
+        <div className="flex justify-center items-center py-8">
+          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary-600"></div>
         </div>
       </div>
     );
@@ -62,15 +61,17 @@ export default function WeatherWidget() {
 
   if (!weather) {
     return (
-      <div className="bg-white/40 backdrop-blur-md rounded-2xl shadow-2xl shadow-green-100/40 p-6 transition-transform hover:scale-105 hover:shadow-green-200/60 overflow-hidden">
-        <div className="pb-4">
-          <div className="flex items-center pb-3 border-b border-zinc-400/20">
-            <Cloud className="mr-2 h-6 w-6" />
-            <h2 className="text-xl font-semibold">Weather Conditions</h2>
+      <div className="bg-white/90 backdrop-blur-sm rounded-3xl shadow-soft border border-white/60 p-6">
+        <div className="flex items-center justify-between pb-4">
+          <div className="flex items-center gap-3">
+            <div className="w-10 h-10 bg-blue-100 rounded-2xl flex items-center justify-center">
+              <Cloud className="w-5 h-5 text-blue-600" />
+            </div>
+            <h2 className="text-lg font-semibold text-neutral-900">Weather</h2>
           </div>
         </div>
-        <div>
-          <p className="text-center text-gray-500">
+        <div className="py-8">
+          <p className="text-center text-neutral-500">
             Unable to load weather data
           </p>
         </div>
@@ -79,45 +80,62 @@ export default function WeatherWidget() {
   }
 
   return (
-    <div className="bg-white/40 backdrop-blur-md rounded-2xl shadow-2xl shadow-green-100/40 p-6 transition-transform hover:scale-105 hover:shadow-green-200/60 overflow-hidden">
-      <div className="pb-4">
-        <div className="flex items-center pb-3 border-b border-zinc-400/20">
-          <h2 className="text-xl font-semibold">Weather Conditions</h2>
-          <Link href="/weather" className="ml-auto">
-            <p className=" flex p-3 text-[15px] text-green-700 font-semibold">
-              See all <ArrowRightIcon />
-            </p>
-          </Link>
+    <div className="bg-white/90 backdrop-blur-sm rounded-3xl shadow-soft border border-white/60 p-6">
+      <div className="flex items-center justify-between pb-4">
+        <div className="flex items-center gap-3">
+          <div className="w-10 h-10 bg-blue-100 rounded-2xl flex items-center justify-center">
+            <Cloud className="w-5 h-5 text-blue-600" />
+          </div>
+          <h2 className="text-lg font-semibold text-neutral-900">Weather</h2>
         </div>
+        <Link
+          href="/weather"
+          className="flex items-center gap-1 text-sm text-primary-600 font-medium hover:text-primary-700 transition-colors"
+        >
+          View all
+          <ArrowRightIcon className="w-4 h-4" />
+        </Link>
       </div>
-      <div className="grid grid-cols-2 gap-4">
-        <div className="flex items-center">
-          <ThermometerSun className="h-5 w-5 text-red-500 mr-2" />
-          <div>
-            <p className="text-sm text-gray-500">Temperature</p>
-            <p className="font-medium">{weather.temperature}</p>
+
+      <div className="space-y-4">
+        <div className="flex items-center justify-between p-3 bg-neutral-50/80 rounded-2xl">
+          <div className="flex items-center gap-3">
+            <ThermometerSun className="w-5 h-5 text-red-500" />
+            <span className="text-sm text-neutral-600">Temperature</span>
           </div>
+          <span className="font-semibold text-neutral-900">
+            {weather.temperature}
+          </span>
         </div>
-        <div className="flex items-center">
-          <Droplets className="h-5 w-5 text-blue-500 mr-2" />
-          <div>
-            <p className="text-sm text-gray-500">Humidity</p>
-            <p className="font-medium">{weather.humidity}</p>
+
+        <div className="flex items-center justify-between p-3 bg-neutral-50/80 rounded-2xl">
+          <div className="flex items-center gap-3">
+            <Droplets className="w-5 h-5 text-blue-500" />
+            <span className="text-sm text-neutral-600">Humidity</span>
           </div>
+          <span className="font-semibold text-neutral-900">
+            {weather.humidity}
+          </span>
         </div>
-        <div className="flex items-center">
-          <Sun className="h-5 w-5 text-yellow-500 mr-2" />
-          <div>
-            <p className="text-sm text-gray-500">Forecast</p>
-            <p className="font-medium">{weather.forecast}</p>
+
+        <div className="flex items-center justify-between p-3 bg-neutral-50/80 rounded-2xl">
+          <div className="flex items-center gap-3">
+            <Sun className="w-5 h-5 text-yellow-500" />
+            <span className="text-sm text-neutral-600">Forecast</span>
           </div>
+          <span className="font-semibold text-neutral-900">
+            {weather.forecast}
+          </span>
         </div>
-        <div className="flex items-center">
-          <Cloud className="h-5 w-5 text-gray-500 mr-2" />
-          <div>
-            <p className="text-sm text-gray-500">Rainfall</p>
-            <p className="font-medium">{weather.rainfall}</p>
+
+        <div className="flex items-center justify-between p-3 bg-neutral-50/80 rounded-2xl">
+          <div className="flex items-center gap-3">
+            <Cloud className="w-5 h-5 text-gray-500" />
+            <span className="text-sm text-neutral-600">Rainfall</span>
           </div>
+          <span className="font-semibold text-neutral-900">
+            {weather.rainfall}
+          </span>
         </div>
       </div>
     </div>

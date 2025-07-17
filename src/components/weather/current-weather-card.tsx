@@ -1,5 +1,13 @@
 import React from "react";
-import { Cloud, Droplets, ThermometerSun, Wind, Umbrella } from "lucide-react";
+import {
+  Cloud,
+  Droplets,
+  ThermometerSun,
+  Wind,
+  Umbrella,
+  MapPin,
+  Clock,
+} from "lucide-react";
 import { CurrentWeather } from "@/lib/types";
 import Image from "next/image";
 
@@ -7,7 +15,6 @@ interface CurrentWeatherCardProps {
   currentWeather: CurrentWeather;
 }
 
-// Helper component for weather details
 interface WeatherDetailItemProps {
   icon: React.ReactNode;
   label: string;
@@ -19,67 +26,83 @@ export default function CurrentWeatherCard({
 }: CurrentWeatherCardProps) {
   if (!currentWeather) {
     return (
-      <div className="bg-white/40 backdrop-blur-md rounded-2xl shadow-2xl shadow-green-100/40 p-6 text-center text-gray-500 transition-transform hover:scale-105 hover:shadow-green-200/60 overflow-hidden">
-        Weather data not available.
+      <div className="bg-white/90 backdrop-blur-sm rounded-3xl shadow-soft border border-white/60 p-6 text-center">
+        <p className="text-neutral-500">Weather data not available.</p>
       </div>
     );
   }
+
   return (
-    <div className="bg-white/40 backdrop-blur-md rounded-2xl shadow-2xl shadow-green-100/40 p-6 transition-transform hover:scale-105 hover:shadow-green-200/60 overflow-hidden">
-      <div className="px-6 py-4">
-        <div className="flex items-center justify-between">
-          <div className="flex items-center">
-            <Cloud className="mr-2 h-6 w-6" />
-            <h2 className="text-xl font-semibold">
-              Current Weather at {currentWeather.location}
-            </h2>
+    <div className="bg-white/90 backdrop-blur-sm rounded-3xl shadow-soft border border-white/60 p-6">
+      {/* Header */}
+      <div className="flex items-center justify-between pb-6">
+        <div className="flex items-center gap-3">
+          <div className="w-10 h-10 bg-blue-100 rounded-2xl flex items-center justify-center">
+            <Cloud className="w-5 h-5 text-blue-600" />
           </div>
-          <p className="text-sm text-gray-500">
-            Last updated: {currentWeather.lastUpdated}
-          </p>
+          <div>
+            <h2 className="text-xl font-semibold text-neutral-900">
+              Current Weather
+            </h2>
+            <div className="flex items-center gap-2 text-sm text-neutral-600">
+              <MapPin className="w-4 h-4" />
+              <span>{currentWeather.location}</span>
+            </div>
+          </div>
+        </div>
+        <div className="text-right">
+          <div className="flex items-center gap-2 text-sm text-neutral-500">
+            <Clock className="w-4 h-4" />
+            <span>Updated: {currentWeather.lastUpdated}</span>
+          </div>
         </div>
       </div>
-      <div className="px-6 pb-6">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          {/* Main weather display */}
-          <div className="flex items-center space-x-4">
+
+      {/* Main Weather Display */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+        {/* Temperature and Icon */}
+        <div className="flex items-center gap-6">
+          <div className="w-20 h-20 bg-blue-50 rounded-3xl flex items-center justify-center">
             <Image
               src={currentWeather.icon}
               alt="Weather icon"
-              width={50}
-              height={50}
+              width={48}
+              height={48}
+              className="w-12 h-12"
             />
-            <div>
-              <h2 className="text-4xl font-bold">
-                {currentWeather.temperature}
-              </h2>
-              <p className="text-xl">{currentWeather.forecast}</p>
-            </div>
           </div>
+          <div>
+            <h3 className="text-5xl font-bold text-neutral-900">
+              {currentWeather.temperature}
+            </h3>
+            <p className="text-xl text-neutral-600 font-medium">
+              {currentWeather.forecast}
+            </p>
+          </div>
+        </div>
 
-          {/* Weather details grid */}
-          <div className="grid grid-cols-2 gap-4">
-            <WeatherDetailItem
-              icon={<ThermometerSun className="h-5 w-5 text-red-500 mr-2" />}
-              label="Temperature"
-              value={currentWeather.temperature}
-            />
-            <WeatherDetailItem
-              icon={<Droplets className="h-5 w-5 text-blue-500 mr-2" />}
-              label="Humidity"
-              value={currentWeather.humidity}
-            />
-            <WeatherDetailItem
-              icon={<Wind className="h-5 w-5 text-gray-500 mr-2" />}
-              label="Wind Speed"
-              value={currentWeather.windSpeed}
-            />
-            <WeatherDetailItem
-              icon={<Umbrella className="h-5 w-5 text-blue-500 mr-2" />}
-              label="Rainfall"
-              value={currentWeather.rainfall}
-            />
-          </div>
+        {/* Weather Details */}
+        <div className="grid grid-cols-2 gap-4">
+          <WeatherDetailItem
+            icon={<ThermometerSun className="w-5 h-5 text-red-500" />}
+            label="Temperature"
+            value={currentWeather.temperature}
+          />
+          <WeatherDetailItem
+            icon={<Droplets className="w-5 h-5 text-blue-500" />}
+            label="Humidity"
+            value={currentWeather.humidity}
+          />
+          <WeatherDetailItem
+            icon={<Wind className="w-5 h-5 text-gray-500" />}
+            label="Wind Speed"
+            value={currentWeather.windSpeed}
+          />
+          <WeatherDetailItem
+            icon={<Umbrella className="w-5 h-5 text-blue-500" />}
+            label="Rainfall"
+            value={currentWeather.rainfall}
+          />
         </div>
       </div>
     </div>
@@ -92,11 +115,11 @@ const WeatherDetailItem: React.FC<WeatherDetailItemProps> = ({
   value,
 }) => {
   return (
-    <div className="flex items-center">
-      {icon}
+    <div className="flex items-center gap-3 p-3 bg-neutral-50/80 rounded-2xl">
+      <div className="flex-shrink-0">{icon}</div>
       <div>
-        <p className="text-sm text-gray-500">{label}</p>
-        <p className="font-medium">{value}</p>
+        <p className="text-xs text-neutral-600 font-medium">{label}</p>
+        <p className="text-sm font-semibold text-neutral-900">{value}</p>
       </div>
     </div>
   );

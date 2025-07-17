@@ -6,6 +6,7 @@ import { useEffect, useState, useRef } from "react";
 import { Field } from "@/lib/types";
 import { useUser } from "@clerk/nextjs";
 import { getFieldsByUser } from "@/actions";
+import { Sprout } from "lucide-react";
 
 Chart.register(ArcElement, Tooltip, Legend);
 
@@ -27,7 +28,6 @@ export default function CropWidget() {
     { category: string; color: string; percentage: number }[]
   >([]);
 
-  // Define a set of colors for categories
   const categoryColors: Record<string, string> = {
     Wheat: "#F4A261",
     Tomato: "#E63946",
@@ -37,26 +37,21 @@ export default function CropWidget() {
     Soybean: "#118AB2",
   };
 
-  // Store categoryColors in a ref
   const categoryColorsRef = useRef(categoryColors);
 
-  // First useEffect - fetch data when user changes
   useEffect(() => {
     const fetchData = async () => {
       const fields = await getFieldsByUser();
       setDbFields(fields ?? []);
     };
     fetchData();
-  }, [user]); // This is correct - dependency on user
-
-  // Second useEffect - update chart when dbFields changes
+  }, [user]);
 
   useEffect(() => {
     if (!dbFields || dbFields.length === 0) {
       return;
     }
 
-    // Count occurrences of each category
     const categoryCounts: Record<string, number> = {};
     dbFields.forEach((field: Field) => {
       if (field.categories && field.categories.length > 0) {
@@ -72,7 +67,7 @@ export default function CropWidget() {
 
     const percentages = Object.keys(categoryCounts).map((category) => ({
       category,
-      color: colors[category] || "#CCCCCC", // Default gray color if category is unknown
+      color: colors[category] || "#CCCCCC",
       percentage: Math.round((categoryCounts[category] / totalFields) * 100),
     }));
 
@@ -91,64 +86,90 @@ export default function CropWidget() {
     });
 
     setCategoryPercentages(percentages);
-  }, [dbFields]); // Keep this dependency - we want the chart to update when fields change
+  }, [dbFields]);
 
   if (!chartData) {
     return (
-      <section className="bg-white/40 backdrop-blur-md rounded-2xl shadow-2xl shadow-green-100/40 p-6 transition-transform hover:scale-105 hover:shadow-green-200/60">
-        <div className="flex border-b border-zinc-400/20 pb-3 px-3">
-          <h2 className="text-lg font-semibold">Crop Distribution</h2>
-          <p className=" p-1 ml-auto text-[15px] text-green-700 font-semibold">
-            2025
-          </p>
+      <div className="bg-white/90 backdrop-blur-sm rounded-3xl shadow-soft border border-white/60 p-6">
+        <div className="flex items-center gap-3 pb-4">
+          <div className="w-10 h-10 bg-green-100 rounded-2xl flex items-center justify-center">
+            <Sprout className="w-5 h-5 text-green-600" />
+          </div>
+          <h2 className="text-lg font-semibold text-neutral-900">
+            Crop Distribution
+          </h2>
         </div>
-        <div className="flex flex-col items-center justify-center h-44">
-          <p className="text-gray-500">No data available</p>
+        <div className="flex flex-col items-center justify-center py-12">
+          <p className="text-neutral-500">No crop data available</p>
         </div>
-      </section>
+      </div>
     );
   }
 
   return (
-    <section className="bg-white/40 backdrop-blur-md rounded-2xl shadow-2xl shadow-green-100/40 p-6 transition-transform hover:scale-105 hover:shadow-green-200/60">
-      <div className="pb-1">
-        <div className="flex items-center border-b border-zinc-400/20 pb-3">
-          <h2 className="text-lg font-semibold">Crop Distribution</h2>
-          <p className="p-3 ml-auto text-[15px] text-green-700 font-semibold">
-            2025
-          </p>
+    <div className="bg-white/90 backdrop-blur-sm rounded-3xl shadow-soft border border-white/60 p-6">
+      <div className="flex items-center justify-between pb-4">
+        <div className="flex items-center gap-3">
+          <div className="w-10 h-10 bg-green-100 rounded-2xl flex items-center justify-center">
+            <Sprout className="w-5 h-5 text-green-600" />
+          </div>
+          <h2 className="text-lg font-semibold text-neutral-900">
+            Crop Distribution
+          </h2>
         </div>
+        <span className="text-sm text-neutral-500 font-medium">2025</span>
       </div>
-      <div className="flex justify-center items-center w-44 h-auto mx-auto py-3">
-        <Doughnut
-          data={chartData}
-          options={{
-            cutout: "70%",
-            responsive: true,
-            plugins: {
-              legend: {
-                display: false,
+
+      <div className="flex flex-col items-center gap-4">
+        <div className="w-24 h-24 sm:w-28 sm:h-28">
+          <Doughnut
+            data={chartData}
+            options={{
+              cutout: "70%",
+              responsive: true,
+              maintainAspectRatio: true,
+              plugins: {
+                legend: {
+                  display: false,
+                },
+                tooltip: {
+                  enabled: true,
+                  backgroundColor: "rgba(0, 0, 0, 0.8)",
+                  titleColor: "white",
+                  bodyColor: "white",
+                  borderColor: "rgba(255, 255, 255, 0.1)",
+                  borderWidth: 1,
+                  cornerRadius: 8,
+                },
               },
-              tooltip: {
-                enabled: true,
-              },
-            },
-          }}
-        />
-        <div className="ml-8">
-          {categoryPercentages.map((item, index) => (
-            <div key={index} className="flex items-center mb-2">
+            }}
+          />
+        </div>
+
+        <div className="w-full max-w-xs">
+          <div className="grid grid-cols-1 gap-2">
+            {categoryPercentages.map((item, index) => (
               <div
-                className="w-4 h-4 mr-2 rounded-full"
-                style={{ backgroundColor: item.color }}
-              ></div>
-              <span className="text-sm">
-                {item.category} - {item.percentage}%
-              </span>
-            </div>
-          ))}
+                key={index}
+                className="flex items-center justify-between p-2 bg-neutral-50/80 rounded-xl"
+              >
+                <div className="flex items-center gap-2">
+                  <div
+                    className="w-3 h-3 rounded-full flex-shrink-0"
+                    style={{ backgroundColor: item.color }}
+                  ></div>
+                  <span className="text-sm text-neutral-700 font-medium truncate">
+                    {item.category}
+                  </span>
+                </div>
+                <span className="text-sm text-neutral-500 font-semibold flex-shrink-0">
+                  {item.percentage}%
+                </span>
+              </div>
+            ))}
+          </div>
         </div>
       </div>
-    </section>
+    </div>
   );
 }

@@ -1,8 +1,9 @@
-'use client';
+"use client";
 
 import { getAllCategories } from "@/actions";
 import { Category } from "@/lib/types";
 import { useEffect, useState } from "react";
+import { Loader2, X, Tag } from "lucide-react";
 
 interface CategoryModalProps {
   isOpen: boolean;
@@ -10,12 +11,16 @@ interface CategoryModalProps {
   onConfirm: (category: string, label: string) => void;
 }
 
-export default function CategoryModal({ isOpen, onClose, onConfirm }: CategoryModalProps) {
+export default function CategoryModal({
+  isOpen,
+  onClose,
+  onConfirm,
+}: CategoryModalProps) {
   const [categories, setCategories] = useState<Category[]>([]);
   const [selectedCategory, setSelectedCategory] = useState<Category>({
-    type: 'General'
+    type: "General",
   });
-  const [fieldLabel, setFieldLabel] = useState('');
+  const [fieldLabel, setFieldLabel] = useState("");
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
@@ -24,12 +29,11 @@ export default function CategoryModal({ isOpen, onClose, onConfirm }: CategoryMo
         setIsLoading(true);
         const fetchedCategories = await getAllCategories();
         setCategories(fetchedCategories);
-        
         if (fetchedCategories.length > 0) {
           setSelectedCategory(fetchedCategories[0]);
         }
       } catch (error) {
-        console.error('Error fetching categories:', error);
+        console.error("Error fetching categories:", error);
       } finally {
         setIsLoading(false);
       }
@@ -37,46 +41,56 @@ export default function CategoryModal({ isOpen, onClose, onConfirm }: CategoryMo
 
     if (isOpen) {
       fetchCategories();
-      // Reset the label when modal opens
-      setFieldLabel('');
+      setFieldLabel("");
     }
   }, [isOpen]);
 
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 flex items-center justify-center bg-black/50 z-50">
-      <div className="bg-white p-6 rounded-lg shadow-lg w-80">
-        <h2 className="text-lg font-semibold mb-4">Add Field Details</h2>
+    <div className="fixed inset-0 flex items-center justify-center bg-black/40 z-50">
+      <div className="bg-white/95 backdrop-blur-sm rounded-3xl shadow-large border border-white/60 p-8 w-96 relative">
+        <button
+          className="absolute top-4 right-4 w-8 h-8 bg-neutral-100 hover:bg-neutral-200 rounded-xl flex items-center justify-center transition-colors"
+          onClick={onClose}
+        >
+          <X className="w-4 h-4 text-neutral-600" />
+        </button>
+        <h2 className="text-xl font-bold text-neutral-900 mb-6 flex items-center gap-2">
+          <Tag className="w-5 h-5 text-primary-600" />
+          Add Field Details
+        </h2>
 
         {/* Add label input */}
-        <div className="mb-4">
-          <label className="block text-sm font-medium text-gray-700 mb-1">
+        <div className="mb-6">
+          <label className="block text-sm font-medium text-neutral-700 mb-2">
             Field Label
           </label>
           <input
             type="text"
             value={fieldLabel}
             onChange={(e) => setFieldLabel(e.target.value)}
-            className="w-full p-2 border rounded"
+            className="w-full px-4 py-3 border border-neutral-200 rounded-2xl bg-white/80 focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-500/20 text-neutral-900 placeholder-neutral-400"
             placeholder="Enter field label"
           />
         </div>
 
-        <div className="mb-4">
-          <label className="block text-sm font-medium text-gray-700 mb-1">
+        <div className="mb-6">
+          <label className="block text-sm font-medium text-neutral-700 mb-2">
             Category
           </label>
           {isLoading ? (
             <div className="flex justify-center py-4">
-              <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-blue-500"></div>
+              <Loader2 className="animate-spin w-6 h-6 text-primary-600" />
             </div>
           ) : (
             <select
-              className="w-full p-2 border rounded"
+              className="w-full px-4 py-3 border border-neutral-200 rounded-2xl bg-white/80 focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-500/20 text-neutral-900"
               value={selectedCategory.type}
               onChange={(e) => {
-                const category = categories.find(c => c.type === e.target.value);
+                const category = categories.find(
+                  (c) => c.type === e.target.value
+                );
                 if (category) {
                   setSelectedCategory(category);
                 }
@@ -91,15 +105,15 @@ export default function CategoryModal({ isOpen, onClose, onConfirm }: CategoryMo
           )}
         </div>
 
-        <div className="flex justify-between mt-4">
-          <button 
-            className="bg-gray-300 px-4 py-2 rounded hover:bg-gray-400 transition-colors"
+        <div className="flex justify-between gap-3 mt-6">
+          <button
+            className="flex-1 bg-neutral-100 hover:bg-neutral-200 text-neutral-700 font-semibold py-3 rounded-2xl transition-colors"
             onClick={onClose}
           >
             Cancel
           </button>
           <button
-            className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 transition-colors"
+            className="flex-1 bg-primary-600 hover:bg-primary-700 text-white font-semibold py-3 rounded-2xl transition-colors shadow-soft hover:shadow-medium disabled:bg-neutral-400 disabled:cursor-not-allowed"
             onClick={() => {
               onConfirm(selectedCategory.type, fieldLabel);
               onClose();
