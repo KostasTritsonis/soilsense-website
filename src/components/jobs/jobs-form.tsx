@@ -68,13 +68,16 @@ export default function JobForm({ onCancel }: JobFormProps) {
   };
 
   return (
-    <div className="bg-white p-6 rounded-lg shadow-md mb-6 border border-gray-200">
-      <h2 className="text-xl font-semibold mb-4">Create New Job</h2>
-      <form onSubmit={handleSubmit}>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+    <div className="bg-white/90 backdrop-blur-sm rounded-3xl shadow-soft border border-white/60 p-6 md:p-8">
+      <h2 className="text-xl md:text-2xl font-semibold text-neutral-900 mb-6">
+        Create New Job
+      </h2>
+      <form onSubmit={handleSubmit} className="space-y-6">
+        {/* Basic Information */}
+        <div className="space-y-4">
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
-              Job Title
+            <label className="block text-sm font-medium text-neutral-700 mb-2">
+              Job Title *
             </label>
             <input
               type="text"
@@ -82,11 +85,30 @@ export default function JobForm({ onCancel }: JobFormProps) {
               value={formData.title}
               onChange={handleInputChange}
               required
-              className="w-full p-2 border border-gray-300 rounded-md"
+              className="w-full px-4 py-3 border border-neutral-300 rounded-2xl bg-white/80 focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-500/20 text-neutral-900 placeholder-neutral-400"
+              placeholder="Enter job title"
             />
           </div>
+
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
+            <label className="block text-sm font-medium text-neutral-700 mb-2">
+              Description
+            </label>
+            <textarea
+              name="description"
+              value={formData.description}
+              onChange={handleInputChange}
+              rows={3}
+              className="w-full px-4 py-3 border border-neutral-300 rounded-2xl bg-white/80 focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-500/20 text-neutral-900 placeholder-neutral-400 resize-none"
+              placeholder="Enter job description"
+            ></textarea>
+          </div>
+        </div>
+
+        {/* Location and Assignment */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div>
+            <label className="block text-sm font-medium text-neutral-700 mb-2">
               Location
             </label>
             <input
@@ -94,59 +116,20 @@ export default function JobForm({ onCancel }: JobFormProps) {
               name="location"
               value={formData.location || ""}
               onChange={handleInputChange}
-              className="w-full p-2 border border-gray-300 rounded-md"
+              className="w-full px-4 py-3 border border-neutral-300 rounded-2xl bg-white/80 focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-500/20 text-neutral-900 placeholder-neutral-400"
+              placeholder="Enter location"
             />
           </div>
+
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
-              Start Date
-            </label>
-            <input
-              type="date"
-              name="startDate"
-              value={formData.startDate.toISOString().split("T")[0]}
-              onChange={handleInputChange}
-              required
-              className="w-full p-2 border border-gray-300 rounded-md"
-            />
-          </div>
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
-              End Date
-            </label>
-            <input
-              type="date"
-              name="endDate"
-              value={formData.endDate.toISOString().split("T")[0]}
-              onChange={handleInputChange}
-              required
-              className="w-full p-2 border border-gray-300 rounded-md"
-            />
-          </div>
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
-              Status
-            </label>
-            <select
-              name="status"
-              value={formData.status}
-              onChange={handleInputChange}
-              className="w-full p-2 border border-gray-300 rounded-md"
-            >
-              <option value="ONGOING">Ongoing</option>
-              <option value="DUE">Due</option>
-              <option value="COMPLETED">Completed</option>
-            </select>
-          </div>
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
+            <label className="block text-sm font-medium text-neutral-700 mb-2">
               Assigned To
             </label>
             <select
               name="assignedToId"
               value={formData.assignedToId || ""}
               onChange={handleInputChange}
-              className="w-full p-2 border border-gray-300 rounded-md"
+              className="w-full px-4 py-3 border border-neutral-300 rounded-2xl bg-white/80 focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-500/20 text-neutral-900"
             >
               <option value="">Not Assigned</option>
               {users.map((user) => (
@@ -157,23 +140,60 @@ export default function JobForm({ onCancel }: JobFormProps) {
             </select>
           </div>
         </div>
-        <div className="mb-4">
-          <label className="block text-sm font-medium text-gray-700 mb-1">
-            Description
-          </label>
-          <textarea
-            name="description"
-            value={formData.description}
-            onChange={handleInputChange}
-            rows={3}
-            className="w-full p-2 border border-gray-300 rounded-md"
-          ></textarea>
+
+        {/* Dates and Status */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <div>
+            <label className="block text-sm font-medium text-neutral-700 mb-2">
+              Start Date *
+            </label>
+            <input
+              type="date"
+              name="startDate"
+              value={formData.startDate.toISOString().split("T")[0]}
+              onChange={handleInputChange}
+              required
+              className="w-full px-4 py-3 border border-neutral-300 rounded-2xl bg-white/80 focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-500/20 text-neutral-900"
+            />
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium text-neutral-700 mb-2">
+              End Date *
+            </label>
+            <input
+              type="date"
+              name="endDate"
+              value={formData.endDate.toISOString().split("T")[0]}
+              onChange={handleInputChange}
+              required
+              className="w-full px-4 py-3 border border-neutral-300 rounded-2xl bg-white/80 focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-500/20 text-neutral-900"
+            />
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium text-neutral-700 mb-2">
+              Status
+            </label>
+            <select
+              name="status"
+              value={formData.status}
+              onChange={handleInputChange}
+              className="w-full px-4 py-3 border border-neutral-300 rounded-2xl bg-white/80 focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-500/20 text-neutral-900"
+            >
+              <option value="ONGOING">Ongoing</option>
+              <option value="DUE">Due</option>
+              <option value="COMPLETED">Completed</option>
+            </select>
+          </div>
         </div>
-        <div className="flex justify-end gap-2">
+
+        {/* Action Buttons */}
+        <div className="flex flex-col sm:flex-row justify-end gap-3 pt-4">
           <button
             type="button"
             onClick={onCancel}
-            className="px-4 py-2 border border-gray-300 rounded-md text-gray-700 hover:bg-gray-50"
+            className="w-full sm:w-auto px-6 py-3 border border-neutral-300 rounded-2xl text-neutral-700 hover:bg-neutral-50 transition-colors font-medium"
             disabled={isSubmitting}
           >
             Cancel
@@ -182,7 +202,7 @@ export default function JobForm({ onCancel }: JobFormProps) {
             type="submit"
             isLoading={isSubmitting}
             loadingText="Creating..."
-            className="px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 disabled:bg-green-400"
+            className="w-full sm:w-auto px-6 py-3 bg-primary-600 hover:bg-primary-700 text-white rounded-2xl font-semibold transition-colors shadow-soft hover:shadow-medium disabled:bg-neutral-400 disabled:cursor-not-allowed"
           >
             Create Job
           </ButtonLoader>

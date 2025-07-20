@@ -58,14 +58,16 @@ export default function DirectionsPanel({
   };
 
   return (
-    <div className="absolute top-4 right-14 w-80 max-h-[80vh] bg-white/95 backdrop-blur-sm rounded-3xl shadow-large border border-white/60 z-50 overflow-hidden">
+    <div className="absolute top-4 left-4 right-4 md:top-4 md:right-14 md:left-auto w-auto md:w-80 max-h-[85vh] md:max-h-[80vh] bg-white/95 backdrop-blur-sm rounded-3xl shadow-large border border-white/60 z-50 overflow-hidden">
       {/* Header */}
-      <div className="bg-gradient-to-r from-primary-50 to-blue-50 p-6 border-b border-neutral-200">
-        <div className="flex justify-between items-center pb-4">
-          <h3 className="text-xl font-bold text-neutral-900">Directions</h3>
+      <div className="bg-gradient-to-r from-primary-50 to-blue-50 p-4 md:p-6 border-b border-neutral-200">
+        <div className="flex justify-between items-center pb-3 md:pb-4">
+          <h3 className="text-lg md:text-xl font-bold text-neutral-900">
+            Directions
+          </h3>
           <button
             onClick={onClose}
-            className="w-8 h-8 bg-white/80 hover:bg-white rounded-xl flex items-center justify-center transition-colors shadow-soft"
+            className="w-8 h-8 bg-white/80 hover:bg-white rounded-xl flex items-center justify-center transition-colors shadow-soft flex-shrink-0"
           >
             <X className="w-4 h-4 text-neutral-600" />
           </button>
@@ -74,14 +76,14 @@ export default function DirectionsPanel({
         {/* Route Summary */}
         <div className="space-y-3">
           <div className="flex items-center gap-3 p-3 bg-white/80 rounded-2xl">
-            <div className="w-8 h-8 bg-green-100 rounded-xl flex items-center justify-center">
+            <div className="w-8 h-8 bg-green-100 rounded-xl flex items-center justify-center flex-shrink-0">
               <MapPin className="w-4 h-4 text-green-600" />
             </div>
-            <div>
+            <div className="min-w-0 flex-1">
               <p className="text-xs text-neutral-600 font-medium">
                 Destination
               </p>
-              <p className="text-sm font-semibold text-neutral-900">
+              <p className="text-sm font-semibold text-neutral-900 truncate">
                 {destination}
               </p>
             </div>
@@ -89,10 +91,10 @@ export default function DirectionsPanel({
 
           <div className="grid grid-cols-2 gap-3">
             <div className="flex items-center gap-3 p-3 bg-white/80 rounded-2xl">
-              <div className="w-8 h-8 bg-blue-100 rounded-xl flex items-center justify-center">
+              <div className="w-8 h-8 bg-blue-100 rounded-xl flex items-center justify-center flex-shrink-0">
                 <Navigation className="w-4 h-4 text-blue-600" />
               </div>
-              <div>
+              <div className="min-w-0">
                 <p className="text-xs text-neutral-600 font-medium">Distance</p>
                 <p className="text-sm font-semibold text-neutral-900">
                   {routeInfo.distanceText}
@@ -101,10 +103,10 @@ export default function DirectionsPanel({
             </div>
 
             <div className="flex items-center gap-3 p-3 bg-white/80 rounded-2xl">
-              <div className="w-8 h-8 bg-yellow-100 rounded-xl flex items-center justify-center">
+              <div className="w-8 h-8 bg-yellow-100 rounded-xl flex items-center justify-center flex-shrink-0">
                 <Clock className="w-4 h-4 text-yellow-600" />
               </div>
-              <div>
+              <div className="min-w-0">
                 <p className="text-xs text-neutral-600 font-medium">Duration</p>
                 <p className="text-sm font-semibold text-neutral-900">
                   {routeInfo.durationText}
@@ -116,8 +118,8 @@ export default function DirectionsPanel({
       </div>
 
       {/* Route Steps */}
-      <div className="max-h-96 overflow-y-auto">
-        <div className="p-6 space-y-3">
+      <div className="max-h-64 md:max-h-96 overflow-y-auto">
+        <div className="p-4 md:p-6 space-y-3">
           {routeInfo.steps.map((step: RouteStep, index: number) => (
             <div
               key={index}
@@ -138,7 +140,7 @@ export default function DirectionsPanel({
               {/* Step Content */}
               <div className="flex-1 min-w-0">
                 <div className="flex items-center gap-2 pb-2">
-                  <div className="text-primary-600">
+                  <div className="text-primary-600 flex-shrink-0">
                     {getStepIcon(step.maneuver.type)}
                   </div>
                   <p className="text-sm font-semibold text-neutral-900">
@@ -163,8 +165,8 @@ export default function DirectionsPanel({
       </div>
 
       {/* Footer Actions */}
-      <div className="border-t border-neutral-200 p-6">
-        <div className="flex gap-3">
+      <div className="border-t border-neutral-200 p-4 md:p-6">
+        <div className="flex flex-col sm:flex-row gap-3">
           <button
             onClick={() => {
               if (startPoint) {

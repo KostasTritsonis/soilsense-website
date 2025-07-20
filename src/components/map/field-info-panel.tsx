@@ -17,37 +17,37 @@ export default function FieldInfoPanel({
   hasCustomStartPoint = false,
 }: FieldInfoPanelProps) {
   return (
-    <div className="absolute bottom-4 right-14 bg-white/95 backdrop-blur-sm rounded-3xl shadow-large border border-white/60 p-6 w-80 z-10 transition-all duration-300 hover:shadow-medium text-neutral-900">
-      <div className="flex justify-between items-center pb-4">
-        <h2 className="text-xl font-bold text-neutral-900">
+    <div className="absolute bottom-4 left-4 right-4 md:bottom-4 md:right-14 md:left-auto bg-white/95 backdrop-blur-sm rounded-3xl shadow-large border border-white/60 p-4 md:p-6 w-auto md:w-80 z-10 transition-all duration-300 hover:shadow-medium text-neutral-900">
+      <div className="flex justify-between items-center pb-3 md:pb-4">
+        <h2 className="text-lg md:text-xl font-bold text-neutral-900 truncate pr-2">
           {selectedField.label || "Unnamed Field"}
         </h2>
         <button
           onClick={onDeselect}
-          className="w-8 h-8 bg-neutral-100 hover:bg-neutral-200 rounded-xl flex items-center justify-center transition-colors"
+          className="w-8 h-8 bg-neutral-100 hover:bg-neutral-200 rounded-xl flex items-center justify-center transition-colors flex-shrink-0"
         >
           <X className="w-4 h-4 text-neutral-600" />
         </button>
       </div>
 
-      <div className="space-y-4 pb-6">
+      <div className="space-y-3 md:space-y-4 pb-4 md:pb-6">
         <div className="flex items-center gap-3 p-3 bg-neutral-50/80 rounded-2xl">
-          <div className="w-8 h-8 bg-green-100 rounded-xl flex items-center justify-center">
+          <div className="w-8 h-8 bg-green-100 rounded-xl flex items-center justify-center flex-shrink-0">
             <MapPin className="w-4 h-4 text-green-600" />
           </div>
-          <div>
+          <div className="min-w-0 flex-1">
             <p className="text-xs text-neutral-600 font-medium">Crop Type</p>
-            <p className="text-sm font-semibold text-neutral-900">
+            <p className="text-sm font-semibold text-neutral-900 truncate">
               {selectedField.categories?.[0]?.type || "N/A"}
             </p>
           </div>
         </div>
 
         <div className="flex items-center gap-3 p-3 bg-neutral-50/80 rounded-2xl">
-          <div className="w-8 h-8 bg-blue-100 rounded-xl flex items-center justify-center">
+          <div className="w-8 h-8 bg-blue-100 rounded-xl flex items-center justify-center flex-shrink-0">
             <Ruler className="w-4 h-4 text-blue-600" />
           </div>
-          <div>
+          <div className="min-w-0 flex-1">
             <p className="text-xs text-neutral-600 font-medium">Area</p>
             <p className="text-sm font-semibold text-neutral-900">
               {selectedField.area.toFixed(2)} m²
@@ -64,12 +64,12 @@ export default function FieldInfoPanel({
         {isLoading ? (
           <>
             <div className="animate-spin rounded-full h-4 w-4 border-2 border-white border-t-transparent"></div>
-            <span>Getting Location...</span>
+            <span className="text-sm md:text-base">Getting Location...</span>
           </>
         ) : (
           <>
             <Navigation className="w-4 h-4" />
-            <span>Get Directions</span>
+            <span className="text-sm md:text-base">Get Directions</span>
           </>
         )}
       </button>

@@ -121,6 +121,10 @@ export default function MapComponent() {
     if (fieldId) {
       const field = fields.find((f) => f.id === fieldId);
       setSelectedField(field || null);
+      // Close sidebar on mobile when field is selected
+      if (window.innerWidth < 768) {
+        setIsSidebarOpen(false);
+      }
     } else {
       setSelectedField(null);
     }
@@ -223,60 +227,83 @@ export default function MapComponent() {
     }
   };
 
+  // Close sidebar when clicking outside on mobile
+  const handleBackdropClick = (e: React.MouseEvent) => {
+    if (e.target === e.currentTarget && window.innerWidth < 768) {
+      setIsSidebarOpen(false);
+    }
+  };
+
   return (
-    <div className="flex flex-col md:flex-row h-screen w-full max-sm:pb-[60px] relative bg-neutral-100">
+    <div className="flex flex-col h-screen w-full relative bg-neutral-100 overflow-hidden">
       {/* Loading spinner */}
       {(isLoading || isSaving) && <LoadingSpinner />}
 
-      {/* Sidebar toggle button - visible on mobile */}
-      <button
-        className={`absolute ${
-          isSidebarOpen
-            ? "left-44 sm:left-60 md:left-72 lg:left-80 rounded-r-xl"
-            : "rounded-2xl top-1 left-12"
-        } z-20 bg-primary-600 text-white p-2 shadow-soft transition-all duration-300 hover:bg-primary-700 focus:outline-none `}
-        onClick={() => setIsSidebarOpen(!isSidebarOpen)}
-      >
-        {isSidebarOpen ? <span> ✕</span> : <span>☰</span>}
-      </button>
+      {/* Mobile header with toggle button */}
+      <div className="md:hidden flex items-center justify-between p-4 bg-white/95 backdrop-blur-sm border-b border-neutral-200 z-30">
+        <h1 className="text-xl font-bold text-primary-700">Field Manager</h1>
+        <button
+          className="bg-primary-600 text-white p-2 rounded-xl shadow-soft transition-all duration-300 hover:bg-primary-700 focus:outline-none"
+          onClick={() => setIsSidebarOpen(!isSidebarOpen)}
+        >
+          {isSidebarOpen ? <span>✕</span> : <span>☰</span>}
+        </button>
+      </div>
 
       {/* Main content with map */}
-      <div className="flex-grow h-screen relative">
+      <div className="flex-1 relative">
         {/* Map container */}
         <div ref={mapContainer} className="w-full h-full relative">
+          {/* Mobile backdrop overlay */}
+          {isSidebarOpen && (
+            <div
+              className="md:hidden fixed inset-0 top-16 bg-black/50 z-40"
+              onClick={handleBackdropClick}
+            />
+          )}
+
           {/* Sidebar */}
           <div
             className={`${
               isSidebarOpen ? "translate-x-0" : "-translate-x-full"
-            } transition-transform duration-300 absolute z-10 w-44 sm:w-60 md:w-72 lg:w-80 h-full bg-white/95 backdrop-blur-sm  shadow-large border-r border-white/60 overflow-y-auto flex flex-col`}
+            } transition-transform duration-300 fixed md:absolute z-50 md:z-10 w-72 sm:w-80 md:w-72 lg:w-80 h-[calc(100vh-4rem)] md:h-full top-16 md:top-0 bg-white/95 backdrop-blur-sm shadow-large border-r border-white/60 overflow-y-auto flex flex-col`}
           >
-            {/* Sidebar Header */}
-            <div className="p-6 border-b border-neutral-200 bg-gradient-to-r from-primary-50 to-blue-50 rounded-tr-3xl">
+            {/* Desktop sidebar header - hidden on mobile */}
+            <div className="hidden md:block p-6 border-b border-neutral-200 bg-gradient-to-r from-primary-50 to-blue-50 rounded-tr-3xl">
               <h1 className="text-2xl font-bold text-primary-700 tracking-tight">
                 Field Manager
               </h1>
             </div>
 
+            {/* Mobile sidebar header */}
+            <div className="md:hidden p-4 border-b border-neutral-200 bg-gradient-to-r from-primary-50 to-blue-50">
+              <h2 className="text-lg font-semibold text-primary-700">Menu</h2>
+            </div>
+
             {/* Controls section in sidebar */}
-            <MapControls
-              onReset={handleCustomReset}
-              onSave={handleSave}
-              onLoad={handleLoad}
-              isLoading={isLoading}
-              isSaving={isSaving}
-              hasFields={fields.length > 0}
-            />
+            <div className="p-4 md:p-6">
+              <MapControls
+                onReset={handleCustomReset}
+                onSave={handleSave}
+                onLoad={handleLoad}
+                isLoading={isLoading}
+                isSaving={isSaving}
+                hasFields={fields.length > 0}
+              />
+            </div>
 
             {/* Info panel in sidebar */}
-            <InfoPanel
-              lng={lng}
-              lat={lat}
-              zoom={zoom}
-              fieldArea={fieldArea > 0 ? fieldArea : totalArea}
-            />
+            <div className="px-4 md:px-6 pb-4">
+              <InfoPanel
+                lng={lng}
+                lat={lat}
+                zoom={zoom}
+                fieldArea={fieldArea > 0 ? fieldArea : totalArea}
+              />
+            </div>
 
             {/* Field list in sidebar */}
-            <div className="flex-grow p-4 overflow-y-auto">
+            <div className="flex-1 px-4 md:px-6 pb-4 overflow-y-auto">
               <h2 className="text-lg font-semibold text-neutral-900 mb-4">
                 Fields
               </h2>
@@ -292,15 +319,15 @@ export default function MapComponent() {
         {/* Auth overlay */}
         {!isSignedIn && (
           <div className="absolute z-50 inset-0 flex items-center justify-center bg-black/70">
-            <div className="bg-white/95 backdrop-blur-sm rounded-3xl shadow-large border border-white/60 p-8">
-              <p className="text-lg text-neutral-900 font-semibold text-center">
+            <div className="bg-white/95 backdrop-blur-sm rounded-3xl shadow-large border border-white/60 p-6 md:p-8 mx-4">
+              <p className="text-base md:text-lg text-neutral-900 font-semibold text-center">
                 Please sign in to access the map
               </p>
             </div>
           </div>
         )}
 
-        {/* Field Info Panel */}
+        {/* Field Info Panel - mobile optimized */}
         {selectedField && (
           <FieldInfoPanel
             selectedField={selectedField}
@@ -310,6 +337,8 @@ export default function MapComponent() {
             hasCustomStartPoint={startPointCoordsRef.current !== null}
           />
         )}
+
+        {/* Field Editor */}
         {editingFieldId && (
           <FieldEditor
             field={fields.find((p) => p.id === editingFieldId) || null}

@@ -38,7 +38,30 @@ export default function Header() {
         </div>
         <div>
           <h1 className="text-2xl font-bold text-neutral-900">SoilSense</h1>
-          <p className="text-sm text-neutral-500">Agricultural Intelligence</p>
+          <p className="text-sm sm:block hidden text-neutral-500">
+            Agricultural Intelligence
+          </p>
+        </div>
+
+        {/* User Actions */}
+        <div className="flex items-center gap-4">
+          <SignedIn>
+            <UserButton
+              appearance={{
+                elements: {
+                  avatarBox: "w-8 h-8 rounded-2xl shadow-soft",
+                },
+              }}
+            />
+          </SignedIn>
+          <SignedOut>
+            <Link
+              href="/sign-in"
+              className="px-6 py-3 bg-primary-600 text-white rounded-2xl font-semibold hover:bg-primary-700 transition-colors shadow-soft hover:shadow-medium"
+            >
+              Sign In
+            </Link>
+          </SignedOut>
         </div>
       </div>
 
@@ -59,28 +82,6 @@ export default function Header() {
           </Link>
         ))}
       </nav>
-
-      {/* User Actions */}
-      <div className="flex items-center gap-4">
-        <SignedIn>
-          <UserButton
-            afterSignOutUrl="/"
-            appearance={{
-              elements: {
-                avatarBox: "w-10 h-10 rounded-2xl shadow-soft",
-              },
-            }}
-          />
-        </SignedIn>
-        <SignedOut>
-          <Link
-            href="/sign-in"
-            className="px-6 py-3 bg-primary-600 text-white rounded-2xl font-semibold hover:bg-primary-700 transition-colors shadow-soft hover:shadow-medium"
-          >
-            Sign In
-          </Link>
-        </SignedOut>
-      </div>
     </header>
   );
 }

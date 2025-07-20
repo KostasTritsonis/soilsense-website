@@ -7,7 +7,7 @@ export default function Page() {
       {/* Header Section */}
 
       <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4 pb-5">
-        <h1 className="text-4xl font-bold text-neutral-900">
+        <h1 className="sm:text-4xl text-2xl font-bold text-neutral-900">
           Field Management
         </h1>
       </div>

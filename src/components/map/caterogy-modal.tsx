@@ -48,21 +48,21 @@ export default function CategoryModal({
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 flex items-center justify-center bg-black/40 z-50">
-      <div className="bg-white/95 backdrop-blur-sm rounded-3xl shadow-large border border-white/60 p-8 w-96 relative">
+    <div className="fixed inset-0 flex items-center justify-center bg-black/40 z-50 p-4">
+      <div className="bg-white/95 backdrop-blur-sm rounded-3xl shadow-large border border-white/60 p-6 md:p-8 w-full max-w-sm md:w-96 relative">
         <button
           className="absolute top-4 right-4 w-8 h-8 bg-neutral-100 hover:bg-neutral-200 rounded-xl flex items-center justify-center transition-colors"
           onClick={onClose}
         >
           <X className="w-4 h-4 text-neutral-600" />
         </button>
-        <h2 className="text-xl font-bold text-neutral-900 mb-6 flex items-center gap-2">
+        <h2 className="text-lg md:text-xl font-bold text-neutral-900 mb-4 md:mb-6 flex items-center gap-2">
           <Tag className="w-5 h-5 text-primary-600" />
           Add Field Details
         </h2>
 
         {/* Add label input */}
-        <div className="mb-6">
+        <div className="mb-4 md:mb-6">
           <label className="block text-sm font-medium text-neutral-700 mb-2">
             Field Label
           </label>
@@ -75,7 +75,7 @@ export default function CategoryModal({
           />
         </div>
 
-        <div className="mb-6">
+        <div className="mb-4 md:mb-6">
           <label className="block text-sm font-medium text-neutral-700 mb-2">
             Category
           </label>
@@ -105,7 +105,7 @@ export default function CategoryModal({
           )}
         </div>
 
-        <div className="flex justify-between gap-3 mt-6">
+        <div className="flex flex-col sm:flex-row justify-between gap-3 mt-6">
           <button
             className="flex-1 bg-neutral-100 hover:bg-neutral-200 text-neutral-700 font-semibold py-3 rounded-2xl transition-colors"
             onClick={onClose}

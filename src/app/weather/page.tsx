@@ -85,7 +85,7 @@ export default function Weather() {
       <div className="pb-8">
         <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
           <div>
-            <h1 className="text-4xl font-bold text-neutral-900 pb-2">
+            <h1 className="sm:text-4xl text-2xl font-bold text-neutral-900 pb-2">
               Weather Dashboard
             </h1>
             <p className="text-lg text-neutral-600">

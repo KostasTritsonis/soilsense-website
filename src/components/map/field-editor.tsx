@@ -26,8 +26,8 @@ export default function FieldEditor({
 
   if (!field) return null;
   return (
-    <div className="absolute bottom-3 right-14 z-10 bg-white/95 backdrop-blur-sm rounded-3xl shadow-large border border-white/60 p-6 sm:w-[270px] w-[220px] h-[370px]">
-      <div className="space-y-5">
+    <div className="absolute bottom-4 left-4 right-4 md:bottom-3 md:right-14 md:left-auto z-10 bg-white/95 backdrop-blur-sm rounded-3xl shadow-large border border-white/60 p-4 md:p-6 w-auto md:w-[270px] max-h-[435px] md:h-[340px] overflow-y-auto">
+      <div className="space-y-4 md:space-y-5">
         {/* Label Input */}
         <div>
           <label className="block text-neutral-700 text-sm mb-2">Label</label>
@@ -62,7 +62,7 @@ export default function FieldEditor({
 
         {/* Color Picker */}
         <div>
-          <label className=" text-neutral-700 text-sm mb-2 flex items-center gap-2">
+          <label className="text-neutral-700 text-sm mb-2 flex items-center gap-2">
             <Palette className="w-4 h-4 text-primary-600" />
             Color
           </label>
@@ -90,7 +90,7 @@ export default function FieldEditor({
         </div>
 
         {/* Action Buttons */}
-        <div className="flex gap-2 mt-3">
+        <div className="flex flex-col sm:flex-row gap-2 mt-3">
           <button
             className="w-full bg-primary-600 hover:bg-primary-700 text-white font-semibold px-3 py-2 rounded-2xl transition-colors shadow-soft hover:shadow-medium disabled:bg-neutral-400 disabled:opacity-60"
             onClick={() => {
