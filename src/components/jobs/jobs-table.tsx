@@ -3,7 +3,7 @@ import React from "react";
 import { JobStatus } from "@/lib/types";
 import StatusBadge from "./status-badge";
 import { deleteJob, updateJobStatus } from "@/actions/index";
-import { useFields } from "@/context/fields-context";
+import { useJobs } from "@/context/jobs-context";
 import { MapPin, Calendar, User, Trash2 } from "lucide-react";
 
 const header = [
@@ -31,7 +31,7 @@ const header = [
 ];
 
 export default function JobsTable() {
-  const { jobs, setJobs } = useFields();
+  const { jobs, setJobs } = useJobs();
   if (!jobs) return null;
 
   // Calculate days remaining or overdue

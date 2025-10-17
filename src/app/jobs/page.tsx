@@ -8,7 +8,7 @@ import { Calendar, dateFnsLocalizer, View, Views } from "react-big-calendar";
 import "react-big-calendar/lib/css/react-big-calendar.css";
 import { format, parse, startOfWeek, getDay } from "date-fns";
 import { enUS } from "date-fns/locale/en-US";
-import { useFields } from "@/context/fields-context";
+import { useJobs } from "@/context/jobs-context";
 import { Job } from "@/lib/types";
 
 interface CalendarEvent {
@@ -21,7 +21,7 @@ interface CalendarEvent {
 
 export default function Page() {
   const [showJobForm, setShowJobForm] = useState(false);
-  const { jobs } = useFields();
+  const { jobs } = useJobs();
   const { isSignedIn } = useUser();
   const [view, setView] = useState<View>(Views.MONTH);
 

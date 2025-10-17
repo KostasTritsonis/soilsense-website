@@ -16,6 +16,8 @@ import { centroid } from "@turf/turf";
 import mapboxgl from "mapbox-gl";
 import FieldEditor from "./field-editor";
 import DirectionsPanel from "./directions-panel";
+import MenuIcon from "@mui/icons-material/Menu";
+import CloseIcon from "@mui/icons-material/Close";
 
 export default function MapComponent() {
   const [selectedField, setSelectedField] = useState<Field | null>(null);
@@ -67,6 +69,22 @@ export default function MapComponent() {
   // Use the ref in the effect with an empty dependency array
   useEffect(() => {
     handleResetRef.current();
+  }, []);
+
+  // Set sidebar to open by default on desktop
+  useEffect(() => {
+    const checkScreenSize = () => {
+      if (window.innerWidth >= 768) {
+        setIsSidebarOpen(true);
+      } else {
+        setIsSidebarOpen(false);
+      }
+    };
+
+    checkScreenSize();
+    window.addEventListener("resize", checkScreenSize);
+
+    return () => window.removeEventListener("resize", checkScreenSize);
   }, []);
 
   // Custom reset function that also clears the pin
@@ -246,12 +264,26 @@ export default function MapComponent() {
           className="bg-primary-600 text-white p-2 rounded-xl shadow-soft transition-all duration-300 hover:bg-primary-700 focus:outline-none"
           onClick={() => setIsSidebarOpen(!isSidebarOpen)}
         >
-          {isSidebarOpen ? <span>✕</span> : <span>☰</span>}
+          {isSidebarOpen ? (
+            <CloseIcon className="w-6 h-6" />
+          ) : (
+            <MenuIcon className="w-6 h-6" />
+          )}
         </button>
       </div>
 
       {/* Main content with map */}
       <div className="flex-1 relative">
+        {/* Desktop floating toggle button - only show when sidebar is closed */}
+        {!isSidebarOpen && (
+          <button
+            className="hidden md:block absolute top-1 left-12 z-50 bg-primary-600 text-white p-2 rounded-md shadow-md transition-all duration-300 hover:bg-primary-700 focus:outline-none hover:shadow-md hover:scale-105"
+            onClick={() => setIsSidebarOpen(true)}
+          >
+            <MenuIcon className="w-4 h-4" />
+          </button>
+        )}
+
         {/* Map container */}
         <div ref={mapContainer} className="w-full h-full relative">
           {/* Mobile backdrop overlay */}
@@ -264,20 +296,23 @@ export default function MapComponent() {
 
           {/* Sidebar */}
           <div
-            className={`${
+            className={`transition-transform duration-300 fixed md:absolute z-50 md:z-10 w-72 sm:w-80 md:w-72 lg:w-80 h-[calc(100vh-4rem)] md:h-full top-16 md:top-0 bg-white/95 backdrop-blur-sm shadow-large border-r border-white/60 overflow-y-auto flex flex-col ${
               isSidebarOpen ? "translate-x-0" : "-translate-x-full"
-            } transition-transform duration-300 fixed md:absolute z-50 md:z-10 w-72 sm:w-80 md:w-72 lg:w-80 h-[calc(100vh-4rem)] md:h-full top-16 md:top-0 bg-white/95 backdrop-blur-sm shadow-large border-r border-white/60 overflow-y-auto flex flex-col`}
+            }`}
           >
             {/* Desktop sidebar header - hidden on mobile */}
             <div className="hidden md:block p-6 border-b border-neutral-200 bg-gradient-to-r from-primary-50 to-blue-50 rounded-tr-3xl">
-              <h1 className="text-2xl font-bold text-primary-700 tracking-tight">
-                Field Manager
-              </h1>
-            </div>
-
-            {/* Mobile sidebar header */}
-            <div className="md:hidden p-4 border-b border-neutral-200 bg-gradient-to-r from-primary-50 to-blue-50">
-              <h2 className="text-lg font-semibold text-primary-700">Menu</h2>
+              <div className="flex items-center justify-between">
+                <h1 className="text-2xl font-bold text-primary-700 tracking-tight">
+                  Field Manager
+                </h1>
+                <button
+                  className="text-primary-600 hover:text-primary-700 p-2 rounded-lg transition-colors duration-200 hover:bg-primary-100"
+                  onClick={() => setIsSidebarOpen(false)}
+                >
+                  <CloseIcon className="w-5 h-5" />
+                </button>
+              </div>
             </div>
 
             {/* Controls section in sidebar */}

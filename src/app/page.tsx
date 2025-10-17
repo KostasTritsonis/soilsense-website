@@ -12,6 +12,7 @@ import { useUser } from "@clerk/nextjs";
 import { createUser, getUserByEmail } from "@/actions";
 import MapReadOnly from "@/components/map/map-read-only";
 import { useFields } from "@/context/fields-context";
+import { useJobs } from "@/context/jobs-context";
 import Link from "next/link";
 import JobsWidget from "@/components/jobs/jobs.widget";
 import CropWidget from "@/components/crop-widget";
@@ -19,7 +20,8 @@ import { useLoadingStore } from "@/lib/stores/loading-store";
 
 export default function Home() {
   const { user, isLoaded } = useUser();
-  const { fields, jobs } = useFields();
+  const { fields } = useFields();
+  const { jobs } = useJobs();
   const [totalArea, setTotalArea] = useState<number>(0);
   const { setAppLoading } = useLoadingStore();
 

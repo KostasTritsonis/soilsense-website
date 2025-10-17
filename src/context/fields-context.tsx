@@ -1,8 +1,8 @@
 "use client";
 
 import { createContext, useContext, useEffect, useState } from "react";
-import { Field, Job, User } from "@/lib/types";
-import { getFieldsByUser, getJobs, getUsers } from "@/actions";
+import { Field } from "@/lib/types";
+import { getFieldsByUser } from "@/actions";
 import { useUser } from "@clerk/nextjs";
 
 // Define context type
@@ -10,11 +10,7 @@ interface FieldsContextType {
   fields: Field[];
   isLoading: boolean;
   tempFields: Field[];
-  jobs: Job[] | undefined;
-  users: User[] | undefined;
   setFields: React.Dispatch<React.SetStateAction<Field[]>>;
-  setJobs: React.Dispatch<React.SetStateAction<Job[] | undefined>>;
-  setUsers: React.Dispatch<React.SetStateAction<User[] | undefined>>;
   setTempFields: React.Dispatch<React.SetStateAction<Field[]>>;
 }
 
@@ -26,8 +22,6 @@ export function FieldsProvider({ children }: { children: React.ReactNode }) {
   const { user } = useUser();
   const [fields, setFields] = useState<Field[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(true);
-  const [jobs,setJobs] = useState<Job[] | undefined>([]);
-  const [users,setUsers] = useState<User[] | undefined>([]);
   const [tempFields, setTempFields] = useState<Field[]>([]);
 
   useEffect(() => {
@@ -43,19 +37,15 @@ export function FieldsProvider({ children }: { children: React.ReactNode }) {
       }
     };
 
-    const fetchJobs = async () => {
-          const jobsResult = await getJobs();
-          const usersResult = await getUsers();
-          if (jobsResult.success) setJobs(jobsResult.jobs);
-          if (usersResult.success) setUsers(usersResult.users);
-        };
-
-    if (user) fetchFields(); fetchJobs();
-
+    if (user) {
+      fetchFields();
+    }
   }, [user]);
 
   return (
-    <FieldsContext.Provider value={{ fields, isLoading, jobs, users,tempFields,setTempFields, setFields, setJobs, setUsers }}>
+    <FieldsContext.Provider
+      value={{ fields, isLoading, tempFields, setTempFields, setFields }}
+    >
       {children}
     </FieldsContext.Provider>
   );

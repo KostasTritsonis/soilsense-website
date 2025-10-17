@@ -4,7 +4,7 @@ import React, { useState } from "react";
 import { JobFormData } from "@/lib/types";
 import { createJob } from "@/actions/index";
 import { useRouter } from "next/navigation";
-import { useFields } from "@/context/fields-context";
+import { useJobs } from "@/context/jobs-context";
 import { useLoadingStore } from "@/lib/stores/loading-store";
 import ButtonLoader from "@/components/button-loader";
 
@@ -15,7 +15,7 @@ type JobFormProps = {
 export default function JobForm({ onCancel }: JobFormProps) {
   const router = useRouter();
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const { users } = useFields();
+  const { users } = useJobs();
   const { setCreatingJob } = useLoadingStore();
   const [formData, setFormData] = useState<JobFormData>({
     title: "",

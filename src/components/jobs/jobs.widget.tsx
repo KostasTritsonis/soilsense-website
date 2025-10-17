@@ -1,11 +1,11 @@
-import { useFields } from "@/context/fields-context";
+import { useJobs } from "@/context/jobs-context";
 import { JobStatus } from "@prisma/client";
 import { ArrowRightIcon, MapPin, Clock, User } from "lucide-react";
 import Link from "next/link";
 import React from "react";
 
 export default function JobsWidget() {
-  const { jobs } = useFields();
+  const { jobs } = useJobs();
   const sortedJobs = jobs?.filter((job) => job.status === "DUE");
 
   const getDaysRemaining = (endDate: Date, status: JobStatus) => {
