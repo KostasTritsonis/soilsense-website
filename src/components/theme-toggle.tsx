@@ -1,6 +1,6 @@
 "use client";
 
-import { Sun, Moon, Monitor } from "lucide-react";
+import { Sun, Moon } from "lucide-react";
 import { useThemeStore } from "@/lib/stores/theme-store";
 import { useTranslations } from "next-intl";
 
@@ -11,7 +11,6 @@ export default function ThemeToggle() {
   const themes = [
     { value: "light" as const, icon: Sun, label: t("theme.light") },
     { value: "dark" as const, icon: Moon, label: t("theme.dark") },
-    { value: "system" as const, icon: Monitor, label: t("theme.system") },
   ];
 
   return (
@@ -20,7 +19,7 @@ export default function ThemeToggle() {
         <button
           key={value}
           onClick={() => setTheme(value)}
-          className={`flex items-center gap-2 px-3 py-2 rounded-lg text-sm font-medium transition-all ${
+          className={`flex items-center justify-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-all flex-1 ${
             theme === value
               ? "bg-white dark:bg-neutral-700 text-primary-700 dark:text-primary-400 shadow-sm"
               : "text-neutral-600 dark:text-neutral-400 hover:bg-white/60 dark:hover:bg-neutral-700/60 hover:text-neutral-900 dark:hover:text-neutral-200"

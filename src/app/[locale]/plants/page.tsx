@@ -30,11 +30,11 @@ export default function PlantsPage() {
       <div className="pb-6 md:pb-8">
         <div className="flex items-center gap-3 mb-4">
           <Sprout className="w-8 h-8 text-primary-600" />
-          <h1 className="text-2xl md:text-4xl font-bold text-neutral-900">
+          <h1 className="text-2xl md:text-4xl font-bold text-neutral-900 dark:text-neutral-300">
             {t("navigation.plants")}
           </h1>
         </div>
-        <p className="text-base md:text-lg text-neutral-600">
+        <p className="text-base md:text-lg text-neutral-600 dark:text-neutral-200">
           {t("plants.myPlants")}
         </p>
       </div>
