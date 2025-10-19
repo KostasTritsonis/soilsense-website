@@ -103,34 +103,38 @@ export default function CropWidget() {
 
   if (!chartData) {
     return (
-      <div className="bg-white/90 backdrop-blur-sm rounded-3xl shadow-soft border border-white/60 p-6">
+      <div className="bg-white/90 dark:bg-neutral-800/90 backdrop-blur-sm rounded-3xl shadow-soft border border-white/60 dark:border-neutral-700/60 p-6">
         <div className="flex items-center gap-3 pb-4">
-          <div className="w-10 h-10 bg-green-100 rounded-2xl flex items-center justify-center">
-            <Sprout className="w-5 h-5 text-green-600" />
+          <div className="w-10 h-10 bg-green-100 dark:bg-green-900/30 rounded-2xl flex items-center justify-center">
+            <Sprout className="w-5 h-5 text-green-600 dark:text-green-400" />
           </div>
-          <h2 className="text-lg font-semibold text-neutral-900">
+          <h2 className="text-lg font-semibold text-neutral-900 dark:text-neutral-100">
             {t("crops.cropDistribution")}
           </h2>
         </div>
         <div className="flex flex-col items-center justify-center py-12">
-          <p className="text-neutral-500">{t("crops.noCropDataAvailable")}</p>
+          <p className="text-neutral-500 dark:text-neutral-400">
+            {t("crops.noCropDataAvailable")}
+          </p>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="bg-white/90 backdrop-blur-sm rounded-3xl shadow-soft border border-white/60 p-6">
+    <div className="bg-white/90 dark:bg-neutral-800/90 backdrop-blur-sm rounded-3xl shadow-soft border border-white/60 dark:border-neutral-700/60 p-6">
       <div className="flex items-center justify-between pb-4">
         <div className="flex items-center gap-3">
-          <div className="w-10 h-10 bg-green-100 rounded-2xl flex items-center justify-center">
-            <Sprout className="w-5 h-5 text-green-600" />
+          <div className="w-10 h-10 bg-green-100 dark:bg-green-900/30 rounded-2xl flex items-center justify-center">
+            <Sprout className="w-5 h-5 text-green-600 dark:text-green-400" />
           </div>
-          <h2 className="text-lg font-semibold text-neutral-900">
+          <h2 className="text-lg font-semibold text-neutral-900 dark:text-neutral-100">
             {t("crops.cropDistribution")}
           </h2>
         </div>
-        <span className="text-sm text-neutral-500 font-medium">2025</span>
+        <span className="text-sm text-neutral-500 dark:text-neutral-400 font-medium">
+          2025
+        </span>
       </div>
 
       <div className="flex flex-col items-center gap-4">
@@ -164,18 +168,18 @@ export default function CropWidget() {
             {categoryPercentages.map((item, index) => (
               <div
                 key={index}
-                className="flex items-center justify-between p-2 bg-neutral-50/80 rounded-xl"
+                className="flex items-center justify-between p-2 bg-neutral-50/80 dark:bg-neutral-700/80 rounded-xl"
               >
                 <div className="flex items-center gap-2">
                   <div
                     className="w-3 h-3 rounded-full flex-shrink-0"
                     style={{ backgroundColor: item.color }}
                   ></div>
-                  <span className="text-sm text-neutral-700 font-medium truncate">
+                  <span className="text-sm text-neutral-700 dark:text-neutral-300 font-medium truncate">
                     {getTranslatedCropName(item.category)}
                   </span>
                 </div>
-                <span className="text-sm text-neutral-500 font-semibold flex-shrink-0">
+                <span className="text-sm text-neutral-500 dark:text-neutral-400 font-semibold flex-shrink-0">
                   {item.percentage}%
                 </span>
               </div>

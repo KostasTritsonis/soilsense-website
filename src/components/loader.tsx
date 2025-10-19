@@ -23,9 +23,13 @@ export default function Loader({
   return (
     <div className="flex items-center justify-center">
       <div
-        className={`${sizeClasses[size]} animate-spin rounded-full border-2 border-neutral-200 border-t-primary-600`}
+        className={`${sizeClasses[size]} animate-spin rounded-full border-2 border-neutral-200 dark:border-neutral-700 border-t-primary-600`}
       ></div>
-      {text && <span className="ml-2 text-sm text-neutral-600">{text}</span>}
+      {text && (
+        <span className="ml-2 text-sm text-neutral-600 dark:text-neutral-400">
+          {text}
+        </span>
+      )}
     </div>
   );
 }
@@ -37,11 +41,11 @@ export function FullScreenLoader({ text = "SoilSense" }: { text?: string }) {
       {/* Brand with enhanced styling */}
       <div className="text-center">
         <h1
-          className={`${inter.className} text-4xl font-bold bg-gradient-to-r from-neutral-900 via-primary-700 to-neutral-900 bg-clip-text text-transparent animate-pulse`}
+          className={`${inter.className} text-4xl font-bold bg-gradient-to-r from-neutral-900 via-primary-700 to-neutral-900 dark:from-neutral-100 dark:via-primary-400 dark:to-neutral-100 bg-clip-text text-transparent animate-pulse`}
         >
           {text}
         </h1>
-        <p className="text-lg text-neutral-500 font-medium">
+        <p className="text-lg text-neutral-500 dark:text-neutral-400 font-medium">
           Agricultural Intelligence
         </p>
       </div>
@@ -77,16 +81,16 @@ export function FullScreenLoader({ text = "SoilSense" }: { text?: string }) {
         </div>
 
         {/* Progress bar */}
-        <div className="w-64 h-2 bg-neutral-200 rounded-full overflow-hidden">
+        <div className="w-64 h-2 bg-neutral-200 dark:bg-neutral-700 rounded-full overflow-hidden">
           <div className="h-full bg-gradient-to-r from-primary-500 to-primary-600 rounded-full animate-pulse relative">
-            <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/30 to-transparent animate-shimmer"></div>
+            <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/30 dark:via-neutral-300/30 to-transparent animate-shimmer"></div>
           </div>
         </div>
       </div>
 
       {/* Loading Text with typewriter effect */}
       <div className="text-center space-y-2">
-        <p className="text-lg text-neutral-600 font-medium animate-pulse">
+        <p className="text-lg text-neutral-600 dark:text-neutral-400 font-medium animate-pulse">
           Loading your agricultural data...
         </p>
         <div className="flex items-center justify-center gap-1">

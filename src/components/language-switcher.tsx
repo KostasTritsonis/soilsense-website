@@ -81,11 +81,13 @@ export default function LanguageSwitcher() {
         <button
           ref={buttonRef}
           onClick={() => setIsOpen(!isOpen)}
-          className="flex items-center space-x-2 px-3 py-2 rounded-lg bg-white/80 hover:bg-white transition-colors border border-white/60"
+          className="flex items-center space-x-2 px-3 py-2 rounded-lg bg-white/80 dark:bg-neutral-700/80 hover:bg-white dark:hover:bg-neutral-600 transition-colors border border-white/60 dark:border-neutral-600/60"
           aria-label="Change language"
         >
           <span className="text-lg">{currentLanguage?.flag}</span>
-          <span className="text-sm font-medium">{currentLanguage?.name}</span>
+          <span className="text-sm font-medium text-neutral-700 dark:text-neutral-300">
+            {currentLanguage?.name}
+          </span>
           <svg
             className={`w-4 h-4 transition-transform ${
               isOpen ? "rotate-180" : ""
@@ -109,7 +111,7 @@ export default function LanguageSwitcher() {
         createPortal(
           <div
             ref={dropdownRef}
-            className="fixed w-48 bg-white rounded-lg shadow-lg border border-white/60 z-[9999]"
+            className="fixed w-48 bg-white dark:bg-neutral-800 rounded-lg shadow-lg border border-white/60 dark:border-neutral-700/60 z-[9999]"
             style={{
               top: `${dropdownPosition.top}px`,
               left: `${dropdownPosition.left}px`,
@@ -119,10 +121,10 @@ export default function LanguageSwitcher() {
               <button
                 key={language.code}
                 onClick={() => handleLanguageChange(language.code)}
-                className={`w-full flex items-center space-x-3 px-4 py-3 text-left hover:bg-gray-50 transition-colors first:rounded-t-lg last:rounded-b-lg ${
+                className={`w-full flex items-center space-x-3 px-4 py-3 text-left hover:bg-gray-50 dark:hover:bg-neutral-700 transition-colors first:rounded-t-lg last:rounded-b-lg ${
                   language.code === locale
-                    ? "bg-blue-50 text-blue-600"
-                    : "text-gray-700"
+                    ? "bg-blue-50 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400"
+                    : "text-gray-700 dark:text-neutral-300"
                 }`}
               >
                 <span className="text-lg">{language.flag}</span>

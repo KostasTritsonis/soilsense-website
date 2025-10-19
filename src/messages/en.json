@@ -24,6 +24,7 @@
     "filter": "Filter",
     "import": "Import",
     "info": "Information",
+    "language": "Language",
     "loading": "Loading...",
     "login": "Login",
     "logout": "Logout",
@@ -287,6 +288,12 @@
     "passwordChanged": "Password changed successfully",
     "profileUpdated": "Profile updated successfully",
     "settingsSaved": "Settings saved successfully"
+  },
+  "theme": {
+    "light": "Light",
+    "dark": "Dark",
+    "system": "System",
+    "theme": "Theme"
   },
   "time": {
     "afternoon": "Afternoon",

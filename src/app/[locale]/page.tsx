@@ -82,21 +82,21 @@ export default function Home() {
             <h1 className="sm:text-4xl text-2xl font-bold text-neutral-900 pb-2">
               {greeting}
             </h1>
-            <p className="text-lg text-neutral-600">
+            <p className="text-lg text-neutral-600 dark:text-neutral-300">
               {t("dashboard.agriculturalOperations")}
             </p>
           </div>
-          <div className="flex items-center gap-3 bg-white/80 backdrop-blur-sm rounded-2xl shadow-soft border border-white/60 px-4 py-3">
+          <div className="flex items-center gap-3 bg-white/80 dark:bg-neutral-800/80 backdrop-blur-sm rounded-2xl shadow-soft border border-white/60 dark:border-neutral-700/60 px-4 py-3">
             <div className="w-8 h-8 bg-primary-100 rounded-xl flex items-center justify-center">
-              <span className="text-primary-700 font-semibold text-sm">
+              <span className="text-primary-700 dark:text-primary-300 font-semibold text-sm">
                 {user?.firstName?.[0] || user?.username?.[0] || "U"}
               </span>
             </div>
             <div>
-              <p className="font-semibold text-neutral-900">
+              <p className="font-semibold text-neutral-900 dark:text-neutral-100">
                 {user?.firstName || user?.username || t("common.user")}
               </p>
-              <p className="text-sm text-neutral-500">
+              <p className="text-sm text-neutral-500 dark:text-neutral-400">
                 {t("common.farmManager")}
               </p>
             </div>
