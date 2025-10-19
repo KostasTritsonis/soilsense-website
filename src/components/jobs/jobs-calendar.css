@@ -1,0 +1,266 @@
+/* Calendar Styles for Jobs Page */
+.rbc-calendar {
+  font-family: inherit;
+  border-radius: 16px;
+}
+
+.rbc-header {
+  background: #f3f4f6;
+  border-bottom: 1px solid #d1d5db;
+  padding: 12px 8px;
+  font-weight: 600;
+  color: #6b7280;
+  font-size: 14px;
+}
+
+.rbc-month-view {
+  border-radius: 12px;
+  overflow: hidden;
+  border: 1px solid #d1d5db;
+}
+
+.rbc-month-header {
+  background: #f3f4f6;
+}
+
+.rbc-date-cell {
+  padding: 8px 4px;
+  font-weight: 500;
+  color: #6b7280;
+}
+
+.rbc-day-bg {
+  border: 1px solid #e5e7eb;
+  transition: background-color 0.2s ease;
+  background-color: #f9fafb;
+}
+
+.rbc-day-bg:hover {
+  background-color: #f3f4f6;
+}
+
+.rbc-today {
+  background: linear-gradient(135deg, #22c55e 0%, #16a34a 100%) !important;
+}
+
+.rbc-today .rbc-date-cell {
+  color: white !important;
+  font-weight: 700;
+}
+
+.rbc-off-range-bg {
+  background-color: #f3f4f6;
+}
+
+.rbc-off-range {
+  color: #9ca3af;
+}
+
+.rbc-event {
+  border-radius: 8px;
+  border: none;
+  padding: 4px 8px;
+  font-size: 12px;
+  font-weight: 500;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  transition: all 0.2s ease;
+}
+
+.rbc-event:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+.rbc-toolbar {
+  padding: 8px 12px;
+  background: #f3f4f6;
+  border-bottom: 1px solid #d1d5db;
+  border-radius: 12px 12px 0 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  align-items: center;
+  justify-content: space-between;
+  min-height: 40px;
+}
+
+.rbc-toolbar .rbc-btn-group {
+  display: flex;
+  gap: 4px;
+  align-items: center;
+}
+
+.rbc-toolbar .rbc-toolbar-label {
+  font-size: 14px;
+  font-weight: 600;
+  color: #6b7280;
+  flex-shrink: 0;
+  text-align: center;
+  flex: 1;
+}
+
+.rbc-toolbar button {
+  background: white;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  padding: 4px 8px;
+  font-weight: 500;
+  color: #6b7280;
+  transition: all 0.2s ease;
+  font-size: 13px;
+  white-space: nowrap;
+  flex-shrink: 0;
+  min-width: fit-content;
+}
+
+.rbc-toolbar button:hover {
+  background: #e5e7eb;
+  border-color: #9ca3af;
+}
+
+.rbc-toolbar button.rbc-active {
+  background: #22c55e;
+  border-color: #22c55e;
+  color: white;
+}
+
+.rbc-time-view {
+  border-radius: 12px;
+  overflow: hidden;
+  border: 1px solid #d1d5db;
+}
+
+.rbc-time-header {
+  background: #f3f4f6;
+}
+
+.rbc-time-content {
+  border-top: 1px solid #d1d5db;
+}
+
+.rbc-timeslot-group {
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.rbc-time-slot {
+  border-bottom: 1px solid #f3f4f6;
+}
+
+.rbc-agenda-view {
+  border-radius: 12px;
+  overflow: hidden;
+  border: 1px solid #d1d5db;
+}
+
+.rbc-agenda-view table.rbc-agenda-table {
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.rbc-agenda-view table.rbc-agenda-table tbody > tr > td {
+  padding: 12px 16px;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.rbc-agenda-view table.rbc-agenda-table .rbc-agenda-time-cell {
+  font-weight: 500;
+  color: #6b7280;
+}
+
+.rbc-agenda-view table.rbc-agenda-table .rbc-agenda-event-cell {
+  font-weight: 500;
+  color: #6b7280;
+}
+
+.rbc-agenda-view table.rbc-agenda-table .rbc-agenda-date-cell {
+  font-weight: 600;
+  color: #6b7280;
+}
+
+/* Responsive Styles */
+@media (max-width: 1024px) {
+  .rbc-toolbar {
+    gap: 8px;
+    padding: 10px 12px;
+  }
+
+  .rbc-toolbar button {
+    padding: 5px 10px;
+    font-size: 13px;
+  }
+
+  .rbc-toolbar .rbc-toolbar-label {
+    font-size: 15px;
+  }
+
+  .rbc-toolbar .rbc-btn-group {
+    gap: 3px;
+  }
+}
+
+@media (max-width: 768px) {
+  .rbc-toolbar {
+    flex-direction: row;
+    gap: 6px;
+    padding: 6px 8px;
+    align-items: center;
+    min-height: 32px;
+  }
+
+  .rbc-toolbar .rbc-toolbar-label {
+    font-size: 13px;
+    text-align: center;
+    flex: 1;
+  }
+
+  .rbc-toolbar .rbc-btn-group {
+    display: flex;
+    gap: 4px;
+    justify-content: center;
+  }
+
+  .rbc-toolbar button {
+    padding: 4px 6px;
+    font-size: 11px;
+    min-width: auto;
+    justify-content: center;
+    border-radius: 4px;
+  }
+}
+
+@media (max-width: 480px) {
+  .rbc-toolbar {
+    padding: 4px 6px;
+    min-height: 28px;
+    gap: 4px;
+  }
+
+  .rbc-toolbar .rbc-toolbar-label {
+    font-size: 12px;
+  }
+
+  .rbc-toolbar button {
+    padding: 3px 5px;
+    font-size: 10px;
+    border-radius: 3px;
+  }
+
+  .rbc-toolbar .rbc-btn-group:last-child {
+    display: none;
+  }
+
+  .rbc-header {
+    padding: 8px 4px;
+    font-size: 12px;
+  }
+
+  .rbc-date-cell {
+    padding: 6px 2px;
+    font-size: 12px;
+  }
+
+  .rbc-event {
+    font-size: 11px;
+    padding: 2px 6px;
+  }
+}

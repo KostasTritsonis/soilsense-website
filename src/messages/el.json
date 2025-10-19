@@ -2,6 +2,7 @@
   "common": {
     "actions": "Ενέργειες",
     "add": "Προσθήκη",
+    "ago": "πριν",
     "admin": "Διαχειριστής",
     "agriculturalIntelligence": "Γεωργική Νοημοσύνη",
     "back": "Πίσω",
@@ -10,6 +11,7 @@
     "checkConnection": "Ελέγξτε τη σύνδεση στο διαδίκτυο και δοκιμάστε ξανά",
 
     "close": "Κλείσιμο",
+    "complete": "ολοκληρωμένο",
     "confirm": "Επιβεβαίωση",
     "copy": "Αντιγραφή",
     "creating": "Δημιουργία...",
@@ -27,7 +29,9 @@
     "login": "Σύνδεση",
     "logout": "Αποσύνδεση",
     "manager": "Διαχειριστής",
+    "needs": "χρειάζεται",
     "next": "Επόμενο",
+    "noResults": "Δεν βρέθηκαν αποτελέσματα",
     "no": "Όχι",
     "notAvailable": "Μ/Δ",
     "notFound": "Δεν βρέθηκε",
@@ -49,6 +53,9 @@
     "soilSense": "SoilSense",
     "sort": "Ταξινόμηση",
     "submit": "Υποβολή",
+    "today": "Σήμερα",
+    "water": "Πότισμα",
+    "watering": "πότισμα",
     "success": "Επιτυχία",
     "tryAgain": "Δοκιμάστε ξανά",
     "unnamed": "Ανώνυμο",
@@ -63,6 +70,7 @@
     "yes": "Ναι"
   },
   "crops": {
+    "carrot": "Καρότο",
     "carrots": "Καρότα",
     "categories": "Κατηγορίες",
     "corn": "Καλαμπόκι",
@@ -81,11 +89,14 @@
     "lettuce": "Μαρούλι",
     "noCropDataAvailable": "Δεν υπάρχουν διαθέσιμα δεδομένα καλλιευγειών",
     "olive": "Ελιά",
+    "onion": "Κρεμμύδι",
     "onions": "Κρεμμύδια",
+    "potato": "Πατάτα",
     "potatoes": "Πατάτες",
     "rice": "Ρύζι",
     "soybean": "Σόγια",
     "soybeans": "Σόγια",
+    "tomato": "Ντομάτα",
     "tomatoes": "Ντομάτες",
     "wheat": "Σιτάρι"
   },
@@ -210,12 +221,41 @@
     "updateJob": "Ενημέρωση Εργασίας"
   },
   "navigation": {
-    "dashboard": "Πίνακας Ελέγχου",
+    "dashboard": "Αρχική",
     "fields": "Χωράφια",
     "home": "Αρχική",
     "jobs": "Εργασίες",
     "map": "Χάρτης",
+    "plants": "Φυτά",
     "weather": "Καιρός"
+  },
+  "plants": {
+    "addPlant": "Προσθήκη Φυτού",
+    "daysUntilHarvest": "Ημέρες μέχρι τη συγκομιδή",
+    "harvestDays": "Ημέρες συγκομιδής",
+    "harvestReady": "Έτοιμο για συγκομιδή!",
+    "myPlants": "Τα Φυτά μου",
+    "noPlantsYet": "Δεν υπάρχουν φυτά ακόμα",
+    "plantingDay": "Φυτεύτηκε στις",
+    "suggestPlants": "Προτείνω φυτά για εσωτερική καλλιέργεια",
+    "waterEvery": "Πότισμα κάθε",
+    "waterSupply": "Παροχή Νερού",
+    "wateringFrequency": "Συχνότητα πότισματος",
+    "days": "ημέρες",
+    "day": "ημέρα",
+    "plantTypes": {
+      "basil": "Βασιλικός",
+      "cherryTomato": "Ντοματάκι",
+      "cilantro": "Κολιαντρό",
+      "lettuce": "Μαρούλι",
+      "mint": "Μέντα",
+      "oregano": "Ρίγανη",
+      "parsley": "Μαϊντανός",
+      "pepper": "Πιπεριά",
+      "rosemary": "Δεντρολίβανο",
+      "spinach": "Σπανάκι",
+      "thyme": "Θυμάρι"
+    }
   },
   "status": {
     "active": "Ενεργό",

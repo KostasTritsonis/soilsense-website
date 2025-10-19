@@ -2,7 +2,15 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { SignedIn, SignedOut, useClerk } from "@clerk/nextjs";
-import { Home, Map, Briefcase, CloudSun, User, LogOut } from "lucide-react";
+import {
+  Home,
+  Map,
+  Briefcase,
+  CloudSun,
+  User,
+  LogOut,
+  Leaf,
+} from "lucide-react";
 import { useTranslations, useLocale } from "next-intl";
 import LanguageSwitcher from "./language-switcher";
 
@@ -16,6 +24,11 @@ const getNavLinks = (t: (key: string) => string, locale: string) => [
     href: `/${locale}/fields`,
     label: t("navigation.fields"),
     icon: <Map className="w-5 h-5" />,
+  },
+  {
+    href: `/${locale}/plants`,
+    label: t("navigation.plants"),
+    icon: <Leaf className="w-5 h-5" />,
   },
   {
     href: `/${locale}/jobs`,

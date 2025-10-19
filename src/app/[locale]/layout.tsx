@@ -31,14 +31,15 @@ export default async function LocaleLayout({
   const messages = await getMessages();
 
   return (
-    <ClerkProvider>
-      <html lang={locale}>
-        <head>
-          <link rel="manifest" href="/manifest.json" />
-        </head>
-        <body
-          className={`${inter.className} bg-gradient-to-br from-neutral-50 via-primary-50/30 to-neutral-100 text-neutral-900 min-h-screen antialiased`}
-        >
+    <html lang={locale}>
+      <head>
+        <link rel="manifest" href="/manifest.json" />
+      </head>
+      <body
+        className={`${inter.className} bg-gradient-to-br from-neutral-50 via-primary-50/30 to-neutral-100 text-neutral-900 min-h-screen antialiased`}
+        suppressHydrationWarning={true}
+      >
+        <ClerkProvider>
           <NextIntlClientProvider messages={messages}>
             <div className="w-full max-w-7xl mx-auto px-6 py-6">
               {/* Desktop Header - only show on md and above */}
@@ -72,8 +73,8 @@ export default async function LocaleLayout({
               </div>
             </div>
           </NextIntlClientProvider>
-        </body>
-      </html>
-    </ClerkProvider>
+        </ClerkProvider>
+      </body>
+    </html>
   );
 }
