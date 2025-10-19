@@ -9,7 +9,7 @@ import FieldInfoPanel from "./field-info-panel";
 import { useUser } from "@clerk/nextjs";
 import CategoryModal from "./caterogy-modal";
 import { useMapHandlers } from "@/lib/hooks";
-import { useFields } from "@/context/fields-context";
+import { useFieldsStore } from "@/lib/stores/fields-store";
 import { Field } from "@/lib/types";
 import { getDirections, RouteInfo } from "@/lib/directions";
 import { centroid } from "@turf/turf";
@@ -26,8 +26,11 @@ export default function MapComponent() {
   const [routeInfo, setRouteInfo] = useState<RouteInfo | null>(null);
   const [showDirectionsPanel, setShowDirectionsPanel] = useState(false);
   const [isGettingDirections, setIsGettingDirections] = useState(false);
+  const [destinationCoordinates, setDestinationCoordinates] = useState<
+    [number, number] | null
+  >(null);
   const { isSignedIn } = useUser();
-  const { fields } = useFields();
+  const { fields } = useFieldsStore();
   const startPointCoordsRef = useRef<[number, number] | null>(null);
   const startPointMarkerRef = useRef<mapboxgl.Marker | null>(null);
 
@@ -168,8 +171,9 @@ export default function MapComponent() {
       // Fetch directions with enhanced route info
       const routeInfo = await getDirections(startLngLat, fieldLngLat);
 
-      // Store route info for the directions panel
+      // Store route info and destination coordinates for the directions panel
       setRouteInfo(routeInfo);
+      setDestinationCoordinates(fieldLngLat);
       setShowDirectionsPanel(true);
 
       // Draw route on map using the geometry from routeInfo
@@ -398,6 +402,7 @@ export default function MapComponent() {
           onClose={() => {
             setShowDirectionsPanel(false);
             setRouteInfo(null);
+            setDestinationCoordinates(null);
             // Clear the route from the map
             if (mapRef.current?.getSource("directions-route")) {
               (
@@ -413,6 +418,7 @@ export default function MapComponent() {
           }}
           startPoint={startPointCoordsRef.current}
           destination={selectedField?.label || "Field"}
+          destinationCoordinates={destinationCoordinates || undefined}
         />
       )}
     </div>

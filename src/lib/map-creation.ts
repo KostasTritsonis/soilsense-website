@@ -7,7 +7,7 @@ import MapboxDraw from "@mapbox/mapbox-gl-draw";
 import "mapbox-gl/dist/mapbox-gl.css";
 import "@mapbox/mapbox-gl-draw/dist/mapbox-gl-draw.css";
 import { deleteField, getFieldById } from "@/actions";
-import { useFields } from "@/context/fields-context";
+import { useFieldsStore } from "@/lib/stores/fields-store";
 
 mapboxgl.accessToken = process.env.NEXT_PUBLIC_MAPBOX_ACCESS_TOKEN || "";
 
@@ -56,15 +56,23 @@ export const MapSetup = () => {
   const initialLngRef = useRef<number>(lng);
   const initialLatRef = useRef<number>(lat);
 
-  const { setFields } = useFields();
-  const setFieldsRef = useRef(setFields);
+  const {
+    addField,
+    updateField: updateFieldStore,
+    removeField,
+  } = useFieldsStore();
+  const addFieldRef = useRef(addField);
+  const updateFieldRef = useRef(updateFieldStore);
+  const removeFieldRef = useRef(removeField);
 
-  // Store initial coordinates and setFields in refs to avoid dependency changes
+  // Store initial coordinates and store functions in refs to avoid dependency changes
   useEffect(() => {
     initialLngRef.current = lng;
     initialLatRef.current = lat;
-    setFieldsRef.current = setFields;
-  }, [lng, lat, setFields]);
+    addFieldRef.current = addField;
+    updateFieldRef.current = updateFieldStore;
+    removeFieldRef.current = removeField;
+  }, [lng, lat, addField, updateFieldStore, removeField]);
 
   // Update the ref whenever selectedColor changes
   useEffect(() => {
@@ -209,18 +217,14 @@ export const MapSetup = () => {
       const currentColor = selectedColorRef.current;
 
       // Add the field to your fields array
-
-      setFieldsRef.current((prev) => [
-        ...prev,
-        {
-          id: fieldId,
-          color: currentColor,
-          area: fArea,
-          coordinates,
-          label: "",
-          categories: [],
-        },
-      ]);
+      addFieldRef.current({
+        id: fieldId,
+        color: currentColor,
+        area: fArea,
+        coordinates,
+        label: "",
+        categories: [],
+      });
 
       setFieldArea(fArea);
       setIsModalOpen(true);
@@ -261,13 +265,10 @@ export const MapSetup = () => {
           .coordinates;
         const updatedArea = area(feature);
 
-        setFieldsRef.current((prevFields) =>
-          prevFields.map((field) =>
-            field.id === fieldId
-              ? { ...field, coordinates: updatedCoordinates, area: updatedArea }
-              : field
-          )
-        );
+        updateFieldRef.current(fieldId, {
+          coordinates: updatedCoordinates,
+          area: updatedArea,
+        });
 
         // ✅ Update the field fill in real-time
         if (mapRef.current?.getSource(fieldId)) {
@@ -344,9 +345,7 @@ export const MapSetup = () => {
       });
 
       // Update the fields state
-      setFieldsRef.current((prev) =>
-        prev.filter((p) => !deletedIds.includes(p.id))
-      );
+      deletedIds.forEach((id) => removeFieldRef.current(id));
 
       const existingPolygon = getFieldById(deletedIds[0]);
       if (existingPolygon != null) {

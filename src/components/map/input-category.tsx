@@ -1,11 +1,13 @@
 import { useState } from "react";
 import { createCategory } from "@/actions";
 import { Plus, Loader2 } from "lucide-react";
+import { useTranslations } from "next-intl";
 
 export default function InputCategory() {
   const [categoryName, setCategoryName] = useState("");
   const [isSaving, setIsSaving] = useState(false);
   const [error, setError] = useState("");
+  const t = useTranslations();
 
   const handleCreateCategory = async () => {
     if (!categoryName.trim()) return;
@@ -17,7 +19,7 @@ export default function InputCategory() {
       await createCategory(categoryName);
       setCategoryName(""); // Reset input after saving
     } catch (err) {
-      setError("Failed to create category.");
+      setError(t("fields.categoryError"));
       console.error(err);
     } finally {
       setIsSaving(false);
@@ -27,12 +29,12 @@ export default function InputCategory() {
   return (
     <div className="w-full">
       <h2 className="text-lg font-semibold text-neutral-900 pb-4">
-        Add Category
+        {t("fields.addCategory")}
       </h2>
       <div className="space-y-3">
         <input
           type="text"
-          placeholder="New category name"
+          placeholder={t("fields.newCategoryName")}
           value={categoryName}
           onChange={(e) => setCategoryName(e.target.value)}
           className="w-full px-4 py-3 rounded-2xl bg-white/80 backdrop-blur-sm border border-neutral-200 focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-500/20 text-neutral-900 placeholder-neutral-500 disabled:opacity-60"
@@ -46,12 +48,12 @@ export default function InputCategory() {
           {isSaving ? (
             <>
               <Loader2 className="w-4 h-4 animate-spin" />
-              Saving...
+              {t("common.saving")}
             </>
           ) : (
             <>
               <Plus className="w-4 h-4" />
-              Add Category
+              {t("fields.addCategory")}
             </>
           )}
         </button>

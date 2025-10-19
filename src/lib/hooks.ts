@@ -6,7 +6,7 @@ import MapboxDraw from "@mapbox/mapbox-gl-draw";
 import "mapbox-gl/dist/mapbox-gl.css";
 import "@mapbox/mapbox-gl-draw/dist/mapbox-gl-draw.css";
 import { createField, getFieldsByUser, updateField } from "@/actions";
-import { useFields } from "@/context/fields-context";
+import { useFieldsStore } from "@/lib/stores/fields-store";
 
 type handlerProps = {
   mapRef: React.RefObject<mapboxgl.Map | null>;
@@ -26,7 +26,7 @@ export const useMapHandlers = ({
   const [error, setError] = useState<string | null>(null);
   const [totalArea, setTotalArea] = useState<number>(0);
 
-  const { fields, setFields } = useFields();
+  const { fields, setFields, updateField: updateFieldStore } = useFieldsStore();
 
   const addLayers = (
     id: string,
@@ -295,46 +295,41 @@ export const useMapHandlers = ({
       if (!id || !updates || Object.keys(updates).length === 0) {
         throw new Error("Invalid update data");
       }
-      setFields((currentFields) =>
-        currentFields.map((field) =>
-          field.id === id ? { ...field, isUpdating: true } : field
-        )
-      );
-      setFields((currentFields) => {
-        const newFields = currentFields.map((field) =>
-          field.id === id ? { ...field, ...updates, isUpdating: false } : field
-        );
 
-        // Update map visualization
-        if (mapRef.current) {
-          // Update color if changed
-          if (updates.color && mapRef.current.getLayer(id)) {
-            mapRef.current.setPaintProperty(id, "fill-color", updates.color);
+      // Use Zustand store's updateField method
+      updateFieldStore(id, { ...updates, isUpdating: true });
 
-            const borderLayerId = `${id}-border`;
-            if (mapRef.current.getLayer(borderLayerId)) {
-              mapRef.current.setPaintProperty(
-                borderLayerId,
-                "line-color",
-                updates.color
-              );
-            }
-          }
+      // Update map visualization
+      if (mapRef.current) {
+        // Update color if changed
+        if (updates.color && mapRef.current.getLayer(id)) {
+          mapRef.current.setPaintProperty(id, "fill-color", updates.color);
 
-          // Update label if changed
-          if (updates.label) {
-            const labelLayerId = `${id}-label`;
-            if (mapRef.current.getLayer(labelLayerId)) {
-              mapRef.current.setLayoutProperty(
-                labelLayerId,
-                "text-field",
-                updates.label
-              );
-            }
+          const borderLayerId = `${id}-border`;
+          if (mapRef.current.getLayer(borderLayerId)) {
+            mapRef.current.setPaintProperty(
+              borderLayerId,
+              "line-color",
+              updates.color
+            );
           }
         }
-        return newFields;
-      });
+
+        // Update label if changed
+        if (updates.label) {
+          const labelLayerId = `${id}-label`;
+          if (mapRef.current.getLayer(labelLayerId)) {
+            mapRef.current.setLayoutProperty(
+              labelLayerId,
+              "text-field",
+              updates.label
+            );
+          }
+        }
+      }
+
+      // Mark as not updating
+      updateFieldStore(id, { isUpdating: false });
     } catch (error) {
       setError(
         error instanceof Error ? error.message : "Failed to update field."
@@ -349,9 +344,7 @@ export const useMapHandlers = ({
       const result = await updateField(field.id, updatedField);
 
       if (result.success) {
-        setFields((currentFields) =>
-          currentFields.map((f) => (f.id === field.id ? updatedField : f))
-        );
+        updateFieldStore(field.id, updatedField);
         toast.success(`Field "${updatedField.label}" updated successfully.`);
       } else {
         const errorMessage = (result as { error?: unknown }).error;
@@ -372,13 +365,10 @@ export const useMapHandlers = ({
       const all = drawRef.current.getAll();
       if (all.features.length > 0) {
         const fieldId = all.features[all.features.length - 1].id as string;
-        setFields((prev) =>
-          prev.map((f) =>
-            f.id === fieldId
-              ? { ...f, label: label, categories: [{ type: categoryType }] }
-              : f
-          )
-        );
+        updateFieldStore(fieldId, {
+          label: label,
+          categories: [{ type: categoryType }],
+        });
 
         const field = fields.find((f) => f.id === fieldId);
         if (field) {

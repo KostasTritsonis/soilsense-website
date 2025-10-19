@@ -1,5 +1,6 @@
 import { Field } from "@/lib/types";
 import { MapPin, Ruler, Navigation, X } from "lucide-react";
+import { useTranslations } from "next-intl";
 
 type FieldInfoPanelProps = {
   selectedField: Field;
@@ -16,11 +17,12 @@ export default function FieldInfoPanel({
   isLoading = false,
   hasCustomStartPoint = false,
 }: FieldInfoPanelProps) {
+  const t = useTranslations();
   return (
     <div className="absolute bottom-4 left-4 right-4 md:bottom-4 md:right-14 md:left-auto bg-white/95 backdrop-blur-sm rounded-3xl shadow-large border border-white/60 p-4 md:p-6 w-auto md:w-80 z-10 transition-all duration-300 hover:shadow-medium text-neutral-900">
       <div className="flex justify-between items-center pb-3 md:pb-4">
         <h2 className="text-lg md:text-xl font-bold text-neutral-900 truncate pr-2">
-          {selectedField.label || "Unnamed Field"}
+          {selectedField.label || t("common.unnamed")}
         </h2>
         <button
           onClick={onDeselect}
@@ -36,9 +38,11 @@ export default function FieldInfoPanel({
             <MapPin className="w-4 h-4 text-green-600" />
           </div>
           <div className="min-w-0 flex-1">
-            <p className="text-xs text-neutral-600 font-medium">Crop Type</p>
+            <p className="text-xs text-neutral-600 font-medium">
+              {t("fields.cropType")}
+            </p>
             <p className="text-sm font-semibold text-neutral-900 truncate">
-              {selectedField.categories?.[0]?.type || "N/A"}
+              {selectedField.categories?.[0]?.type || t("common.notAvailable")}
             </p>
           </div>
         </div>
@@ -48,9 +52,11 @@ export default function FieldInfoPanel({
             <Ruler className="w-4 h-4 text-blue-600" />
           </div>
           <div className="min-w-0 flex-1">
-            <p className="text-xs text-neutral-600 font-medium">Area</p>
+            <p className="text-xs text-neutral-600 font-medium">
+              {t("fields.area")}
+            </p>
             <p className="text-sm font-semibold text-neutral-900">
-              {selectedField.area.toFixed(2)} m²
+              {selectedField.area.toFixed(2)} {t("units.squareMeters")}
             </p>
           </div>
         </div>
@@ -64,20 +70,24 @@ export default function FieldInfoPanel({
         {isLoading ? (
           <>
             <div className="animate-spin rounded-full h-4 w-4 border-2 border-white border-t-transparent"></div>
-            <span className="text-sm md:text-base">Getting Location...</span>
+            <span className="text-sm md:text-base">
+              {t("fields.gettingLocation")}
+            </span>
           </>
         ) : (
           <>
             <Navigation className="w-4 h-4" />
-            <span className="text-sm md:text-base">Get Directions</span>
+            <span className="text-sm md:text-base">
+              {t("fields.getDirections")}
+            </span>
           </>
         )}
       </button>
 
       <p className="text-xs text-neutral-500 mt-3 text-center">
         {hasCustomStartPoint
-          ? "Will use your placed start point"
-          : "Uses your current location"}
+          ? t("fields.willUseStartPoint")
+          : t("fields.usesCurrentLocation")}
       </p>
     </div>
   );

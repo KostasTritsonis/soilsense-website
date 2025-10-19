@@ -8,8 +8,9 @@ import { Calendar, dateFnsLocalizer, View, Views } from "react-big-calendar";
 import "react-big-calendar/lib/css/react-big-calendar.css";
 import { format, parse, startOfWeek, getDay } from "date-fns";
 import { enUS } from "date-fns/locale/en-US";
-import { useJobs } from "@/context/jobs-context";
+import { useJobsStore } from "@/lib/stores/jobs-store";
 import { Job } from "@/lib/types";
+import { useTranslations } from "next-intl";
 
 interface CalendarEvent {
   title: string;
@@ -21,9 +22,10 @@ interface CalendarEvent {
 
 export default function Page() {
   const [showJobForm, setShowJobForm] = useState(false);
-  const { jobs } = useJobs();
+  const { jobs } = useJobsStore();
   const { isSignedIn } = useUser();
   const [view, setView] = useState<View>(Views.MONTH);
+  const t = useTranslations();
 
   const locales = {
     "en-US": enUS,
@@ -47,7 +49,7 @@ export default function Page() {
           ? "#22c55e"
           : job.status === "DUE"
           ? "#ef4444"
-          : "#3b82f6",
+          : "#16a34a",
       resource: job,
     })) || [];
 
@@ -81,10 +83,10 @@ export default function Page() {
         <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
           <div>
             <h1 className="text-2xl md:text-4xl font-bold text-neutral-900 pb-2">
-              Job Management
+              {t("jobs.jobs")}
             </h1>
             <p className="text-base md:text-lg text-neutral-600">
-              Manage your agricultural tasks and schedules
+              {t("jobs.jobFormDescription")}
             </p>
           </div>
           <button
@@ -92,8 +94,8 @@ export default function Page() {
             className="flex items-center justify-center gap-2 bg-primary-600 hover:bg-primary-700 text-white px-4 md:px-6 py-3 rounded-2xl font-semibold transition-colors shadow-soft hover:shadow-medium w-full sm:w-auto"
           >
             <PlusCircle className="w-5 h-5" />
-            <span className="hidden sm:inline">Add New Job</span>
-            <span className="sm:hidden">Add Job</span>
+            <span className="hidden sm:inline">{t("jobs.createJob")}</span>
+            <span className="sm:hidden">{t("jobs.createJob")}</span>
           </button>
         </div>
       </div>
@@ -102,7 +104,7 @@ export default function Page() {
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 p-4">
           <div className="bg-white/95 backdrop-blur-sm rounded-3xl p-6 md:p-8 shadow-large border border-white/60 max-w-sm w-full">
             <p className="text-base md:text-lg text-neutral-900 font-semibold text-center">
-              Please sign in to access job management
+              {t("fields.pleaseSignInMap")}
             </p>
           </div>
         </div>
@@ -118,7 +120,7 @@ export default function Page() {
       {/* Jobs Table */}
       <section className="pb-6 md:pb-8">
         <h2 className="text-xl md:text-2xl font-semibold text-neutral-900 pb-4 md:pb-6">
-          Active Jobs
+          {t("dashboard.activeJobs")}
         </h2>
         <JobsTable />
       </section>
@@ -127,7 +129,7 @@ export default function Page() {
       <section className="pb-6">
         <h2 className="text-xl md:text-2xl font-semibold text-neutral-900 pb-4 md:pb-6 flex items-center gap-3">
           <CalendarIcon className="w-5 h-5 md:w-6 md:h-6 text-primary-600" />
-          Job Calendar
+          {t("jobs.jobs")} {t("time.today")}
         </h2>
         <div className="bg-white/90 backdrop-blur-sm rounded-3xl shadow-soft border border-white/60 overflow-hidden">
           <div className="h-[500px] md:h-[600px] lg:h-[700px] p-4 md:p-6">
@@ -162,49 +164,49 @@ export default function Page() {
         }
 
         .rbc-header {
-          background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
-          border-bottom: 1px solid #e2e8f0;
+          background: linear-gradient(135deg, #dcfce7 0%, #bbf7d0 100%);
+          border-bottom: 1px solid #86efac;
           padding: 12px 8px;
           font-weight: 600;
-          color: #374151;
+          color: #15803d;
           font-size: 14px;
         }
 
         .rbc-month-view {
           border-radius: 12px;
           overflow: hidden;
-          border: 1px solid #e2e8f0;
+          border: 1px solid #86efac;
         }
 
         .rbc-month-header {
-          background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+          background: linear-gradient(135deg, #dcfce7 0%, #bbf7d0 100%);
         }
 
         .rbc-date-cell {
           padding: 8px 4px;
           font-weight: 500;
-          color: #374151;
+          color: #15803d;
         }
 
         .rbc-day-bg {
-          border: 1px solid #f1f5f9;
+          border: 1px solid #bbf7d0;
           transition: background-color 0.2s ease;
         }
 
         .rbc-day-bg:hover {
-          background-color: #f8fafc;
+          background-color: #dcfce7;
         }
 
         .rbc-today {
-          background: linear-gradient(135deg, #dbeafe 0%, #bfdbfe 100%);
+          background: linear-gradient(135deg, #bbf7d0 0%, #86efac 100%);
         }
 
         .rbc-off-range-bg {
-          background-color: #f8fafc;
+          background-color: #dcfce7;
         }
 
         .rbc-off-range {
-          color: #9ca3af;
+          color: #4ade80;
         }
 
         .rbc-event {
@@ -224,8 +226,8 @@ export default function Page() {
 
         .rbc-toolbar {
           padding: 8px 12px;
-          background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
-          border-bottom: 1px solid #e2e8f0;
+          background: linear-gradient(135deg, #dcfce7 0%, #bbf7d0 100%);
+          border-bottom: 1px solid #86efac;
           border-radius: 12px 12px 0 0;
           display: flex;
           flex-wrap: wrap;
@@ -244,7 +246,7 @@ export default function Page() {
         .rbc-toolbar .rbc-toolbar-label {
           font-size: 14px;
           font-weight: 600;
-          color: #111827;
+          color: #15803d;
           flex-shrink: 0;
           text-align: center;
           flex: 1;
@@ -252,11 +254,11 @@ export default function Page() {
 
         .rbc-toolbar button {
           background: white;
-          border: 1px solid #d1d5db;
+          border: 1px solid #86efac;
           border-radius: 6px;
           padding: 4px 8px;
           font-weight: 500;
-          color: #374151;
+          color: #15803d;
           transition: all 0.2s ease;
           font-size: 13px;
           white-space: nowrap;
@@ -265,13 +267,13 @@ export default function Page() {
         }
 
         .rbc-toolbar button:hover {
-          background: #f3f4f6;
-          border-color: #9ca3af;
+          background: #dcfce7;
+          border-color: #4ade80;
         }
 
         .rbc-toolbar button.rbc-active {
-          background: #3b82f6;
-          border-color: #3b82f6;
+          background: #22c55e;
+          border-color: #22c55e;
           color: white;
         }
 
@@ -280,29 +282,29 @@ export default function Page() {
         .rbc-time-view {
           border-radius: 12px;
           overflow: hidden;
-          border: 1px solid #e2e8f0;
+          border: 1px solid #86efac;
         }
 
         .rbc-time-header {
-          background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+          background: linear-gradient(135deg, #dcfce7 0%, #bbf7d0 100%);
         }
 
         .rbc-time-content {
-          border-top: 1px solid #e2e8f0;
+          border-top: 1px solid #86efac;
         }
 
         .rbc-timeslot-group {
-          border-bottom: 1px solid #f1f5f9;
+          border-bottom: 1px solid #bbf7d0;
         }
 
         .rbc-time-slot {
-          border-bottom: 1px solid #f8fafc;
+          border-bottom: 1px solid #dcfce7;
         }
 
         .rbc-agenda-view {
           border-radius: 12px;
           overflow: hidden;
-          border: 1px solid #e2e8f0;
+          border: 1px solid #86efac;
         }
 
         .rbc-agenda-view table.rbc-agenda-table {
@@ -312,22 +314,22 @@ export default function Page() {
 
         .rbc-agenda-view table.rbc-agenda-table tbody > tr > td {
           padding: 12px 16px;
-          border-bottom: 1px solid #f1f5f9;
+          border-bottom: 1px solid #bbf7d0;
         }
 
         .rbc-agenda-view table.rbc-agenda-table .rbc-agenda-time-cell {
           font-weight: 500;
-          color: #374151;
+          color: #15803d;
         }
 
         .rbc-agenda-view table.rbc-agenda-table .rbc-agenda-event-cell {
           font-weight: 500;
-          color: #111827;
+          color: #15803d;
         }
 
         .rbc-agenda-view table.rbc-agenda-table .rbc-agenda-date-cell {
           font-weight: 600;
-          color: #374151;
+          color: #15803d;
         }
 
                 @media (max-width: 1024px) {

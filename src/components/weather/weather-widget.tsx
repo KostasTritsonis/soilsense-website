@@ -10,10 +10,13 @@ import {
 import { fetchWeatherData } from "@/lib/weather";
 import Link from "next/link";
 import { CurrentWeather } from "@/lib/types";
+import { useLocale, useTranslations } from "next-intl";
 
 export default function WeatherWidget() {
   const [weather, setWeather] = useState<CurrentWeather | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
+  const locale = useLocale();
+  const t = useTranslations();
 
   useEffect(() => {
     const loadWeatherData = async () => {
@@ -49,7 +52,9 @@ export default function WeatherWidget() {
             <div className="w-10 h-10 bg-blue-100 rounded-2xl flex items-center justify-center">
               <Cloud className="w-5 h-5 text-blue-600" />
             </div>
-            <h2 className="text-lg font-semibold text-neutral-900">Weather</h2>
+            <h2 className="text-lg font-semibold text-neutral-900">
+              {t("weather.weather")}
+            </h2>
           </div>
         </div>
         <div className="flex justify-center items-center py-8">
@@ -67,12 +72,14 @@ export default function WeatherWidget() {
             <div className="w-10 h-10 bg-blue-100 rounded-2xl flex items-center justify-center">
               <Cloud className="w-5 h-5 text-blue-600" />
             </div>
-            <h2 className="text-lg font-semibold text-neutral-900">Weather</h2>
+            <h2 className="text-lg font-semibold text-neutral-900">
+              {t("weather.weather")}
+            </h2>
           </div>
         </div>
         <div className="py-8">
           <p className="text-center text-neutral-500">
-            Unable to load weather data
+            {t("weather.weatherDataNotAvailable")}
           </p>
         </div>
       </div>
@@ -89,10 +96,10 @@ export default function WeatherWidget() {
           <h2 className="text-lg font-semibold text-neutral-900">Weather</h2>
         </div>
         <Link
-          href="/weather"
+          href={`/${locale}/weather`}
           className="flex items-center gap-1 text-sm text-primary-600 font-medium hover:text-primary-700 transition-colors"
         >
-          View all
+          {t("weather.viewAll")}
           <ArrowRightIcon className="w-4 h-4" />
         </Link>
       </div>
@@ -101,7 +108,9 @@ export default function WeatherWidget() {
         <div className="flex items-center justify-between p-3 bg-neutral-50/80 rounded-2xl">
           <div className="flex items-center gap-3">
             <ThermometerSun className="w-5 h-5 text-red-500" />
-            <span className="text-sm text-neutral-600">Temperature</span>
+            <span className="text-sm text-neutral-600">
+              {t("weather.temperature")}
+            </span>
           </div>
           <span className="font-semibold text-neutral-900">
             {weather.temperature}
@@ -111,7 +120,9 @@ export default function WeatherWidget() {
         <div className="flex items-center justify-between p-3 bg-neutral-50/80 rounded-2xl">
           <div className="flex items-center gap-3">
             <Droplets className="w-5 h-5 text-blue-500" />
-            <span className="text-sm text-neutral-600">Humidity</span>
+            <span className="text-sm text-neutral-600">
+              {t("weather.humidity")}
+            </span>
           </div>
           <span className="font-semibold text-neutral-900">
             {weather.humidity}
@@ -121,7 +132,9 @@ export default function WeatherWidget() {
         <div className="flex items-center justify-between p-3 bg-neutral-50/80 rounded-2xl">
           <div className="flex items-center gap-3">
             <Sun className="w-5 h-5 text-yellow-500" />
-            <span className="text-sm text-neutral-600">Forecast</span>
+            <span className="text-sm text-neutral-600">
+              {t("weather.weatherForecast")}
+            </span>
           </div>
           <span className="font-semibold text-neutral-900">
             {weather.forecast}
@@ -131,7 +144,9 @@ export default function WeatherWidget() {
         <div className="flex items-center justify-between p-3 bg-neutral-50/80 rounded-2xl">
           <div className="flex items-center gap-3">
             <Cloud className="w-5 h-5 text-gray-500" />
-            <span className="text-sm text-neutral-600">Rainfall</span>
+            <span className="text-sm text-neutral-600">
+              {t("weather.precipitation")}
+            </span>
           </div>
           <span className="font-semibold text-neutral-900">
             {weather.rainfall}

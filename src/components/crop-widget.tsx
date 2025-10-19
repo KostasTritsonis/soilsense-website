@@ -2,11 +2,12 @@
 
 import { Doughnut } from "react-chartjs-2";
 import { Chart, ArcElement, Tooltip, Legend } from "chart.js";
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState, useRef, useCallback } from "react";
 import { Field } from "@/lib/types";
 import { useUser } from "@clerk/nextjs";
 import { getFieldsByUser } from "@/actions";
 import { Sprout } from "lucide-react";
+import { useTranslations } from "next-intl";
 
 Chart.register(ArcElement, Tooltip, Legend);
 
@@ -27,6 +28,7 @@ export default function CropWidget() {
   const [categoryPercentages, setCategoryPercentages] = useState<
     { category: string; color: string; percentage: number }[]
   >([]);
+  const t = useTranslations();
 
   const categoryColors: Record<string, string> = {
     Wheat: "#F4A261",
@@ -38,6 +40,15 @@ export default function CropWidget() {
   };
 
   const categoryColorsRef = useRef(categoryColors);
+
+  // Function to get translated crop name
+  const getTranslatedCropName = useCallback(
+    (cropName: string): string => {
+      const cropKey = cropName.toLowerCase();
+      return t(`crops.${cropKey}` as keyof typeof t) || cropName;
+    },
+    [t]
+  );
 
   useEffect(() => {
     const fetchData = async () => {
@@ -72,10 +83,12 @@ export default function CropWidget() {
     }));
 
     setChartData({
-      labels: Object.keys(categoryCounts),
+      labels: Object.keys(categoryCounts).map((category) =>
+        getTranslatedCropName(category)
+      ),
       datasets: [
         {
-          label: "Categories",
+          label: t("crops.categories"),
           data: Object.values(categoryCounts),
           backgroundColor: Object.keys(categoryCounts).map(
             (category) => colors[category] || "#CCCCCC"
@@ -86,7 +99,7 @@ export default function CropWidget() {
     });
 
     setCategoryPercentages(percentages);
-  }, [dbFields]);
+  }, [dbFields, getTranslatedCropName, t]);
 
   if (!chartData) {
     return (
@@ -96,11 +109,11 @@ export default function CropWidget() {
             <Sprout className="w-5 h-5 text-green-600" />
           </div>
           <h2 className="text-lg font-semibold text-neutral-900">
-            Crop Distribution
+            {t("crops.cropDistribution")}
           </h2>
         </div>
         <div className="flex flex-col items-center justify-center py-12">
-          <p className="text-neutral-500">No crop data available</p>
+          <p className="text-neutral-500">{t("crops.noCropDataAvailable")}</p>
         </div>
       </div>
     );
@@ -114,7 +127,7 @@ export default function CropWidget() {
             <Sprout className="w-5 h-5 text-green-600" />
           </div>
           <h2 className="text-lg font-semibold text-neutral-900">
-            Crop Distribution
+            {t("crops.cropDistribution")}
           </h2>
         </div>
         <span className="text-sm text-neutral-500 font-medium">2025</span>
@@ -159,7 +172,7 @@ export default function CropWidget() {
                     style={{ backgroundColor: item.color }}
                   ></div>
                   <span className="text-sm text-neutral-700 font-medium truncate">
-                    {item.category}
+                    {getTranslatedCropName(item.category)}
                   </span>
                 </div>
                 <span className="text-sm text-neutral-500 font-semibold flex-shrink-0">

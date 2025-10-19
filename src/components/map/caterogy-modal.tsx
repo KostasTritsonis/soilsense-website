@@ -4,6 +4,7 @@ import { getAllCategories } from "@/actions";
 import { Category } from "@/lib/types";
 import { useEffect, useState } from "react";
 import { Loader2, X, Tag } from "lucide-react";
+import { useTranslations } from "next-intl";
 
 interface CategoryModalProps {
   isOpen: boolean;
@@ -22,6 +23,7 @@ export default function CategoryModal({
   });
   const [fieldLabel, setFieldLabel] = useState("");
   const [isLoading, setIsLoading] = useState(true);
+  const t = useTranslations();
 
   useEffect(() => {
     const fetchCategories = async () => {
@@ -58,26 +60,26 @@ export default function CategoryModal({
         </button>
         <h2 className="text-lg md:text-xl font-bold text-neutral-900 mb-4 md:mb-6 flex items-center gap-2">
           <Tag className="w-5 h-5 text-primary-600" />
-          Add Field Details
+          {t("fields.addFieldDetails")}
         </h2>
 
         {/* Add label input */}
         <div className="mb-4 md:mb-6">
           <label className="block text-sm font-medium text-neutral-700 mb-2">
-            Field Label
+            {t("fields.fieldLabel")}
           </label>
           <input
             type="text"
             value={fieldLabel}
             onChange={(e) => setFieldLabel(e.target.value)}
             className="w-full px-4 py-3 border border-neutral-200 rounded-2xl bg-white/80 focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-500/20 text-neutral-900 placeholder-neutral-400"
-            placeholder="Enter field label"
+            placeholder={t("fields.fieldLabel")}
           />
         </div>
 
         <div className="mb-4 md:mb-6">
           <label className="block text-sm font-medium text-neutral-700 mb-2">
-            Category
+            {t("fields.fieldCategory")}
           </label>
           {isLoading ? (
             <div className="flex justify-center py-4">
@@ -110,7 +112,7 @@ export default function CategoryModal({
             className="flex-1 bg-neutral-100 hover:bg-neutral-200 text-neutral-700 font-semibold py-3 rounded-2xl transition-colors"
             onClick={onClose}
           >
-            Cancel
+            {t("common.cancel")}
           </button>
           <button
             className="flex-1 bg-primary-600 hover:bg-primary-700 text-white font-semibold py-3 rounded-2xl transition-colors shadow-soft hover:shadow-medium disabled:bg-neutral-400 disabled:cursor-not-allowed"
@@ -120,7 +122,7 @@ export default function CategoryModal({
             }}
             disabled={!fieldLabel.trim()}
           >
-            Confirm
+            {t("common.confirm")}
           </button>
         </div>
       </div>

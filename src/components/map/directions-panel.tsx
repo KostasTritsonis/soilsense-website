@@ -13,12 +13,14 @@ import {
   Target,
   RefreshCw,
 } from "lucide-react";
+import { useTranslations } from "next-intl";
 
 interface DirectionsPanelProps {
   routeInfo: RouteInfo | null;
   onClose: () => void;
   startPoint: [number, number] | null;
   destination: string;
+  destinationCoordinates?: [number, number];
 }
 
 export default function DirectionsPanel({
@@ -26,8 +28,10 @@ export default function DirectionsPanel({
   onClose,
   startPoint,
   destination,
+  destinationCoordinates,
 }: DirectionsPanelProps) {
   const [selectedStep, setSelectedStep] = useState<number | null>(null);
+  const t = useTranslations();
 
   if (!routeInfo) {
     return null;
@@ -35,9 +39,14 @@ export default function DirectionsPanel({
 
   const formatStepDistance = (meters: number): string => {
     if (meters < 100) {
-      return `${Math.round(meters)} m`;
+      return `${Math.round(meters)} ${t("units.meters")}`;
     }
-    return `${(meters / 1000).toFixed(1)} km`;
+    return `${(meters / 1000).toFixed(1)} ${t("units.kilometers")}`;
+  };
+
+  const formatCoordinates = (coordinates: [number, number]): string => {
+    const [lat, lng] = coordinates;
+    return `${lat.toFixed(6)}, ${lng.toFixed(6)}`;
   };
 
   const getStepIcon = (maneuverType: string) => {
@@ -63,7 +72,7 @@ export default function DirectionsPanel({
       <div className="bg-gradient-to-r from-primary-50 to-blue-50 p-4 md:p-6 border-b border-neutral-200">
         <div className="flex justify-between items-center pb-3 md:pb-4">
           <h3 className="text-lg md:text-xl font-bold text-neutral-900">
-            Directions
+            {t("fields.directions")}
           </h3>
           <button
             onClick={onClose}
@@ -81,10 +90,12 @@ export default function DirectionsPanel({
             </div>
             <div className="min-w-0 flex-1">
               <p className="text-xs text-neutral-600 font-medium">
-                Destination
+                {t("fields.destination")}
               </p>
               <p className="text-sm font-semibold text-neutral-900 truncate">
-                {destination}
+                {destinationCoordinates
+                  ? formatCoordinates(destinationCoordinates)
+                  : destination}
               </p>
             </div>
           </div>
@@ -95,7 +106,9 @@ export default function DirectionsPanel({
                 <Navigation className="w-4 h-4 text-blue-600" />
               </div>
               <div className="min-w-0">
-                <p className="text-xs text-neutral-600 font-medium">Distance</p>
+                <p className="text-xs text-neutral-600 font-medium">
+                  {t("fields.distance")}
+                </p>
                 <p className="text-sm font-semibold text-neutral-900">
                   {routeInfo.distanceText}
                 </p>
@@ -107,7 +120,9 @@ export default function DirectionsPanel({
                 <Clock className="w-4 h-4 text-yellow-600" />
               </div>
               <div className="min-w-0">
-                <p className="text-xs text-neutral-600 font-medium">Duration</p>
+                <p className="text-xs text-neutral-600 font-medium">
+                  {t("fields.duration")}
+                </p>
                 <p className="text-sm font-semibold text-neutral-900">
                   {routeInfo.durationText}
                 </p>
@@ -155,7 +170,7 @@ export default function DirectionsPanel({
                   </span>
                   <span className="flex items-center gap-1">
                     <Clock className="w-3 h-3" />
-                    {Math.round(step.duration / 60)} min
+                    {Math.round(step.duration / 60)} {t("time.minutes")}
                   </span>
                 </div>
               </div>
@@ -170,14 +185,17 @@ export default function DirectionsPanel({
           <button
             onClick={() => {
               if (startPoint) {
-                const url = `https://www.google.com/maps/dir/${startPoint[1]},${startPoint[0]}/${destination}`;
+                const destinationParam = destinationCoordinates
+                  ? `${destinationCoordinates[1]},${destinationCoordinates[0]}`
+                  : destination;
+                const url = `https://www.google.com/maps/dir/${startPoint[1]},${startPoint[0]}/${destinationParam}`;
                 window.open(url, "_blank");
               }
             }}
             className="flex-1 flex items-center justify-center gap-2 bg-primary-600 hover:bg-primary-700 text-white py-3 px-4 rounded-2xl text-sm font-semibold transition-colors shadow-soft hover:shadow-medium"
           >
             <ExternalLink className="w-4 h-4" />
-            Open in Maps
+            {t("fields.openInMaps")}
           </button>
           <button
             onClick={() => {
@@ -187,7 +205,7 @@ export default function DirectionsPanel({
             className="flex items-center justify-center gap-2 px-4 py-3 border border-neutral-300 rounded-2xl text-sm font-semibold hover:bg-neutral-50 transition-colors"
           >
             <Copy className="w-4 h-4" />
-            Copy
+            {t("common.copy")}
           </button>
         </div>
       </div>

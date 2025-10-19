@@ -1,24 +1,27 @@
-import { useJobs } from "@/context/jobs-context";
+import { useJobsStore } from "@/lib/stores/jobs-store";
 import { JobStatus } from "@prisma/client";
 import { ArrowRightIcon, MapPin, Clock, User } from "lucide-react";
 import Link from "next/link";
 import React from "react";
+import { useLocale, useTranslations } from "next-intl";
 
 export default function JobsWidget() {
-  const { jobs } = useJobs();
+  const { jobs } = useJobsStore();
   const sortedJobs = jobs?.filter((job) => job.status === "DUE");
+  const locale = useLocale();
+  const t = useTranslations();
 
   const getDaysRemaining = (endDate: Date, status: JobStatus) => {
     const today = new Date();
     const diffTime = new Date(endDate).getTime() - today.getTime();
     const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
     if (diffDays < 0) {
-      if (status === "COMPLETED") return "Completed";
-      return `${Math.abs(diffDays)} days overdue`;
+      if (status === "COMPLETED") return t("jobs.completed");
+      return `${Math.abs(diffDays)} ${t("time.days")} ${t("jobs.overdue")}`;
     } else if (diffDays === 0) {
-      return "Due today";
+      return t("jobs.dueToday");
     } else {
-      return `${diffDays} days remaining`;
+      return `${diffDays} ${t("time.days")} ${t("jobs.remaining")}`;
     }
   };
 
@@ -29,13 +32,15 @@ export default function JobsWidget() {
           <div className="w-10 h-10 bg-orange-100 rounded-2xl flex items-center justify-center">
             <Clock className="w-5 h-5 text-orange-600" />
           </div>
-          <h2 className="text-lg font-semibold text-neutral-900">Due Jobs</h2>
+          <h2 className="text-lg font-semibold text-neutral-900">
+            {t("jobs.dueJobs")}
+          </h2>
         </div>
         <Link
-          href="/jobs"
+          href={`/${locale}/jobs`}
           className="flex items-center gap-1 text-sm text-primary-600 font-medium hover:text-primary-700 transition-colors"
         >
-          <span className="hidden sm:inline">View all</span>
+          <span className="hidden sm:inline">{t("weather.viewAll")}</span>
           <ArrowRightIcon className="w-4 h-4" />
         </Link>
       </div>
@@ -67,7 +72,7 @@ export default function JobsWidget() {
                 <div className="flex items-center gap-2 text-xs text-neutral-600">
                   <MapPin className="w-3 h-3 flex-shrink-0" />
                   <span className="truncate">
-                    {job.location || "No location specified"}
+                    {job.location || t("jobs.noLocationSpecified")}
                   </span>
                 </div>
 
@@ -75,7 +80,7 @@ export default function JobsWidget() {
                 <div className="flex items-center gap-2 text-xs text-neutral-600">
                   <User className="w-3 h-3 flex-shrink-0" />
                   <span className="truncate">
-                    {job.assignedTo?.name || "Unassigned"}
+                    {job.assignedTo?.name || t("jobs.unassigned")}
                   </span>
                 </div>
 

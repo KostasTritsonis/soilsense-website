@@ -4,9 +4,10 @@ import React, { useState } from "react";
 import { JobFormData } from "@/lib/types";
 import { createJob } from "@/actions/index";
 import { useRouter } from "next/navigation";
-import { useJobs } from "@/context/jobs-context";
+import { useJobsStore } from "@/lib/stores/jobs-store";
 import { useLoadingStore } from "@/lib/stores/loading-store";
 import ButtonLoader from "@/components/button-loader";
+import { useTranslations } from "next-intl";
 
 type JobFormProps = {
   onCancel: () => void;
@@ -15,8 +16,9 @@ type JobFormProps = {
 export default function JobForm({ onCancel }: JobFormProps) {
   const router = useRouter();
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const { users } = useJobs();
+  const { users } = useJobsStore();
   const { setCreatingJob } = useLoadingStore();
+  const t = useTranslations();
   const [formData, setFormData] = useState<JobFormData>({
     title: "",
     description: "",
@@ -56,11 +58,11 @@ export default function JobForm({ onCancel }: JobFormProps) {
       } else {
         // Handle error
         console.error(result.error);
-        alert("Failed to create job. Please try again.");
+        alert(t("jobs.failedToCreateJob"));
       }
     } catch (error) {
       console.error("Error creating job:", error);
-      alert("An unexpected error occurred.");
+      alert(t("jobs.unexpectedError"));
     } finally {
       setIsSubmitting(false);
       setCreatingJob(false);
@@ -70,14 +72,14 @@ export default function JobForm({ onCancel }: JobFormProps) {
   return (
     <div className="bg-white/90 backdrop-blur-sm rounded-3xl shadow-soft border border-white/60 p-6 md:p-8">
       <h2 className="text-xl md:text-2xl font-semibold text-neutral-900 mb-6">
-        Create New Job
+        {t("jobs.jobFormTitle")}
       </h2>
       <form onSubmit={handleSubmit} className="space-y-6">
         {/* Basic Information */}
         <div className="space-y-4">
           <div>
             <label className="block text-sm font-medium text-neutral-700 mb-2">
-              Job Title *
+              {t("jobs.jobTitle")} *
             </label>
             <input
               type="text"
@@ -86,13 +88,13 @@ export default function JobForm({ onCancel }: JobFormProps) {
               onChange={handleInputChange}
               required
               className="w-full px-4 py-3 border border-neutral-300 rounded-2xl bg-white/80 focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-500/20 text-neutral-900 placeholder-neutral-400"
-              placeholder="Enter job title"
+              placeholder={t("jobs.jobTitle")}
             />
           </div>
 
           <div>
             <label className="block text-sm font-medium text-neutral-700 mb-2">
-              Description
+              {t("jobs.jobDescription")}
             </label>
             <textarea
               name="description"
@@ -100,7 +102,7 @@ export default function JobForm({ onCancel }: JobFormProps) {
               onChange={handleInputChange}
               rows={3}
               className="w-full px-4 py-3 border border-neutral-300 rounded-2xl bg-white/80 focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-500/20 text-neutral-900 placeholder-neutral-400 resize-none"
-              placeholder="Enter job description"
+              placeholder={t("jobs.jobDescription")}
             ></textarea>
           </div>
         </div>
@@ -109,7 +111,7 @@ export default function JobForm({ onCancel }: JobFormProps) {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div>
             <label className="block text-sm font-medium text-neutral-700 mb-2">
-              Location
+              {t("jobs.jobLocation")}
             </label>
             <input
               type="text"
@@ -117,13 +119,13 @@ export default function JobForm({ onCancel }: JobFormProps) {
               value={formData.location || ""}
               onChange={handleInputChange}
               className="w-full px-4 py-3 border border-neutral-300 rounded-2xl bg-white/80 focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-500/20 text-neutral-900 placeholder-neutral-400"
-              placeholder="Enter location"
+              placeholder={t("jobs.jobLocation")}
             />
           </div>
 
           <div>
             <label className="block text-sm font-medium text-neutral-700 mb-2">
-              Assigned To
+              {t("jobs.jobAssignedTo")}
             </label>
             <select
               name="assignedToId"
@@ -131,7 +133,7 @@ export default function JobForm({ onCancel }: JobFormProps) {
               onChange={handleInputChange}
               className="w-full px-4 py-3 border border-neutral-300 rounded-2xl bg-white/80 focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-500/20 text-neutral-900"
             >
-              <option value="">Not Assigned</option>
+              <option value="">{t("jobs.selectUser")}</option>
               {users.map((user) => (
                 <option key={user.id} value={user.id}>
                   {user.email}
@@ -145,7 +147,7 @@ export default function JobForm({ onCancel }: JobFormProps) {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           <div>
             <label className="block text-sm font-medium text-neutral-700 mb-2">
-              Start Date *
+              {t("jobs.jobStartDate")} *
             </label>
             <input
               type="date"
@@ -159,7 +161,7 @@ export default function JobForm({ onCancel }: JobFormProps) {
 
           <div>
             <label className="block text-sm font-medium text-neutral-700 mb-2">
-              End Date *
+              {t("jobs.jobEndDate")} *
             </label>
             <input
               type="date"
@@ -173,7 +175,7 @@ export default function JobForm({ onCancel }: JobFormProps) {
 
           <div>
             <label className="block text-sm font-medium text-neutral-700 mb-2">
-              Status
+              {t("jobs.jobStatus")}
             </label>
             <select
               name="status"
@@ -181,9 +183,9 @@ export default function JobForm({ onCancel }: JobFormProps) {
               onChange={handleInputChange}
               className="w-full px-4 py-3 border border-neutral-300 rounded-2xl bg-white/80 focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-500/20 text-neutral-900"
             >
-              <option value="ONGOING">Ongoing</option>
-              <option value="DUE">Due</option>
-              <option value="COMPLETED">Completed</option>
+              <option value="ONGOING">{t("jobs.ongoing")}</option>
+              <option value="DUE">{t("jobs.due")}</option>
+              <option value="COMPLETED">{t("jobs.completed")}</option>
             </select>
           </div>
         </div>
@@ -196,15 +198,15 @@ export default function JobForm({ onCancel }: JobFormProps) {
             className="w-full sm:w-auto px-6 py-3 border border-neutral-300 rounded-2xl text-neutral-700 hover:bg-neutral-50 transition-colors font-medium"
             disabled={isSubmitting}
           >
-            Cancel
+            {t("common.cancel")}
           </button>
           <ButtonLoader
             type="submit"
             isLoading={isSubmitting}
-            loadingText="Creating..."
+            loadingText={t("common.creating")}
             className="w-full sm:w-auto px-6 py-3 bg-primary-600 hover:bg-primary-700 text-white rounded-2xl font-semibold transition-colors shadow-soft hover:shadow-medium disabled:bg-neutral-400 disabled:cursor-not-allowed"
           >
-            Create Job
+            {t("jobs.createJob")}
           </ButtonLoader>
         </div>
       </form>

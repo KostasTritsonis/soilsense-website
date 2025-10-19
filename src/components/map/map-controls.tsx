@@ -1,4 +1,5 @@
 import { RotateCcw, Save, Upload, Loader2 } from "lucide-react";
+import { useTranslations } from "next-intl";
 
 type MapControlsProps = {
   onReset: () => void;
@@ -17,6 +18,7 @@ export default function MapControls({
   isSaving,
   hasFields,
 }: MapControlsProps) {
+  const t = useTranslations();
   return (
     <div className="p-4 space-y-3">
       <div className="flex flex-col space-y-3">
@@ -26,7 +28,7 @@ export default function MapControls({
           disabled={isLoading || isSaving || !hasFields}
         >
           <RotateCcw className="w-4 h-4" />
-          Reset Map
+          {t("fields.resetMap")}
         </button>
 
         <button
@@ -37,12 +39,12 @@ export default function MapControls({
           {isSaving ? (
             <>
               <Loader2 className="w-4 h-4 animate-spin" />
-              Creating...
+              {t("common.creating")}
             </>
           ) : (
             <>
               <Save className="w-4 h-4" />
-              Create/Save Fields
+              {t("fields.createSaveFields")}
             </>
           )}
         </button>
@@ -55,12 +57,12 @@ export default function MapControls({
           {isLoading ? (
             <>
               <Loader2 className="w-4 h-4 animate-spin" />
-              Loading...
+              {t("common.loading")}
             </>
           ) : (
             <>
               <Upload className="w-4 h-4" />
-              Load Fields
+              {t("fields.loadFields")}
             </>
           )}
         </button>

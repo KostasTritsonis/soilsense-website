@@ -10,6 +10,7 @@ import {
 } from "lucide-react";
 import { CurrentWeather } from "@/lib/types";
 import Image from "next/image";
+import { useTranslations } from "next-intl";
 
 interface CurrentWeatherCardProps {
   currentWeather: CurrentWeather;
@@ -24,10 +25,13 @@ interface WeatherDetailItemProps {
 export default function CurrentWeatherCard({
   currentWeather,
 }: CurrentWeatherCardProps) {
+  const t = useTranslations();
   if (!currentWeather) {
     return (
       <div className="bg-white/90 backdrop-blur-sm rounded-3xl shadow-soft border border-white/60 p-6 text-center">
-        <p className="text-neutral-500">Weather data not available.</p>
+        <p className="text-neutral-500">
+          {t("weather.weatherDataNotAvailable")}
+        </p>
       </div>
     );
   }
@@ -42,7 +46,7 @@ export default function CurrentWeatherCard({
           </div>
           <div>
             <h2 className="text-xl font-semibold text-neutral-900">
-              Current Weather
+              {t("weather.currentWeather")}
             </h2>
             <div className="flex items-center gap-2 text-sm text-neutral-600">
               <MapPin className="w-4 h-4" />
@@ -53,7 +57,9 @@ export default function CurrentWeatherCard({
         <div className="text-right">
           <div className="flex items-center gap-2 text-sm text-neutral-500">
             <Clock className="w-4 h-4" />
-            <span>Updated: {currentWeather.lastUpdated}</span>
+            <span>
+              {t("weather.updated")}: {currentWeather.lastUpdated}
+            </span>
           </div>
         </div>
       </div>
@@ -85,22 +91,22 @@ export default function CurrentWeatherCard({
         <div className="grid grid-cols-2 gap-4">
           <WeatherDetailItem
             icon={<ThermometerSun className="w-5 h-5 text-red-500" />}
-            label="Temperature"
+            label={t("weather.temperature")}
             value={currentWeather.temperature}
           />
           <WeatherDetailItem
             icon={<Droplets className="w-5 h-5 text-blue-500" />}
-            label="Humidity"
+            label={t("weather.humidity")}
             value={currentWeather.humidity}
           />
           <WeatherDetailItem
             icon={<Wind className="w-5 h-5 text-gray-500" />}
-            label="Wind Speed"
+            label={t("weather.windSpeed")}
             value={currentWeather.windSpeed}
           />
           <WeatherDetailItem
             icon={<Umbrella className="w-5 h-5 text-blue-500" />}
-            label="Rainfall"
+            label={t("weather.precipitation")}
             value={currentWeather.rainfall}
           />
         </div>

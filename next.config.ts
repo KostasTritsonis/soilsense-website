@@ -1,24 +1,27 @@
 import type { NextConfig } from "next";
+import createNextIntlPlugin from "next-intl/plugin";
+
+const withNextIntl = createNextIntlPlugin("./src/utils/i18n.ts");
 
 const nextConfig: NextConfig = {
   reactStrictMode: true,
   images: {
-    domains: ['openweathermap.org'],
+    domains: ["openweathermap.org"],
   },
   webpack(config) {
     config.module.rules.push({
       test: /\.svg$/,
-      use: ['@svgr/webpack'],
+      use: ["@svgr/webpack"],
     });
     return config;
   },
 };
 
-const withPWA = require('next-pwa')({
-  dest: 'public',
+const withPWA = require("next-pwa")({
+  dest: "public",
   register: true,
   skipWaiting: true,
-  disable: process.env.NODE_ENV === 'development'
-})
+  disable: process.env.NODE_ENV === "development",
+});
 
-module.exports = withPWA(nextConfig);
+export default withPWA(withNextIntl(nextConfig));

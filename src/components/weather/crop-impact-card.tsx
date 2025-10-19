@@ -1,6 +1,7 @@
 import { CurrentWeather, ForecastDay } from "@/lib/types";
 import React from "react";
 import { Sprout, Thermometer, Droplets, AlertTriangle } from "lucide-react";
+import { useTranslations } from "next-intl";
 
 interface CropImpactCardProps {
   currentWeather: CurrentWeather;
@@ -11,10 +12,13 @@ export default function CropImpactCard({
   currentWeather,
   forecast,
 }: CropImpactCardProps) {
+  const t = useTranslations();
   if (!currentWeather) {
     return (
       <div className="bg-white/90 backdrop-blur-sm rounded-3xl shadow-soft border border-white/60 p-6 text-center">
-        <p className="text-neutral-500">Weather data not available.</p>
+        <p className="text-neutral-500">
+          {t("weather.weatherDataNotAvailable")}
+        </p>
       </div>
     );
   }
@@ -26,7 +30,7 @@ export default function CropImpactCard({
           <Sprout className="w-5 h-5 text-green-600" />
         </div>
         <h2 className="text-xl font-semibold text-neutral-900">
-          Crop Impact Analysis
+          {t("weather.cropImpactAnalysis")}
         </h2>
       </div>
 
@@ -66,6 +70,7 @@ const CropImpactItem: React.FC<CropImpactItemProps> = ({
   optimalTempRange,
   highHumidityThreshold,
 }) => {
+  const t = useTranslations();
   const currentTemp = parseInt(currentWeather.temperature);
   const currentHumidity = parseInt(currentWeather.humidity);
   const isOptimalTemp =
@@ -86,10 +91,16 @@ const CropImpactItem: React.FC<CropImpactItemProps> = ({
         <div className="flex items-center gap-3">
           <Thermometer className="w-4 h-4 text-red-500" />
           <div className="flex-1">
-            <p className="text-xs text-neutral-600">Temperature</p>
+            <p className="text-xs text-neutral-600">
+              {t("weather.temperature")}
+            </p>
             <p className="text-sm font-medium text-neutral-900">
-              {currentWeather.temperature}°C (Optimal: {optimalTempRange[0]}-
-              {optimalTempRange[1]}°C)
+              {currentWeather.temperature}°C (
+              {t("weather.optimalTempRange", {
+                min: optimalTempRange[0],
+                max: optimalTempRange[1],
+              })}
+              )
             </p>
           </div>
           <div
@@ -99,7 +110,7 @@ const CropImpactItem: React.FC<CropImpactItemProps> = ({
                 : "bg-yellow-100 text-yellow-700"
             }`}
           >
-            {isOptimalTemp ? "Optimal" : "Moderate"}
+            {isOptimalTemp ? t("weather.optimal") : t("weather.moderate")}
           </div>
         </div>
 
@@ -107,7 +118,7 @@ const CropImpactItem: React.FC<CropImpactItemProps> = ({
         <div className="flex items-center gap-3">
           <Droplets className="w-4 h-4 text-blue-500" />
           <div className="flex-1">
-            <p className="text-xs text-neutral-600">Humidity</p>
+            <p className="text-xs text-neutral-600">{t("weather.humidity")}</p>
             <p className="text-sm font-medium text-neutral-900">
               {currentWeather.humidity}%
             </p>
@@ -119,7 +130,7 @@ const CropImpactItem: React.FC<CropImpactItemProps> = ({
                 : "bg-green-100 text-green-700"
             }`}
           >
-            {isHighHumidity ? "High" : "Normal"}
+            {isHighHumidity ? t("weather.high") : t("weather.normal")}
           </div>
         </div>
 
@@ -129,20 +140,16 @@ const CropImpactItem: React.FC<CropImpactItemProps> = ({
             <AlertTriangle className="w-4 h-4 text-orange-600 flex-shrink-0 mt-0.5" />
             <div className="text-xs text-orange-800">
               {isHighHumidity && (
-                <p className="pb-1">
-                  Monitor for fungal diseases due to high humidity
-                </p>
+                <p className="pb-1">{t("weather.monitorFungalDiseases")}</p>
               )}
-              {heavyRainExpected && (
-                <p>Heavy rain expected - consider protective measures</p>
-              )}
+              {heavyRainExpected && <p>{t("weather.heavyRainExpected")}</p>}
             </div>
           </div>
         )}
 
         {!isHighHumidity && !heavyRainExpected && (
           <div className="text-xs text-green-700 font-medium">
-            ✓ Conditions are favorable for growth
+            {t("weather.conditionsFavorable")}
           </div>
         )}
       </div>

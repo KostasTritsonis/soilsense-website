@@ -1,5 +1,6 @@
 import React from "react";
 import { AlertTriangle, Info } from "lucide-react";
+import { useTranslations } from "next-intl";
 
 export interface WeatherAlert {
   type: "warning" | "info";
@@ -11,6 +12,7 @@ interface WeatherAlertsProps {
 }
 
 export default function WeatherAlerts({ alerts }: WeatherAlertsProps) {
+  const t = useTranslations();
   if (alerts.length === 0) {
     return (
       <div className="bg-white/90 backdrop-blur-sm rounded-3xl shadow-soft border border-white/60 p-6">
@@ -19,11 +21,11 @@ export default function WeatherAlerts({ alerts }: WeatherAlertsProps) {
             <Info className="w-5 h-5 text-green-600" />
           </div>
           <h2 className="text-xl font-semibold text-neutral-900">
-            Weather Alerts
+            {t("weather.weatherAlerts")}
           </h2>
         </div>
         <div className="text-center py-8">
-          <p className="text-neutral-500">No weather alerts at this time</p>
+          <p className="text-neutral-500">{t("weather.noAlertsAtThisTime")}</p>
         </div>
       </div>
     );

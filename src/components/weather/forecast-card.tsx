@@ -2,6 +2,7 @@ import React from "react";
 import { Calendar } from "lucide-react";
 import { ForecastDay } from "@/lib/types";
 import Image from "next/image";
+import { useTranslations } from "next-intl";
 
 interface ForecastCardProps {
   forecast: ForecastDay[];
@@ -12,6 +13,7 @@ interface ForecastDayItemProps {
 }
 
 export default function ForecastCard({ forecast }: ForecastCardProps) {
+  const t = useTranslations();
   return (
     <div className="bg-white/90 backdrop-blur-sm rounded-3xl shadow-soft border border-white/60 p-6">
       {/* Header */}
@@ -20,7 +22,7 @@ export default function ForecastCard({ forecast }: ForecastCardProps) {
           <Calendar className="w-5 h-5 text-purple-600" />
         </div>
         <h2 className="text-xl font-semibold text-neutral-900">
-          5-Day Forecast
+          {t("weather.fiveDayForecast")}
         </h2>
       </div>
 

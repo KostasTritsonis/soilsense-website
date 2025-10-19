@@ -1,11 +1,36 @@
 "use client";
 import { useUser } from "@clerk/nextjs";
-import { SignedIn, SignedOut } from "@clerk/nextjs";
-import { User, Mail, Calendar, Settings, LogOut } from "lucide-react";
+import { SignedIn, SignedOut, useClerk } from "@clerk/nextjs";
+import {
+  User,
+  Mail,
+  Calendar,
+  Settings,
+  LogOut,
+  MapPin,
+  CheckCircle,
+} from "lucide-react";
 import Link from "next/link";
+import { useFieldsStore } from "@/lib/stores/fields-store";
+import { useJobsStore } from "@/lib/stores/jobs-store";
+import { useLocale } from "next-intl";
 
 export default function ProfilePage() {
   const { user } = useUser();
+  const { signOut } = useClerk();
+  const { fields } = useFieldsStore();
+  const { jobs } = useJobsStore();
+  const locale = useLocale();
+
+  // Calculate statistics
+  const totalFields = fields.length;
+  const completedJobs =
+    jobs?.filter((job) => job.status === "COMPLETED").length || 0;
+  const totalArea = fields.reduce((sum, field) => sum + (field.area || 0), 0);
+
+  const handleSignOut = () => {
+    signOut();
+  };
 
   return (
     <div className="h-auto bg-gradient-to-br from-neutral-50 via-primary-50/30 to-neutral-100">
@@ -63,11 +88,95 @@ export default function ProfilePage() {
                           </p>
                           <p className="font-medium text-neutral-900 text-sm md:text-base">
                             {user?.createdAt
-                              ? new Date(user.createdAt).toLocaleDateString()
+                              ? new Date(user.createdAt).toLocaleDateString(
+                                  "en-GB",
+                                  {
+                                    day: "numeric",
+                                    month: "long",
+                                    year: "numeric",
+                                  }
+                                )
                               : "N/A"}
                           </p>
                         </div>
                       </div>
+                    </div>
+
+                    {/* Recent Activity */}
+                    <div className="pt-4 md:pt-6 border-t border-neutral-200">
+                      <h3 className="text-base md:text-lg font-semibold text-neutral-900 mb-3 md:mb-4">
+                        Recent Fields
+                      </h3>
+                      <div className="space-y-3 mb-4">
+                        {fields.slice(0, 3).map((field) => (
+                          <div
+                            key={field.id}
+                            className="flex items-center gap-3 p-2 bg-neutral-50 rounded-lg"
+                          >
+                            <MapPin className="w-4 h-4 text-primary-600 flex-shrink-0" />
+                            <div className="min-w-0 flex-1">
+                              <p className="text-sm font-medium text-neutral-900 truncate">
+                                {field.label || "Unnamed Field"}
+                              </p>
+                              <p className="text-xs text-neutral-500">
+                                {(field.area || 0).toFixed(2)} m²
+                              </p>
+                            </div>
+                          </div>
+                        ))}
+                        {fields.length === 0 && (
+                          <p className="text-sm text-neutral-500 text-center py-4">
+                            No fields created yet
+                          </p>
+                        )}
+                      </div>
+                      {fields.length > 3 && (
+                        <Link
+                          href={`/${locale}/fields`}
+                          className="block text-center text-sm text-primary-600 hover:text-primary-700 mb-4"
+                        >
+                          View all fields
+                        </Link>
+                      )}
+                    </div>
+
+                    {/* Recent Jobs */}
+                    <div className="pt-4 md:pt-6 border-t border-neutral-200">
+                      <h3 className="text-base md:text-lg font-semibold text-neutral-900 mb-3 md:mb-4">
+                        Recent Jobs
+                      </h3>
+                      <div className="space-y-3 mb-4">
+                        {jobs?.slice(0, 3).map((job) => (
+                          <div
+                            key={job.id}
+                            className="flex items-center gap-3 p-2 bg-neutral-50 rounded-lg"
+                          >
+                            <CheckCircle className="w-4 h-4 text-blue-600 flex-shrink-0" />
+                            <div className="min-w-0 flex-1">
+                              <p className="text-sm font-medium text-neutral-900 truncate">
+                                {job.title}
+                              </p>
+                              <p className="text-xs text-neutral-500">
+                                {job.status} •{" "}
+                                {new Date(job.endDate).toLocaleDateString()}
+                              </p>
+                            </div>
+                          </div>
+                        ))}
+                        {(!jobs || jobs.length === 0) && (
+                          <p className="text-sm text-neutral-500 text-center py-4">
+                            No jobs created yet
+                          </p>
+                        )}
+                      </div>
+                      {jobs && jobs.length > 3 && (
+                        <Link
+                          href={`/${locale}/jobs`}
+                          className="block text-center text-sm text-primary-600 hover:text-primary-700 mb-4"
+                        >
+                          View all jobs
+                        </Link>
+                      )}
                     </div>
 
                     {/* Account Actions */}
@@ -77,13 +186,16 @@ export default function ProfilePage() {
                       </h3>
                       <div className="flex flex-col sm:flex-row gap-3">
                         <Link
-                          href="/profile/edit"
+                          href={`/${locale}/profile/edit`}
                           className="flex items-center justify-center gap-2 px-4 py-3 bg-primary-600 text-white rounded-xl hover:bg-primary-700 transition-colors text-sm md:text-base"
                         >
                           <Settings className="w-4 h-4" />
                           Edit Profile
                         </Link>
-                        <button className="flex items-center justify-center gap-2 px-4 py-3 bg-neutral-100 text-neutral-700 rounded-xl hover:bg-neutral-200 transition-colors text-sm md:text-base">
+                        <button
+                          onClick={handleSignOut}
+                          className="flex items-center justify-center gap-2 px-4 py-3 bg-red-600 text-white rounded-xl hover:bg-red-700 transition-colors text-sm md:text-base"
+                        >
                           <LogOut className="w-4 h-4" />
                           Sign Out
                         </button>
@@ -106,7 +218,15 @@ export default function ProfilePage() {
                         Fields Created
                       </span>
                       <span className="font-semibold text-primary-600 text-sm md:text-base">
-                        0
+                        {totalFields}
+                      </span>
+                    </div>
+                    <div className="flex justify-between items-center py-2">
+                      <span className="text-sm md:text-base text-neutral-600">
+                        Total Area
+                      </span>
+                      <span className="font-semibold text-primary-600 text-sm md:text-base">
+                        {totalArea.toFixed(2)} m²
                       </span>
                     </div>
                     <div className="flex justify-between items-center py-2">
@@ -114,7 +234,16 @@ export default function ProfilePage() {
                         Jobs Completed
                       </span>
                       <span className="font-semibold text-primary-600 text-sm md:text-base">
-                        0
+                        {completedJobs}
+                      </span>
+                    </div>
+                    <div className="flex justify-between items-center py-2">
+                      <span className="text-sm md:text-base text-neutral-600">
+                        Active Jobs
+                      </span>
+                      <span className="font-semibold text-blue-600 text-sm md:text-base">
+                        {jobs?.filter((job) => job.status === "ONGOING")
+                          .length || 0}
                       </span>
                     </div>
                     <div className="flex justify-between items-center py-2">
@@ -176,7 +305,7 @@ export default function ProfilePage() {
                 settings.
               </p>
               <Link
-                href="/sign-in"
+                href={`/${locale}/sign-in`}
                 className="inline-flex items-center gap-2 px-6 py-3 bg-primary-600 text-white rounded-xl hover:bg-primary-700 transition-colors"
               >
                 Sign In

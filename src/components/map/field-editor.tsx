@@ -4,6 +4,7 @@ import { Field } from "@/lib/types";
 import { Category } from "@prisma/client";
 import { useEffect, useState } from "react";
 import { Loader2, Palette } from "lucide-react";
+import { useTranslations } from "next-intl";
 
 type FieldEditorProps = {
   field: Field | null;
@@ -19,6 +20,7 @@ export default function FieldEditor({
   onClose,
 }: FieldEditorProps) {
   const [categories, setCategories] = useState<Category[]>([]);
+  const t = useTranslations();
 
   useEffect(() => {
     getAllCategories().then((categories) => setCategories(categories));
@@ -30,7 +32,9 @@ export default function FieldEditor({
       <div className="space-y-4 md:space-y-5">
         {/* Label Input */}
         <div>
-          <label className="block text-neutral-700 text-sm mb-2">Label</label>
+          <label className="block text-neutral-700 text-sm mb-2">
+            {t("fields.fieldLabel")}
+          </label>
           <input
             type="text"
             value={field.label || ""}
@@ -42,7 +46,7 @@ export default function FieldEditor({
 
         <div>
           <label className="block text-neutral-700 text-sm mb-2">
-            Category
+            {t("fields.fieldCategory")}
           </label>
           <select
             className="w-full px-3 py-2 rounded-2xl bg-white/80 border border-neutral-200 text-neutral-900 focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-500/20"
@@ -64,7 +68,7 @@ export default function FieldEditor({
         <div>
           <label className="text-neutral-700 text-sm mb-2 flex items-center gap-2">
             <Palette className="w-4 h-4 text-primary-600" />
-            Color
+            {t("fields.fieldColor")}
           </label>
           <input
             type="color"
@@ -79,14 +83,16 @@ export default function FieldEditor({
         {field.isUpdating && (
           <div className="text-primary-600 text-sm flex items-center gap-2">
             <Loader2 className="animate-spin w-4 h-4" />
-            Saving...
+            {t("common.saving")}
           </div>
         )}
 
         {/* Area Display */}
         <div className="text-neutral-700 text-sm">
-          Area: {field.area?.toFixed(2) || 0} &#13217; <br />
-          Category: {field.categories?.[0].type || "Uncategorized"}
+          {t("fields.area")}: {field.area?.toFixed(2) || 0}{" "}
+          {t("units.squareMeters")} <br />
+          {t("fields.fieldCategory")}:{" "}
+          {field.categories?.[0].type || t("common.uncategorized")}
         </div>
 
         {/* Action Buttons */}
@@ -99,19 +105,21 @@ export default function FieldEditor({
                 color: field.color,
                 area: field.area,
                 coordinates: field.coordinates,
-                categories: field.categories ?? [{ type: "Uncategorized" }],
+                categories: field.categories ?? [
+                  { type: t("common.uncategorized") },
+                ],
               });
             }}
             disabled={field.isUpdating}
           >
-            Update
+            {t("common.update")}
           </button>
 
           <button
             className="w-full bg-neutral-100 hover:bg-neutral-200 text-neutral-700 font-semibold px-3 py-2 rounded-2xl transition-colors"
             onClick={onClose}
           >
-            Cancel
+            {t("common.cancel")}
           </button>
         </div>
       </div>

@@ -1,6 +1,7 @@
 import { deleteField } from "@/actions";
-import { useFields } from "@/context/fields-context";
+import { useFieldsStore } from "@/lib/stores/fields-store";
 import { Edit, X, MapPin, Ruler } from "lucide-react";
+import { useTranslations } from "next-intl";
 
 type FieldListProps = {
   onFieldSelect: (fieldId: string) => void;
@@ -13,12 +14,13 @@ export default function FieldList({
   selectedFieldId,
   onEditField,
 }: FieldListProps) {
-  const { fields, setFields } = useFields();
+  const { fields, removeField } = useFieldsStore();
+  const t = useTranslations();
 
   const handleDeleteField = (e: React.MouseEvent, fieldId: string) => {
     e.stopPropagation();
     deleteField(fieldId);
-    setFields((prev) => prev.filter((f) => f.id !== fieldId));
+    removeField(fieldId);
   };
 
   return (
@@ -28,9 +30,11 @@ export default function FieldList({
           <div className="w-12 h-12 bg-neutral-100 rounded-2xl flex items-center justify-center mx-auto mb-3">
             <MapPin className="w-6 h-6 text-neutral-400" />
           </div>
-          <p className="text-neutral-500 font-medium">No fields created yet</p>
+          <p className="text-neutral-500 font-medium">
+            {t("fields.noFieldsCreated")}
+          </p>
           <p className="text-sm text-neutral-400">
-            Create your first field to get started
+            {t("fields.createFirstField")}
           </p>
         </div>
       ) : (
@@ -57,7 +61,7 @@ export default function FieldList({
                       : "text-neutral-900"
                   }`}
                 >
-                  {field.label || "Unnamed Field"}
+                  {field.label || t("common.unnamed")}
                 </span>
                 <button
                   className="w-6 h-6 bg-red-100 hover:bg-red-200 rounded-lg flex items-center justify-center transition-colors flex-shrink-0"
@@ -77,7 +81,7 @@ export default function FieldList({
                 <div className="flex items-center gap-2">
                   <MapPin className="w-3 h-3 text-neutral-500" />
                   <span className="text-xs text-neutral-600">
-                    {field.categories?.[0]?.type || "Uncategorized"}
+                    {field.categories?.[0]?.type || t("common.uncategorized")}
                   </span>
                 </div>
               </div>

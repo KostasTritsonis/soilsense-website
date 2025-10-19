@@ -3,36 +3,39 @@ import React from "react";
 import { JobStatus } from "@/lib/types";
 import StatusBadge from "./status-badge";
 import { deleteJob, updateJobStatus } from "@/actions/index";
-import { useJobs } from "@/context/jobs-context";
+import { useJobsStore } from "@/lib/stores/jobs-store";
 import { MapPin, Calendar, User, Trash2 } from "lucide-react";
-
-const header = [
-  {
-    label: "Job",
-  },
-  {
-    label: "Timeline",
-  },
-  {
-    label: "Status",
-  },
-  {
-    label: "Location",
-  },
-  {
-    label: "Assigned to",
-  },
-  {
-    label: "Actions",
-  },
-  {
-    label: "Delete",
-  },
-];
+import { useTranslations } from "next-intl";
 
 export default function JobsTable() {
-  const { jobs, setJobs } = useJobs();
+  const { jobs, updateJob, removeJob } = useJobsStore();
+  const t = useTranslations();
+
   if (!jobs) return null;
+
+  const header = [
+    {
+      label: t("jobs.job"),
+    },
+    {
+      label: t("time.timeline"),
+    },
+    {
+      label: t("jobs.jobStatus"),
+    },
+    {
+      label: t("jobs.jobLocation"),
+    },
+    {
+      label: t("jobs.jobAssignedTo"),
+    },
+    {
+      label: t("common.actions"),
+    },
+    {
+      label: t("common.delete"),
+    },
+  ];
 
   // Calculate days remaining or overdue
   const getDaysRemaining = (endDate: Date, status: JobStatus) => {
@@ -40,25 +43,18 @@ export default function JobsTable() {
     const diffTime = new Date(endDate).getTime() - today.getTime();
     const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
     if (diffDays < 0) {
-      if (status === "COMPLETED") return "Completed";
-      return `${Math.abs(diffDays)} days overdue`;
+      if (status === "COMPLETED") return t("jobs.completed");
+      return `${Math.abs(diffDays)} ${t("time.days")} ${t("jobs.overdue")}`;
     } else if (diffDays === 0) {
-      return "Due today";
+      return t("jobs.dueToday");
     } else {
-      return `${diffDays} days remaining`;
+      return `${diffDays} ${t("time.days")} ${t("jobs.remaining")}`;
     }
   };
 
   // Handle status change
   const handleStatusChange = async (id: string, newStatus: string) => {
-    setJobs((prevJobs) => {
-      return prevJobs?.map((job) => {
-        if (job.id === id) {
-          return { ...job, status: newStatus as JobStatus };
-        }
-        return job;
-      });
-    });
+    updateJob(id, { status: newStatus as JobStatus });
     await updateJobStatus(id, newStatus as JobStatus);
   };
 
@@ -75,7 +71,7 @@ export default function JobsTable() {
   };
 
   const handleDelete = async (id: string) => {
-    setJobs((prev) => prev?.filter((f) => f.id !== id));
+    removeJob(id);
     await deleteJob(id);
   };
 
@@ -86,11 +82,9 @@ export default function JobsTable() {
           <Calendar className="w-8 h-8 text-neutral-400" />
         </div>
         <p className="text-lg font-semibold text-neutral-700 mb-2">
-          No jobs found
+          {t("jobs.noJobsFound")}
         </p>
-        <p className="text-neutral-500">
-          Create your first job to get started.
-        </p>
+        <p className="text-neutral-500">{t("jobs.createFirstJob")}</p>
       </div>
     );
   }
