@@ -4,10 +4,10 @@ import { persist } from "zustand/middleware";
 export interface Plant {
   id: string;
   type: PlantType;
-  plantingDate: Date;
+  plantingDate: string; // Store as ISO string for serialization
   harvestDays: number;
   wateringFrequency: number; // days between watering
-  lastWatered?: Date;
+  lastWatered?: string; // Store as ISO string for serialization
 }
 
 export type PlantType =
@@ -101,13 +101,28 @@ export const PLANT_TYPES: Record<PlantType, PlantTypeInfo> = {
 
 interface PlantsStore {
   plants: Plant[];
-  addPlant: (plant: Omit<Plant, "id">) => void;
+  addPlant: (plant: {
+    type: PlantType;
+    plantingDate: Date | string;
+    harvestDays: number;
+    wateringFrequency: number;
+    lastWatered?: Date | string;
+  }) => void;
   removePlant: (id: string) => void;
   waterPlant: (id: string) => void;
   getPlantProgress: (plant: Plant) => number; // returns percentage 0-100
   getDaysUntilHarvest: (plant: Plant) => number;
   getDaysSinceLastWatered: (plant: Plant) => number;
 }
+
+// Helper function to convert Date or string to string
+const toDateString = (date: Date | string | undefined): string | undefined => {
+  if (!date) return undefined;
+  if (date instanceof Date) {
+    return date.toISOString();
+  }
+  return String(date);
+};
 
 export const usePlantsStore = create<PlantsStore>()(
   persist(
@@ -118,6 +133,8 @@ export const usePlantsStore = create<PlantsStore>()(
         const newPlant: Plant = {
           ...plantData,
           id: Date.now().toString(),
+          plantingDate: toDateString(plantData.plantingDate)!,
+          lastWatered: toDateString(plantData.lastWatered),
         };
         set((state) => ({
           plants: [...state.plants, newPlant],
@@ -133,7 +150,9 @@ export const usePlantsStore = create<PlantsStore>()(
       waterPlant: (id) => {
         set((state) => ({
           plants: state.plants.map((plant) =>
-            plant.id === id ? { ...plant, lastWatered: new Date() } : plant
+            plant.id === id
+              ? { ...plant, lastWatered: new Date().toISOString() }
+              : plant
           ),
         }));
       },
@@ -167,6 +186,34 @@ export const usePlantsStore = create<PlantsStore>()(
     }),
     {
       name: "plants-storage",
+      // Add migration to handle existing Date objects
+      migrate: (persistedState: unknown) => {
+        if (
+          persistedState &&
+          typeof persistedState === "object" &&
+          "plants" in persistedState
+        ) {
+          const state = persistedState as { plants: unknown[] };
+          state.plants = state.plants.map((plant: unknown) => {
+            if (plant && typeof plant === "object") {
+              const plantObj = plant as Record<string, unknown>;
+              return {
+                ...plantObj,
+                plantingDate:
+                  plantObj.plantingDate instanceof Date
+                    ? plantObj.plantingDate.toISOString()
+                    : plantObj.plantingDate,
+                lastWatered:
+                  plantObj.lastWatered instanceof Date
+                    ? plantObj.lastWatered.toISOString()
+                    : plantObj.lastWatered,
+              };
+            }
+            return plant;
+          });
+        }
+        return persistedState;
+      },
     }
   )
 );

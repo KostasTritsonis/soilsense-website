@@ -10,7 +10,7 @@ export default function Page() {
       {/* Header Section */}
 
       <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4 pb-5">
-        <h1 className="sm:text-4xl text-2xl font-bold text-neutral-900">
+        <h1 className="sm:text-4xl text-2xl font-bold text-neutral-900 dark:text-neutral-300">
           {t("fields.fields")}
         </h1>
       </div>

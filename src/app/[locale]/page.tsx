@@ -79,10 +79,10 @@ export default function Home() {
       <div className="pb-8">
         <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
           <div>
-            <h1 className="sm:text-4xl text-2xl font-bold text-neutral-900 pb-2">
+            <h1 className="sm:text-4xl text-2xl font-bold text-neutral-900 dark:text-neutral-300 pb-2">
               {greeting}
             </h1>
-            <p className="text-lg text-neutral-600 dark:text-neutral-300">
+            <p className="text-lg text-neutral-600 dark:text-neutral-100">
               {t("dashboard.agriculturalOperations")}
             </p>
           </div>
@@ -110,7 +110,7 @@ export default function Home() {
         <div className="xl:col-span-3 space-y-8">
           {/* Overview Cards */}
           <section>
-            <h2 className="text-2xl font-semibold text-neutral-900 pb-6">
+            <h2 className="text-2xl font-semibold text-neutral-900 dark:text-neutral-300 pb-6">
               {t("dashboard.overview")}
             </h2>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
