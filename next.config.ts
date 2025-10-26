@@ -15,6 +15,15 @@ const nextConfig: NextConfig = {
     });
     return config;
   },
+  async redirects() {
+    return [
+      {
+        source: "/",
+        destination: "/en",
+        permanent: false,
+      },
+    ];
+  },
 };
 
 const withPWA = require("next-pwa")({
