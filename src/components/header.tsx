@@ -1,16 +1,8 @@
 "use client";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { SignedIn, SignedOut, useClerk } from "@clerk/nextjs";
-import {
-  Home,
-  Map,
-  Briefcase,
-  CloudSun,
-  User,
-  LogOut,
-  Leaf,
-} from "lucide-react";
+import { SignedIn, SignedOut } from "@clerk/nextjs";
+import { Home, Map, Briefcase, CloudSun, User, Leaf } from "lucide-react";
 import { useTranslations, useLocale } from "next-intl";
 import SettingsDropdown from "./settings-dropdown";
 
@@ -49,21 +41,9 @@ const getNavLinks = (t: (key: string) => string, locale: string) => [
 
 export default function Header() {
   const pathname = usePathname();
-  const { signOut } = useClerk();
   const t = useTranslations();
   const locale = useLocale();
   const navLinks = getNavLinks(t, locale);
-
-  const handleSignOut = () => {
-    try {
-      signOut({
-        redirectUrl: `/${locale}`,
-        sessionId: undefined,
-      });
-    } catch (error) {
-      console.error("Error signing out:", error);
-    }
-  };
 
   return (
     <>
@@ -121,16 +101,6 @@ export default function Header() {
               <span>{t("common.signIn")}</span>
             </Link>
           </SignedOut>
-
-          <SignedIn>
-            <button
-              onClick={handleSignOut}
-              className="flex flex-col items-center gap-1 px-2 py-3 rounded-lg text-xs font-medium transition-all flex-1 bg-red-600 text-white hover:bg-red-700"
-            >
-              <LogOut className="w-5 h-5" />
-              <span>{t("common.signOut")}</span>
-            </button>
-          </SignedIn>
         </nav>
       </div>
 
@@ -199,16 +169,6 @@ export default function Header() {
                 <span className="hidden sm:inline">{t("common.signIn")}</span>
               </Link>
             </SignedOut>
-
-            <SignedIn>
-              <button
-                onClick={handleSignOut}
-                className="flex items-center gap-2 px-4 py-3 rounded-xl text-sm font-medium transition-all bg-red-600 text-white hover:bg-red-700 shadow-soft"
-              >
-                <LogOut className="w-5 h-5" />
-                <span className="hidden sm:inline">{t("common.signOut")}</span>
-              </button>
-            </SignedIn>
           </div>
         </div>
       </header>

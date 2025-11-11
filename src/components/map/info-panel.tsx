@@ -16,7 +16,7 @@ export default function InfoPanel({
 }: InfoPanelProps) {
   const t = useTranslations();
   return (
-    <div className="p-4 bg-white/90 backdrop-blur-sm border-t border-neutral-200">
+    <div className="p-4 bg-white/95 backdrop-blur-sm border border-white/60 rounded-2xl shadow-large">
       <div className="space-y-3">
         <div className="flex items-center justify-between p-2 bg-neutral-50/80 rounded-xl">
           <div className="flex items-center gap-2">
@@ -24,10 +24,10 @@ export default function InfoPanel({
             <span className="text-sm text-neutral-600 font-medium">
               {t("fields.longitude")}
             </span>
+            <span className="text-sm font-semibold text-neutral-900">
+              {lng.toFixed(4)}
+            </span>
           </div>
-          <span className="text-sm font-semibold text-neutral-900">
-            {lng.toFixed(4)}
-          </span>
         </div>
 
         <div className="flex items-center justify-between p-2 bg-neutral-50/80 rounded-xl">

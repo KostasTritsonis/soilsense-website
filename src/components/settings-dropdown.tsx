@@ -2,7 +2,8 @@
 
 import { useState, useRef, useEffect } from "react";
 import { Settings, ChevronDown } from "lucide-react";
-import { useTranslations } from "next-intl";
+import { useTranslations, useLocale } from "next-intl";
+import { SignedIn, useClerk } from "@clerk/nextjs";
 import LanguageSwitcher from "./language-switcher";
 import ThemeToggle from "./theme-toggle";
 
@@ -10,6 +11,19 @@ export default function SettingsDropdown() {
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
   const t = useTranslations();
+  const locale = useLocale();
+  const { signOut } = useClerk();
+
+  const handleSignOut = () => {
+    try {
+      signOut({
+        redirectUrl: `/${locale}`,
+        sessionId: undefined,
+      });
+    } catch (error) {
+      console.error("Error signing out:", error);
+    }
+  };
 
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
@@ -62,6 +76,17 @@ export default function SettingsDropdown() {
               </h3>
               <LanguageSwitcher />
             </div>
+
+            <SignedIn>
+              <div className="pt-2 border-t border-neutral-200 dark:border-neutral-700">
+                <button
+                  onClick={handleSignOut}
+                  className="self-center w-full px-3 py-2 rounded-md text-sm font-medium transition-all bg-red-600 text-white hover:bg-red-700 shadow-soft"
+                >
+                  {t("common.signOut")}
+                </button>
+              </div>
+            </SignedIn>
           </div>
         </div>
       )}
