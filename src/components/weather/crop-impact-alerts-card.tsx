@@ -26,20 +26,22 @@ export default function CropImpactAlertsCard({
 }: CropImpactAlertsCardProps) {
   if (!currentWeather) {
     return (
-      <div className="bg-white/90 backdrop-blur-sm rounded-3xl shadow-soft border border-white/60 p-6 text-center">
-        <p className="text-neutral-500">Weather data not available.</p>
+      <div className="bg-white/90 dark:bg-neutral-800/90 backdrop-blur-sm rounded-3xl shadow-soft border border-white/60 dark:border-neutral-700/60 p-6 text-center">
+        <p className="text-neutral-500 dark:text-neutral-400 text-sm">
+          Weather data not available.
+        </p>
       </div>
     );
   }
 
   return (
-    <div className="bg-white/90 backdrop-blur-sm rounded-3xl shadow-soft border border-white/60 p-6">
+    <div className="bg-white/90 dark:bg-neutral-800/90 backdrop-blur-sm rounded-3xl shadow-soft border border-white/60 dark:border-neutral-700/60 p-6">
       {/* Header */}
       <div className="flex items-center gap-3 pb-6">
-        <div className="w-10 h-10 bg-green-100 rounded-2xl flex items-center justify-center">
+        <div className="w-10 h-10 bg-green-100 dark:bg-green-900/30 rounded-2xl flex items-center justify-center">
           <Sprout className="w-5 h-5 text-green-600" />
         </div>
-        <h2 className="text-xl font-semibold text-neutral-900">
+        <h2 className="text-xl font-semibold text-neutral-900 dark:text-neutral-100">
           Crop Impact & Weather Alerts
         </h2>
       </div>
@@ -48,23 +50,23 @@ export default function CropImpactAlertsCard({
         {/* Weather Alerts Section */}
         <div>
           <div className="flex items-center gap-2 pb-3">
-            <div className="w-6 h-6 bg-orange-100 rounded-lg flex items-center justify-center">
+            <div className="w-6 h-6 bg-orange-100 dark:bg-orange-900/30 rounded-lg flex items-center justify-center">
               <AlertTriangle className="w-4 h-4 text-orange-600" />
             </div>
-            <h3 className="text-lg font-semibold text-neutral-900">
+            <h3 className="text-lg font-semibold text-neutral-900 dark:text-neutral-100">
               Weather Alerts
             </h3>
           </div>
 
           {alerts.length === 0 ? (
-            <div className="text-center py-6 bg-green-50 rounded-2xl border border-green-100">
+            <div className="text-center py-6 bg-green-50 dark:bg-green-900/30 rounded-xl border border-green-100 dark:border-green-600">
               <div className="flex items-center justify-center gap-2 mb-2">
                 <Info className="w-5 h-5 text-green-600" />
-                <p className="text-green-700 font-medium">
+                <p className="text-green-700 dark:text-green-300 font-medium">
                   No weather alerts at this time
                 </p>
               </div>
-              <p className="text-sm text-green-600">
+              <p className="text-sm text-green-600 dark:text-green-300">
                 All conditions are favorable
               </p>
             </div>
@@ -75,21 +77,21 @@ export default function CropImpactAlertsCard({
                   key={index}
                   className={`p-4 rounded-2xl border ${
                     alert.type === "warning"
-                      ? "bg-orange-50 border-orange-200"
-                      : "bg-blue-50 border-blue-200"
+                      ? "bg-orange-50 dark:bg-orange-900/30 border-orange-200 dark:border-orange-600"
+                      : "bg-blue-50 dark:bg-blue-900/30 border-blue-200 dark:border-blue-600"
                   }`}
                 >
                   <div className="flex items-start gap-3">
                     {alert.type === "warning" ? (
-                      <AlertTriangle className="w-5 h-5 text-orange-600 flex-shrink-0 mt-0.5" />
+                      <AlertTriangle className="w-5 h-5 text-orange-600 dark:text-orange-300 flex-shrink-0 mt-0.5" />
                     ) : (
-                      <Info className="w-5 h-5 text-blue-600 flex-shrink-0 mt-0.5" />
+                      <Info className="w-5 h-5 text-blue-600 dark:text-blue-300 flex-shrink-0 mt-0.5" />
                     )}
                     <p
                       className={`text-sm font-medium ${
                         alert.type === "warning"
-                          ? "text-orange-800"
-                          : "text-blue-800"
+                          ? "text-orange-800 dark:text-orange-300"
+                          : "text-blue-800 dark:text-blue-300"
                       }`}
                     >
                       {alert.message}
@@ -104,10 +106,10 @@ export default function CropImpactAlertsCard({
         {/* Crop Impact Analysis Section */}
         <div>
           <div className="flex items-center gap-2 pb-3">
-            <div className="w-6 h-6 bg-green-100 rounded-lg flex items-center justify-center">
+            <div className="w-6 h-6 bg-green-100 dark:bg-green-900/30 rounded-lg flex items-center justify-center">
               <Sprout className="w-4 h-4 text-green-600" />
             </div>
-            <h3 className="text-lg font-semibold text-neutral-900">
+            <h3 className="text-lg font-semibold text-neutral-900 dark:text-neutral-100">
               Crop Impact Analysis
             </h3>
           </div>
@@ -160,18 +162,20 @@ const CropImpactItem: React.FC<CropImpactItemProps> = ({
     .some((day) => parseFloat(day.rainChance) > 60);
 
   return (
-    <div className="p-4 bg-neutral-50/80 rounded-2xl border border-neutral-100">
-      <h4 className="font-semibold text-neutral-900 text-sm pb-3">
+    <div className="p-4 bg-neutral-50/80 dark:bg-neutral-700/80 rounded-xl border border-neutral-100 dark:border-neutral-600">
+      <h4 className="font-semibold text-neutral-900 dark:text-neutral-100 text-sm pb-3">
         {cropName}
       </h4>
 
       <div className="space-y-3">
         {/* Temperature Status */}
         <div className="flex items-center gap-3">
-          <Thermometer className="w-4 h-4 text-red-500" />
+          <Thermometer className="w-4 h-4 text-red-500 dark:text-red-300" />
           <div className="flex-1">
-            <p className="text-xs text-neutral-600">Temperature</p>
-            <p className="text-sm font-medium text-neutral-900">
+            <p className="text-xs text-neutral-600 dark:text-neutral-400">
+              Temperature
+            </p>
+            <p className="text-sm font-medium text-neutral-900 dark:text-neutral-100">
               {currentWeather.temperature}°C (Optimal: {optimalTempRange[0]}-
               {optimalTempRange[1]}°C)
             </p>
@@ -179,8 +183,8 @@ const CropImpactItem: React.FC<CropImpactItemProps> = ({
           <div
             className={`px-2 py-1 rounded-full text-xs font-medium ${
               isOptimalTemp
-                ? "bg-green-100 text-green-700"
-                : "bg-yellow-100 text-yellow-700"
+                ? "bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-300"
+                : "bg-yellow-100 dark:bg-yellow-900/30 text-yellow-700 dark:text-yellow-300"
             }`}
           >
             {isOptimalTemp ? "Optimal" : "Moderate"}
@@ -189,18 +193,20 @@ const CropImpactItem: React.FC<CropImpactItemProps> = ({
 
         {/* Humidity Status */}
         <div className="flex items-center gap-3">
-          <Droplets className="w-4 h-4 text-blue-500" />
+          <Droplets className="w-4 h-4 text-blue-500 dark:text-blue-300" />
           <div className="flex-1">
-            <p className="text-xs text-neutral-600">Humidity</p>
-            <p className="text-sm font-medium text-neutral-900">
+            <p className="text-xs text-neutral-600 dark:text-neutral-400">
+              Humidity
+            </p>
+            <p className="text-sm font-medium text-neutral-900 dark:text-neutral-100">
               {currentWeather.humidity}%
             </p>
           </div>
           <div
             className={`px-2 py-1 rounded-full text-xs font-medium ${
               isHighHumidity
-                ? "bg-orange-100 text-orange-700"
-                : "bg-green-100 text-green-700"
+                ? "bg-orange-100 dark:bg-orange-900/30 text-orange-700 dark:text-orange-300"
+                : "bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-300"
             }`}
           >
             {isHighHumidity ? "High" : "Normal"}
@@ -209,9 +215,9 @@ const CropImpactItem: React.FC<CropImpactItemProps> = ({
 
         {/* Recommendations */}
         {(isHighHumidity || heavyRainExpected) && (
-          <div className="flex items-start gap-3 p-3 bg-orange-50 rounded-xl border border-orange-100">
+          <div className="flex items-start gap-3 p-3 bg-orange-50 dark:bg-orange-900/30 rounded-xl border border-orange-100 dark:border-orange-600">
             <AlertTriangle className="w-4 h-4 text-orange-600 flex-shrink-0 mt-0.5" />
-            <div className="text-xs text-orange-800">
+            <div className="text-xs text-orange-800 dark:text-orange-300">
               {isHighHumidity && (
                 <p className="pb-1">
                   Monitor for fungal diseases due to high humidity
@@ -225,7 +231,7 @@ const CropImpactItem: React.FC<CropImpactItemProps> = ({
         )}
 
         {!isHighHumidity && !heavyRainExpected && (
-          <div className="text-xs text-green-700 font-medium">
+          <div className="text-xs text-green-700 dark:text-green-300 font-medium">
             ✓ Conditions are favorable for growth
           </div>
         )}

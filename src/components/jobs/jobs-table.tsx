@@ -77,14 +77,16 @@ export default function JobsTable() {
 
   if (jobs.length === 0) {
     return (
-      <div className="bg-white/90 backdrop-blur-sm rounded-3xl shadow-soft border border-white/60 p-8 text-center">
-        <div className="w-16 h-16 bg-neutral-100 rounded-3xl flex items-center justify-center mx-auto mb-4">
-          <Calendar className="w-8 h-8 text-neutral-400" />
+      <div className="bg-white/90 dark:bg-neutral-800/90 backdrop-blur-sm rounded-3xl shadow-soft border border-white/60 dark:border-neutral-700/60 p-8 text-center">
+        <div className="w-16 h-16 bg-neutral-100 dark:bg-neutral-700/80 rounded-3xl flex items-center justify-center mx-auto mb-4">
+          <Calendar className="w-8 h-8 text-neutral-400 dark:text-neutral-500" />
         </div>
-        <p className="text-lg font-semibold text-neutral-700 mb-2">
+        <p className="text-lg font-semibold text-neutral-700 dark:text-neutral-300 mb-2">
           {t("jobs.noJobsFound")}
         </p>
-        <p className="text-neutral-500">{t("jobs.createFirstJob")}</p>
+        <p className="text-neutral-500 dark:text-neutral-400">
+          {t("jobs.createFirstJob")}
+        </p>
       </div>
     );
   }
@@ -92,44 +94,44 @@ export default function JobsTable() {
   return (
     <div className="w-full">
       {/* Desktop Table View */}
-      <div className="hidden md:block bg-white/90 backdrop-blur-sm rounded-3xl shadow-soft border border-white/60 overflow-hidden">
+      <div className="hidden md:block bg-white/90 dark:bg-neutral-800/90 backdrop-blur-sm rounded-3xl shadow-soft border border-white/60 dark:border-neutral-700/60 overflow-hidden">
         <div className="overflow-x-auto">
-          <table className="min-w-full divide-y divide-neutral-200">
-            <thead className="bg-neutral-50/80">
+          <table className="min-w-full divide-y divide-neutral-200 dark:divide-neutral-700">
+            <thead className="bg-neutral-50/80 dark:bg-neutral-700/80">
               <tr>
                 {header.map((header) => (
                   <th
                     key={header.label}
-                    className="py-4 px-6 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center"
+                    className="py-4 px-6 text-xs font-medium text-neutral-600 dark:text-neutral-400 uppercase tracking-wider text-center"
                   >
                     {header.label}
                   </th>
                 ))}
               </tr>
             </thead>
-            <tbody className="bg-white divide-y divide-neutral-200">
+            <tbody className="bg-white dark:bg-neutral-800/50 divide-y divide-neutral-200 dark:divide-neutral-700">
               {jobs.map((job) => (
                 <tr
                   key={job.id}
-                  className="hover:bg-neutral-50/50 transition-colors"
+                  className="hover:bg-neutral-50/50 dark:hover:bg-neutral-700/50 transition-colors"
                 >
                   <td className="py-4 px-6">
-                    <div className="text-sm font-semibold text-neutral-900">
+                    <div className="text-sm font-semibold text-neutral-900 dark:text-neutral-100">
                       {job.title}
                     </div>
-                    <div className="text-sm text-neutral-500 mt-1">
+                    <div className="text-sm text-neutral-500 dark:text-neutral-400 mt-1">
                       {job.description}
                     </div>
                   </td>
-                  <td className="py-4 px-6">
-                    <div className="text-sm text-neutral-900">
+                  <td className="py-4 px-6 text-center">
+                    <div className="text-sm text-neutral-900 dark:text-neutral-100">
                       {new Date(job.startDate).toLocaleDateString()} to{" "}
                       {new Date(job.endDate).toLocaleDateString()}
                     </div>
-                    <div className="text-xs text-neutral-500 mt-1">
+                    <div className="text-xs text-neutral-500 dark:text-neutral-400 mt-1">
                       {getDaysRemaining(job.endDate, job.status)}
                     </div>
-                    <div className="mx-auto mt-2 w-3/4 bg-neutral-200 rounded-full h-2">
+                    <div className="mx-auto mt-2 w-3/4 bg-neutral-200 dark:bg-neutral-700 rounded-full h-2">
                       <div
                         className={`h-2 rounded-full transition-all duration-300 ${
                           job.status === "COMPLETED"
@@ -147,37 +149,39 @@ export default function JobsTable() {
                       ></div>
                     </div>
                   </td>
-                  <td className="py-4 px-6">
+                  <td className="py-4 px-6 text-center">
                     <div className="flex justify-center">
                       <StatusBadge status={job.status} />
                     </div>
                   </td>
-                  <td className="py-4 px-6 text-sm text-neutral-600">
+                  <td className="py-4 px-6 text-sm text-neutral-600 dark:text-neutral-400 text-center">
                     {job.location || "Not specified"}
                   </td>
-                  <td className="py-4 px-6 text-sm text-neutral-600">
+                  <td className="py-4 px-6 text-sm text-neutral-600 dark:text-neutral-400 text-center">
                     {job.assignedTo?.name || "Unassigned"}
                   </td>
-                  <td className="py-4 px-6">
+                  <td className="py-4 px-6 text-center">
                     <select
                       value={job.status}
                       onChange={(e) =>
                         handleStatusChange(job.id, e.target.value)
                       }
-                      className="text-sm border border-neutral-300 rounded-xl px-3 py-2 bg-white focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-500/20"
+                      className="text-sm border border-neutral-300 dark:border-neutral-600 rounded-xl px-3 py-2 bg-white dark:bg-neutral-700 dark:text-neutral-100 focus:border-primary-500 dark:focus:border-primary-400 focus:outline-none focus:ring-2 focus:ring-primary-500/20 dark:focus:ring-primary-400/20 mx-auto"
                     >
                       <option value="ONGOING">Ongoing</option>
                       <option value="DUE">Due</option>
                       <option value="COMPLETED">Completed</option>
                     </select>
                   </td>
-                  <td className="py-4 px-6">
-                    <button
-                      onClick={() => handleDelete(job.id)}
-                      className="w-8 h-8 bg-red-100 hover:bg-red-200 rounded-xl flex items-center justify-center transition-colors"
-                    >
-                      <Trash2 className="w-4 h-4 text-red-600" />
-                    </button>
+                  <td className="py-4 px-6 text-center">
+                    <div className="flex justify-center">
+                      <button
+                        onClick={() => handleDelete(job.id)}
+                        className="w-8 h-8 bg-red-100 dark:bg-red-900/30 hover:bg-red-200 dark:hover:bg-red-900/50 rounded-xl flex items-center justify-center transition-colors"
+                      >
+                        <Trash2 className="w-4 h-4 text-red-600 dark:text-red-400" />
+                      </button>
+                    </div>
                   </td>
                 </tr>
               ))}
@@ -191,45 +195,47 @@ export default function JobsTable() {
         {jobs.map((job) => (
           <div
             key={job.id}
-            className="bg-white/90 backdrop-blur-sm rounded-3xl shadow-soft border border-white/60 p-6"
+            className="bg-white/90 dark:bg-neutral-800/90 backdrop-blur-sm rounded-3xl shadow-soft border border-white/60 dark:border-neutral-700/60 p-6"
           >
             <div className="flex items-start justify-between mb-4">
               <div className="flex-1">
-                <h3 className="text-lg font-semibold text-neutral-900 mb-1">
+                <h3 className="text-lg font-semibold text-neutral-900 dark:text-neutral-100 mb-1">
                   {job.title}
                 </h3>
-                <p className="text-sm text-neutral-600">{job.description}</p>
+                <p className="text-sm text-neutral-600 dark:text-neutral-400">
+                  {job.description}
+                </p>
               </div>
               <div className="flex items-center gap-2">
                 <StatusBadge status={job.status} />
                 <button
                   onClick={() => handleDelete(job.id)}
-                  className="w-8 h-8 bg-red-100 hover:bg-red-200 rounded-xl flex items-center justify-center transition-colors"
+                  className="w-8 h-8 bg-red-100 dark:bg-red-900/30 hover:bg-red-200 dark:hover:bg-red-900/50 rounded-xl flex items-center justify-center transition-colors"
                 >
-                  <Trash2 className="w-4 h-4 text-red-600" />
+                  <Trash2 className="w-4 h-4 text-red-600 dark:text-red-400" />
                 </button>
               </div>
             </div>
 
             <div className="space-y-3">
               {/* Timeline */}
-              <div className="flex items-center gap-3 p-3 bg-neutral-50/80 rounded-2xl">
-                <div className="w-8 h-8 bg-blue-100 rounded-xl flex items-center justify-center">
-                  <Calendar className="w-4 h-4 text-blue-600" />
+              <div className="flex items-center gap-3 p-3 bg-neutral-50/80 dark:bg-neutral-700/80 rounded-2xl">
+                <div className="w-8 h-8 bg-blue-100 dark:bg-blue-900/30 rounded-xl flex items-center justify-center">
+                  <Calendar className="w-4 h-4 text-blue-600 dark:text-blue-400" />
                 </div>
                 <div className="flex-1">
-                  <p className="text-sm font-medium text-neutral-900">
+                  <p className="text-sm font-medium text-neutral-900 dark:text-neutral-100">
                     {new Date(job.startDate).toLocaleDateString()} -{" "}
                     {new Date(job.endDate).toLocaleDateString()}
                   </p>
-                  <p className="text-xs text-neutral-600">
+                  <p className="text-xs text-neutral-600 dark:text-neutral-400">
                     {getDaysRemaining(job.endDate, job.status)}
                   </p>
                 </div>
               </div>
 
               {/* Progress Bar */}
-              <div className="w-full bg-neutral-200 rounded-full h-2">
+              <div className="w-full bg-neutral-200 dark:bg-neutral-700 rounded-full h-2">
                 <div
                   className={`h-2 rounded-full transition-all duration-300 ${
                     job.status === "COMPLETED"
@@ -245,30 +251,30 @@ export default function JobsTable() {
               </div>
 
               {/* Location */}
-              <div className="flex items-center gap-3 p-3 bg-neutral-50/80 rounded-2xl">
-                <div className="w-8 h-8 bg-green-100 rounded-xl flex items-center justify-center">
-                  <MapPin className="w-4 h-4 text-green-600" />
+              <div className="flex items-center gap-3 p-3 bg-neutral-50/80 dark:bg-neutral-700/80 rounded-2xl">
+                <div className="w-8 h-8 bg-green-100 dark:bg-green-900/30 rounded-xl flex items-center justify-center">
+                  <MapPin className="w-4 h-4 text-green-600 dark:text-green-400" />
                 </div>
                 <div>
-                  <p className="text-sm font-medium text-neutral-900">
+                  <p className="text-sm font-medium text-neutral-900 dark:text-neutral-100">
                     Location
                   </p>
-                  <p className="text-xs text-neutral-600">
+                  <p className="text-xs text-neutral-600 dark:text-neutral-400">
                     {job.location || "Not specified"}
                   </p>
                 </div>
               </div>
 
               {/* Assigned To */}
-              <div className="flex items-center gap-3 p-3 bg-neutral-50/80 rounded-2xl">
-                <div className="w-8 h-8 bg-purple-100 rounded-xl flex items-center justify-center">
-                  <User className="w-4 h-4 text-purple-600" />
+              <div className="flex items-center gap-3 p-3 bg-neutral-50/80 dark:bg-neutral-700/80 rounded-2xl">
+                <div className="w-8 h-8 bg-purple-100 dark:bg-purple-900/30 rounded-xl flex items-center justify-center">
+                  <User className="w-4 h-4 text-purple-600 dark:text-purple-400" />
                 </div>
                 <div>
-                  <p className="text-sm font-medium text-neutral-900">
+                  <p className="text-sm font-medium text-neutral-900 dark:text-neutral-100">
                     Assigned To
                   </p>
-                  <p className="text-xs text-neutral-600">
+                  <p className="text-xs text-neutral-600 dark:text-neutral-400">
                     {job.assignedTo?.name || "Unassigned"}
                   </p>
                 </div>
@@ -276,13 +282,13 @@ export default function JobsTable() {
 
               {/* Status Change */}
               <div className="pt-2">
-                <label className="block text-sm font-medium text-neutral-700 mb-2">
+                <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-2">
                   Update Status
                 </label>
                 <select
                   value={job.status}
                   onChange={(e) => handleStatusChange(job.id, e.target.value)}
-                  className="w-full text-sm border border-neutral-300 rounded-2xl px-4 py-3 bg-white focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-500/20"
+                  className="w-full text-sm border border-neutral-300 dark:border-neutral-600 rounded-2xl px-4 py-3 bg-white dark:bg-neutral-700 dark:text-neutral-100 focus:border-primary-500 dark:focus:border-primary-400 focus:outline-none focus:ring-2 focus:ring-primary-500/20 dark:focus:ring-primary-400/20"
                 >
                   <option value="ONGOING">Ongoing</option>
                   <option value="DUE">Due</option>

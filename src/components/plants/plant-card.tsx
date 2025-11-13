@@ -39,23 +39,23 @@ export default function PlantCard({ plant }: PlantCardProps) {
   };
 
   return (
-    <div className="bg-white/90 backdrop-blur-sm rounded-3xl shadow-soft border border-white/60 p-6 hover:shadow-medium transition-all">
+    <div className="bg-white/90 dark:bg-neutral-800/90 backdrop-blur-sm rounded-3xl shadow-soft border border-white/60 dark:border-neutral-700/60 p-6 hover:shadow-medium transition-all">
       {/* Header */}
       <div className="flex items-start justify-between mb-4">
         <div className="flex items-center gap-3">
           <span className="text-4xl">{plantInfo.icon}</span>
           <div>
-            <h3 className="text-xl font-semibold text-neutral-900">
+            <h3 className="text-xl font-semibold text-neutral-900 dark:text-neutral-100">
               {plantInfo.name}
             </h3>
-            <p className="text-sm text-neutral-500">
+            <p className="text-sm text-neutral-500 dark:text-neutral-400">
               {t("plants.plantingDay")} {formatDate(plant.plantingDate)}
             </p>
           </div>
         </div>
         <button
           onClick={handleRemovePlant}
-          className="p-2 text-neutral-400 hover:text-red-500 transition-colors"
+          className="p-2 text-neutral-400 dark:text-neutral-500 hover:text-red-500 dark:hover:text-red-400 transition-colors"
         >
           <Trash2 className="w-4 h-4" />
         </button>
@@ -64,12 +64,12 @@ export default function PlantCard({ plant }: PlantCardProps) {
       {/* Progress Bar */}
       <div className="mb-6">
         <div className="flex justify-between items-center mb-2">
-          <span className="text-sm font-medium text-neutral-700">
+          <span className="text-sm font-medium text-neutral-700 dark:text-neutral-300">
             {daysUntilHarvest === 0
               ? t("plants.harvestReady")
               : t("plants.daysUntilHarvest")}
           </span>
-          <span className="text-sm text-neutral-500">
+          <span className="text-sm text-neutral-500 dark:text-neutral-400">
             {daysUntilHarvest === 0
               ? ""
               : `${daysUntilHarvest} ${
@@ -77,7 +77,7 @@ export default function PlantCard({ plant }: PlantCardProps) {
                 }`}
           </span>
         </div>
-        <div className="w-full bg-neutral-200 rounded-full h-3">
+        <div className="w-full bg-neutral-200 dark:bg-neutral-700 rounded-full h-3">
           <div
             className={`h-3 rounded-full transition-all duration-500 ${
               progress >= 100 ? "bg-green-500" : "bg-primary-500"
@@ -85,26 +85,30 @@ export default function PlantCard({ plant }: PlantCardProps) {
             style={{ width: `${Math.min(progress, 100)}%` }}
           />
         </div>
-        <div className="text-xs text-neutral-500 mt-1">
+        <div className="text-xs text-neutral-500 dark:text-neutral-400 mt-1">
           {Math.round(progress)}% {t("common.complete")}
         </div>
       </div>
 
       {/* Water Supply Info */}
       <div className="space-y-3">
-        <div className="flex items-center gap-3 p-3 bg-blue-50/50 rounded-xl">
+        <div className="flex items-center gap-3 p-3 bg-blue-50/50 dark:bg-blue-900/20 rounded-xl">
           <Droplets
             className={`w-5 h-5 ${
-              needsWatering ? "text-blue-600" : "text-blue-500"
+              needsWatering
+                ? "text-blue-600 dark:text-blue-400"
+                : "text-blue-500 dark:text-blue-400"
             }`}
           />
           <div className="flex-1">
-            <div className="text-sm font-medium text-neutral-900">
+            <div className="text-sm font-medium text-neutral-900 dark:text-neutral-100">
               {t("plants.waterSupply")}
             </div>
             <div
               className={`text-sm ${
-                needsWatering ? "text-blue-700" : "text-blue-600"
+                needsWatering
+                  ? "text-blue-700 dark:text-blue-300"
+                  : "text-blue-600 dark:text-blue-400"
               }`}
             >
               {needsWatering
@@ -119,20 +123,20 @@ export default function PlantCard({ plant }: PlantCardProps) {
           {needsWatering && (
             <button
               onClick={handleWaterPlant}
-              className="px-3 py-1 bg-blue-600 text-white text-sm rounded-lg hover:bg-blue-700 transition-colors"
+              className="px-3 py-1 bg-blue-600 dark:bg-blue-500 text-white text-sm rounded-lg hover:bg-blue-700 dark:hover:bg-blue-600 transition-colors"
             >
               {t("common.water")}
             </button>
           )}
         </div>
 
-        <div className="flex items-center gap-3 p-3 bg-neutral-50/50 rounded-xl">
-          <Calendar className="w-5 h-5 text-neutral-600" />
+        <div className="flex items-center gap-3 p-3 bg-neutral-50/50 dark:bg-neutral-700/80 rounded-xl">
+          <Calendar className="w-5 h-5 text-neutral-600 dark:text-neutral-400" />
           <div className="flex-1">
-            <div className="text-sm font-medium text-neutral-900">
+            <div className="text-sm font-medium text-neutral-900 dark:text-neutral-100">
               {t("plants.wateringFrequency")}
             </div>
-            <div className="text-sm text-neutral-600">
+            <div className="text-sm text-neutral-600 dark:text-neutral-400">
               {daysSinceLastWatered === 0
                 ? t("common.today")
                 : `${daysSinceLastWatered} ${

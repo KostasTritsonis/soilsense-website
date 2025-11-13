@@ -275,7 +275,7 @@ export default function MapComponent(
   };
 
   return (
-    <div className="flex flex-col h-screen w-full relative bg-neutral-100 overflow-hidden">
+    <div className="flex flex-col h-screen w-full relative  overflow-hidden">
       {/* Loading spinner */}
       {(isLoading || isSaving) && <LoadingSpinner />}
 

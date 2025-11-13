@@ -52,7 +52,7 @@ export default function Page() {
       </div>
 
       {/* Map Section */}
-      <div className="bg-white/90 backdrop-blur-sm rounded-3xl shadow-soft border border-white/60 overflow-hidden">
+      <div className="bg-white/90 backdrop-blur-sm rounded-2xl shadow-soft overflow-hidden">
         <MapComponent onHandlersReady={handleHandlersReady} />
       </div>
     </div>

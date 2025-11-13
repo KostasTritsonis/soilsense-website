@@ -23,7 +23,7 @@ export default function MapReadOnly() {
   }, []);
 
   return (
-    <div className="bg-white/90 backdrop-blur-sm rounded-3xl shadow-soft border border-white/60  flex relative justify-center items-center w-full sm:h-[780px] h-[600px]">
+    <div className="bg-white/90 backdrop-blur-sm rounded-2xl shadow-soft flex relative justify-center items-center w-full sm:h-[780px] h-[600px]">
       {isLoading && <LoadingSpinner />}
       <div ref={mapContainer} className="w-full h-full rounded-2xl" />
     </div>

@@ -1,55 +1,32 @@
 "use client";
-import { useEffect } from "react";
 import { useLoadingStore } from "@/lib/stores/loading-store";
-import { FullScreenLoader } from "./loader";
 
 export default function GlobalLoader() {
-  const {
-    isAppLoading,
-    isUserLoading,
-    isFieldsLoading,
-    isJobsLoading,
-    isWeatherLoading,
-    isMapLoading,
-    loadingMessage,
-    resetAllLoading,
-  } = useLoadingStore();
+  const { isAppLoading, isWeatherLoading, loadingMessage } = useLoadingStore();
 
-  // Reset loading states on component unmount
-  useEffect(() => {
-    return () => {
-      resetAllLoading();
-    };
-  }, [resetAllLoading]);
-
-  // Show full screen loader for app initialization
-  if (isAppLoading) {
-    return (
-      <div className="fixed inset-0 flex items-center justify-center z-50 bg-gradient-to-br from-black/10 via-black/20 to-black/10 dark:from-black/30 dark:via-black/40 dark:to-black/30 backdrop-blur-md">
-        <div className="bg-white/95 dark:bg-neutral-800/95 backdrop-blur-xl rounded-3xl shadow-2xl border border-white/60 dark:border-neutral-700/60 p-12 flex flex-col items-center max-w-md mx-4">
-          <FullScreenLoader text={loadingMessage} />
-        </div>
-      </div>
-    );
+  // Only show loader for app initialization and weather loading
+  if (!isAppLoading && !isWeatherLoading) {
+    return null;
   }
 
-  // Show overlay loader for other loading states
-  const isAnyLoading =
-    isUserLoading ||
-    isFieldsLoading ||
-    isJobsLoading ||
-    isWeatherLoading ||
-    isMapLoading;
-
-  if (isAnyLoading) {
-    return (
-      <div className="fixed inset-0 flex items-center justify-center z-50 bg-gradient-to-br from-black/10 via-black/20 to-black/10 dark:from-black/30 dark:via-black/40 dark:to-black/30 backdrop-blur-md">
-        <div className="bg-white/95 dark:bg-neutral-800/95 backdrop-blur-xl rounded-3xl shadow-2xl border border-white/60 dark:border-neutral-700/60 p-12 flex flex-col items-center max-w-md mx-4">
-          <FullScreenLoader text={loadingMessage} />
+  return (
+    <div className="fixed inset-0 flex items-center justify-center z-50 bg-black/10 dark:bg-black/50 backdrop-blur-md transition-opacity duration-300">
+      <div className="bg-white/90 dark:bg-neutral-800/95 backdrop-blur-xl rounded-2xl shadow-xl border border-neutral-200/50 dark:border-neutral-700/50 p-12 flex flex-col items-center w-52 mx-4 transition-all duration-300">
+        {/* Elegant spinner */}
+        <div className="relative w-14 h-14 mb-6">
+          <div className="absolute inset-0 border-2 border-neutral-100 dark:border-neutral-700/50 rounded-full"></div>
+          <div className="absolute inset-0 border-2 border-transparent border-t-primary-600 dark:border-t-primary-400 rounded-full animate-spin"></div>
+          <div
+            className="absolute inset-2 border-2 border-transparent border-r-primary-500 dark:border-r-primary-500/80 rounded-full animate-spin"
+            style={{ animationDirection: "reverse", animationDuration: "1.5s" }}
+          ></div>
         </div>
-      </div>
-    );
-  }
 
-  return null;
+        {/* Loading text */}
+        <p className="text-sm text-neutral-700 dark:text-neutral-300 font-medium text-center tracking-wide">
+          {loadingMessage || "Loading..."}
+        </p>
+      </div>
+    </div>
+  );
 }

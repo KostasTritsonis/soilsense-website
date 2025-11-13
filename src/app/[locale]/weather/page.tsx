@@ -95,10 +95,10 @@ export default function Weather() {
       <div className="pb-8">
         <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
           <div>
-            <h1 className="sm:text-4xl text-2xl font-bold text-neutral-900 pb-2">
+            <h1 className="sm:text-4xl text-2xl font-bold text-neutral-900 dark:text-neutral-100 pb-2">
               {t("weather.weather")}
             </h1>
-            <p className="text-lg text-neutral-600">
+            <p className="text-lg text-neutral-600 dark:text-neutral-400">
               {t("weather.weatherForecast")}
             </p>
           </div>
@@ -107,9 +107,9 @@ export default function Weather() {
 
       {/* Search Section */}
       <div className="pb-8">
-        <div className="bg-white/90 backdrop-blur-sm rounded-3xl shadow-soft border border-white/60 p-6">
-          <h2 className="text-xl font-semibold text-neutral-900 pb-4 flex items-center gap-2">
-            <MapPin className="w-5 h-5 text-primary-600" />
+        <div className="bg-white/90 dark:bg-neutral-800/90 backdrop-blur-sm rounded-3xl shadow-soft border border-white/60 dark:border-neutral-700/60 p-6">
+          <h2 className="text-xl font-semibold text-neutral-900 dark:text-neutral-100 pb-4 flex items-center gap-2">
+            <MapPin className="w-5 h-5 text-primary-600 dark:text-primary-400" />
             {t("fields.location")}
           </h2>
           <div className="flex flex-col sm:flex-row gap-4">
@@ -120,12 +120,12 @@ export default function Weather() {
                 onChange={(e) => setSearchInput(e.target.value)}
                 onKeyPress={(e) => e.key === "Enter" && handleSearch()}
                 placeholder={t("common.search")}
-                className="w-full px-4 py-3 border border-neutral-200 rounded-2xl focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+                className="w-full px-4 py-3 border border-neutral-200 dark:border-neutral-600 rounded-xl bg-white/80 dark:bg-neutral-700/80 text-neutral-900 dark:text-neutral-100 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent"
               />
             </div>
             <button
               onClick={handleSearch}
-              className="flex items-center gap-2 bg-primary-600 hover:bg-primary-700 text-white px-6 py-3 rounded-2xl font-semibold transition-colors shadow-soft hover:shadow-medium"
+              className="flex items-center gap-2 bg-primary-600 hover:bg-primary-700 dark:bg-primary-500 dark:hover:bg-primary-600 text-white px-6 py-3 rounded-xl font-semibold transition-colors shadow-soft hover:shadow-medium"
             >
               <Search className="w-5 h-5" />
               {t("common.search")}

@@ -106,7 +106,7 @@ export default function Header() {
 
       {/* Desktop Layout (md and above) */}
       <header className="w-full hidden md:block relative">
-        <div className="flex items-center justify-between gap-6">
+        <div className="flex items-center justify-between gap-4">
           {/* Logo */}
           <div className="flex-shrink-0">
             <h1 className="text-2xl font-bold text-neutral-900 dark:text-neutral-100">
@@ -157,7 +157,7 @@ export default function Header() {
           </nav>
 
           {/* Right side controls */}
-          <div className="flex items-center gap-2 flex-shrink-0">
+          <div className="flex items-center gap-1 bg-neutral-100/80 dark:bg-neutral-700/80 backdrop-blur-sm rounded-2xl p-1 flex-shrink-0">
             <SettingsDropdown />
 
             <SignedOut>

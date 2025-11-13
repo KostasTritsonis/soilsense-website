@@ -29,7 +29,7 @@ export default function CurrentWeatherCard({
   if (!currentWeather) {
     return (
       <div className="bg-white/90 dark:bg-neutral-800/90 backdrop-blur-sm rounded-3xl shadow-soft border border-white/60 dark:border-neutral-700/60 p-6 text-center">
-        <p className="text-neutral-500 dark:text-neutral-400">
+        <p className="text-neutral-500 dark:text-neutral-400 text-sm">
           {t("weather.weatherDataNotAvailable")}
         </p>
       </div>

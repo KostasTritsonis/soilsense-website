@@ -1,5 +1,25 @@
-import { MapPin, ZoomIn, Ruler } from "lucide-react";
+import { MapPin, ZoomIn, Ruler, LucideIcon } from "lucide-react";
 import { useTranslations } from "next-intl";
+
+type InfoRowProps = {
+  icon: LucideIcon;
+  label: string;
+  value: string | number;
+};
+
+function InfoRow({ icon: Icon, label, value }: InfoRowProps) {
+  return (
+    <div className="flex items-center gap-2 p-2 bg-neutral-50/80 dark:bg-neutral-700/80 rounded-xl">
+      <Icon className="w-4 h-4 text-neutral-500 dark:text-neutral-400" />
+      <span className="text-sm text-neutral-600 dark:text-neutral-400 font-medium">
+        {label}
+      </span>
+      <span className="text-sm font-semibold text-neutral-900 dark:text-neutral-300 flex-1 text-right">
+        {value}
+      </span>
+    </div>
+  );
+}
 
 type InfoPanelProps = {
   lng: number;
@@ -16,55 +36,31 @@ export default function InfoPanel({
 }: InfoPanelProps) {
   const t = useTranslations();
   return (
-    <div className="p-4 bg-white/95 backdrop-blur-sm border border-white/60 rounded-2xl shadow-large">
-      <div className="space-y-3">
-        <div className="flex items-center justify-between p-2 bg-neutral-50/80 rounded-xl">
-          <div className="flex items-center gap-2">
-            <MapPin className="w-4 h-4 text-neutral-500" />
-            <span className="text-sm text-neutral-600 font-medium">
-              {t("fields.longitude")}
-            </span>
-            <span className="text-sm font-semibold text-neutral-900">
-              {lng.toFixed(4)}
-            </span>
-          </div>
-        </div>
+    <div className="p-3 bg-white/95 dark:bg-neutral-800/90 backdrop-blur-sm border border-white/60 dark:border-neutral-700/60 rounded-2xl">
+      <div className="space-y-2">
+        <InfoRow
+          icon={MapPin}
+          label={t("fields.longitude")}
+          value={lng.toFixed(4)}
+        />
 
-        <div className="flex items-center justify-between p-2 bg-neutral-50/80 rounded-xl">
-          <div className="flex items-center gap-2">
-            <MapPin className="w-4 h-4 text-neutral-500" />
-            <span className="text-sm text-neutral-600 font-medium">
-              {t("fields.latitude")}
-            </span>
-          </div>
-          <span className="text-sm font-semibold text-neutral-900">
-            {lat.toFixed(4)}
-          </span>
-        </div>
+        <InfoRow
+          icon={MapPin}
+          label={t("fields.latitude")}
+          value={lat.toFixed(4)}
+        />
 
-        <div className="flex items-center justify-between p-2 bg-neutral-50/80 rounded-xl">
-          <div className="flex items-center gap-2">
-            <ZoomIn className="w-4 h-4 text-neutral-500" />
-            <span className="text-sm text-neutral-600 font-medium">
-              {t("fields.zoom")}
-            </span>
-          </div>
-          <span className="text-sm font-semibold text-neutral-900">
-            {zoom.toFixed(2)}
-          </span>
-        </div>
+        <InfoRow
+          icon={ZoomIn}
+          label={t("fields.zoom")}
+          value={zoom.toFixed(2)}
+        />
 
-        <div className="flex items-center justify-between p-2 bg-neutral-50/80 rounded-xl">
-          <div className="flex items-center gap-2">
-            <Ruler className="w-4 h-4 text-neutral-500" />
-            <span className="text-sm text-neutral-600 font-medium">
-              {t("fields.area")}
-            </span>
-          </div>
-          <span className="text-sm font-semibold text-neutral-900">
-            {fieldArea.toFixed(2)} {t("units.squareMeters")}
-          </span>
-        </div>
+        <InfoRow
+          icon={Ruler}
+          label={t("fields.area")}
+          value={`${fieldArea.toFixed(2)} ${t("units.squareMeters")}`}
+        />
       </div>
     </div>
   );
