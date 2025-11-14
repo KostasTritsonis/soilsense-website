@@ -35,41 +35,41 @@ export default function MapControls({
   }, []);
 
   return (
-    <div className="flex md:flex-row flex-col space-y-1 md:space-y-0 md:justify-between md:items-center gap-4">
+    <div className="flex md:flex-row justify-between items-center gap-4">
       <Tooltip
-        title={t("fields.resetMap")}
+        title={t("fields.reset")}
         disableHoverListener={isMobile}
         disableTouchListener={true}
       >
         <button
           onClick={onReset}
-          className="flex items-center justify-center gap-2 bg-red-600 hover:bg-red-700 disabled:bg-neutral-400 text-white font-semibold py-2 px-2 rounded-md transition-colors disabled:opacity-50 w-full shadow-soft hover:shadow-medium"
+          className="flex items-center justify-center gap-2 bg-red-600 hover:bg-red-700 disabled:bg-neutral-400 text-white font-semibold p-1 sm:px-2 rounded-md transition-colors disabled:opacity-50 w-full shadow-soft hover:shadow-medium h-10"
           disabled={isLoading || isSaving || !hasFields}
         >
           <RotateCcw className="w-4 h-4 md:w-5 md:h-5 flex-shrink-0" />
-          <span className="md:hidden">{t("fields.resetMap")}</span>
+          <span className="md:hidden text-sm">{t("fields.reset")}</span>
         </button>
       </Tooltip>
 
       <Tooltip
-        title={isSaving ? t("common.creating") : t("fields.createSaveFields")}
+        title={isSaving ? t("common.creating") : t("fields.save")}
         disableHoverListener={isMobile}
         disableTouchListener={true}
       >
         <button
           onClick={onSave}
-          className="flex items-center justify-center gap-2 bg-primary-600 hover:bg-primary-700 disabled:bg-neutral-400 text-white font-semibold py-2 px-2 rounded-md transition-colors disabled:opacity-50 w-full shadow-soft hover:shadow-medium"
+          className="flex items-center justify-center gap-2 bg-primary-600 hover:bg-primary-700 disabled:bg-neutral-400 text-white font-semibold p-1 sm:px-2 rounded-md transition-colors disabled:opacity-50 w-full shadow-soft hover:shadow-medium h-10"
           disabled={isLoading || isSaving || !hasFields}
         >
           {isSaving ? (
             <>
               <Loader2 className="w-4 h-4 md:w-5 md:h-5 animate-spin flex-shrink-0" />
-              <span className="md:hidden">{t("common.creating")}</span>
+              <span className="md:hidden text-sm">{t("common.creating")}</span>
             </>
           ) : (
             <>
               <Save className="w-4 h-4 md:w-5 md:h-5 flex-shrink-0" />
-              <span className="md:hidden">{t("fields.createSaveFields")}</span>
+              <span className="md:hidden text-sm">{t("fields.save")}</span>
             </>
           )}
         </button>
@@ -82,18 +82,18 @@ export default function MapControls({
       >
         <button
           onClick={onLoad}
-          className="flex items-center justify-center gap-2 bg-blue-600 hover:bg-blue-700 disabled:bg-neutral-400 text-white font-semibold py-2 px-2 rounded-md transition-colors disabled:opacity-50 w-full shadow-soft hover:shadow-medium"
+          className="flex items-center justify-center gap-2 bg-blue-600 hover:bg-blue-700 disabled:bg-neutral-400 text-white font-semibold p-1 sm:px-2 rounded-md transition-colors disabled:opacity-50 w-full shadow-soft hover:shadow-medium h-10"
           disabled={isLoading || isSaving}
         >
           {isLoading ? (
             <>
               <Loader2 className="w-4 h-4 md:w-5 md:h-5 animate-spin flex-shrink-0" />
-              <span className="md:hidden">{t("common.loading")}</span>
+              <span className="md:hidden text-sm">{t("common.loading")}</span>
             </>
           ) : (
             <>
               <Upload className="w-4 h-4 md:w-5 md:h-5 flex-shrink-0" />
-              <span className="md:hidden">{t("fields.loadFields")}</span>
+              <span className="md:hidden text-sm">{t("fields.load")}</span>
             </>
           )}
         </button>

@@ -122,23 +122,23 @@ export default function CropWidget() {
   }
 
   return (
-    <div className="bg-white/90 dark:bg-neutral-800/90 backdrop-blur-sm rounded-3xl shadow-soft border border-white/60 dark:border-neutral-700/60 p-6">
-      <div className="flex items-center justify-between pb-4">
-        <div className="flex items-center gap-3">
-          <div className="w-10 h-10 bg-green-100 dark:bg-green-900/30 rounded-2xl flex items-center justify-center">
-            <Sprout className="w-5 h-5 text-green-600 dark:text-green-400" />
+    <div className="bg-white/90 dark:bg-neutral-800/90 backdrop-blur-sm rounded-2xl sm:rounded-3xl shadow-soft border border-white/60 dark:border-neutral-700/60 p-4 sm:p-5 md:p-6">
+      <div className="flex items-center justify-between pb-3 sm:pb-4">
+        <div className="flex items-center gap-2 sm:gap-3 min-w-0">
+          <div className="w-8 h-8 sm:w-9 sm:h-9 md:w-10 md:h-10 bg-green-100 dark:bg-green-900/30 rounded-xl sm:rounded-2xl flex items-center justify-center flex-shrink-0">
+            <Sprout className="w-4 h-4 sm:w-5 sm:h-5 text-green-600 dark:text-green-400" />
           </div>
-          <h2 className="text-lg font-semibold text-neutral-900 dark:text-neutral-100">
+          <h2 className="text-base sm:text-lg font-semibold text-neutral-900 dark:text-neutral-100 truncate">
             {t("crops.cropDistribution")}
           </h2>
         </div>
-        <span className="text-sm text-neutral-500 dark:text-neutral-400 font-medium">
+        <span className="text-xs sm:text-sm text-neutral-500 dark:text-neutral-400 font-medium flex-shrink-0 ml-2">
           2025
         </span>
       </div>
 
-      <div className="flex flex-col items-center gap-4">
-        <div className="w-24 h-24 sm:w-28 sm:h-28">
+      <div className="flex flex-col items-center gap-3 sm:gap-4">
+        <div className="w-20 h-20 sm:w-24 sm:h-24 md:w-28 md:h-28">
           <Doughnut
             data={chartData}
             options={{
@@ -164,22 +164,22 @@ export default function CropWidget() {
         </div>
 
         <div className="w-full max-w-xs">
-          <div className="grid grid-cols-1 gap-2">
+          <div className="grid grid-cols-1 gap-1.5 sm:gap-2">
             {categoryPercentages.map((item, index) => (
               <div
                 key={index}
-                className="flex items-center justify-between p-2 bg-neutral-50/80 dark:bg-neutral-700/80 rounded-xl"
+                className="flex items-center justify-between p-2 sm:p-2.5 bg-neutral-50/80 dark:bg-neutral-700/80 rounded-lg sm:rounded-xl"
               >
-                <div className="flex items-center gap-2">
+                <div className="flex items-center gap-2 min-w-0">
                   <div
-                    className="w-3 h-3 rounded-full flex-shrink-0"
+                    className="w-2.5 h-2.5 sm:w-3 sm:h-3 rounded-full flex-shrink-0"
                     style={{ backgroundColor: item.color }}
                   ></div>
-                  <span className="text-sm text-neutral-700 dark:text-neutral-300 font-medium truncate">
+                  <span className="text-xs sm:text-sm text-neutral-700 dark:text-neutral-300 font-medium truncate">
                     {getTranslatedCropName(item.category)}
                   </span>
                 </div>
-                <span className="text-sm text-neutral-500 dark:text-neutral-400 font-semibold flex-shrink-0">
+                <span className="text-xs sm:text-sm text-neutral-500 dark:text-neutral-400 font-semibold flex-shrink-0 ml-2">
                   {item.percentage}%
                 </span>
               </div>

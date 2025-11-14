@@ -43,72 +43,72 @@ export default function ProfilePage() {
   return (
     <div className="w-full">
       {/* Header */}
-      <div className="pb-8">
-        <h1 className="text-2xl md:text-3xl font-bold text-neutral-900 dark:text-neutral-100">
+      <div className="pb-4 md:pb-8">
+        <h1 className="text-xl md:text-3xl font-bold text-neutral-900 dark:text-neutral-100">
           Profile
         </h1>
-        <p className="text-lg text-neutral-600 dark:text-neutral-400">
+        <p className="text-sm md:text-lg text-neutral-600 dark:text-neutral-400">
           Manage your account settings and preferences
         </p>
       </div>
 
       <SignedIn>
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 lg:gap-8">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-3 md:gap-4 lg:gap-8">
           {/* Profile Card */}
           <div className="lg:col-span-2">
-            <div className="bg-white/90 dark:bg-neutral-800/90 backdrop-blur-sm rounded-3xl shadow-soft border border-white/60 dark:border-neutral-700/60 p-6 h-full flex flex-col">
-              <div className="flex flex-col sm:flex-row items-center sm:items-start gap-4 sm:gap-6 mb-6 md:mb-8">
-                <div className="w-16 h-16 sm:w-20 sm:h-20 bg-primary-100 dark:bg-primary-900/30 rounded-xl flex items-center justify-center flex-shrink-0">
-                  <User className="w-8 h-8 sm:w-10 sm:h-10 text-primary-600 dark:text-primary-400" />
+            <div className="bg-white/90 dark:bg-neutral-800/90 backdrop-blur-sm rounded-2xl md:rounded-3xl shadow-soft border border-white/60 dark:border-neutral-700/60 p-4 md:p-6 h-full flex flex-col">
+              <div className="flex flex-col sm:flex-row items-center sm:items-start gap-3 sm:gap-6 mb-4 md:mb-8">
+                <div className="w-12 h-12 sm:w-20 sm:h-20 bg-primary-100 dark:bg-primary-900/30 rounded-lg md:rounded-xl flex items-center justify-center flex-shrink-0">
+                  <User className="w-6 h-6 sm:w-10 sm:h-10 text-primary-600 dark:text-primary-400" />
                 </div>
                 <div className="flex-1 text-center sm:text-left">
-                  <h2 className="text-xl sm:text-2xl font-bold text-neutral-900 dark:text-neutral-100 mb-1">
+                  <h2 className="text-lg sm:text-2xl font-bold text-neutral-900 dark:text-neutral-100 mb-1">
                     {user?.fullName || "User"}
                   </h2>
-                  <p className="text-sm sm:text-base text-neutral-600 dark:text-neutral-400 break-all">
+                  <p className="text-xs sm:text-base text-neutral-600 dark:text-neutral-400 break-all">
                     {user?.primaryEmailAddress?.emailAddress}
                   </p>
                 </div>
-                <div className="flex flex-col sm:flex-row gap-2 sm:gap-3">
+                <div className="flex flex-row gap-2 sm:gap-3">
                   <Link
                     href={`/${locale}/profile/edit`}
-                    className="flex items-center justify-center gap-2 px-4 py-2 bg-primary-600 dark:bg-primary-500 text-white rounded-xl hover:bg-primary-700 dark:hover:bg-primary-600 transition-colors text-sm"
+                    className="flex items-center justify-center gap-1.5 md:gap-2 px-3 md:px-4 py-1.5 md:py-2 bg-primary-600 dark:bg-primary-500 text-white rounded-lg md:rounded-xl hover:bg-primary-700 dark:hover:bg-primary-600 transition-colors text-xs md:text-sm"
                   >
-                    <Settings className="w-4 h-4" />
-                    <span className="sm:hidden inline">Edit Profile</span>
+                    <Settings className="w-3.5 h-3.5 md:w-4 md:h-4" />
+                    <span className="sm:hidden inline">Edit</span>
                   </Link>
                   <button
                     onClick={handleSignOut}
-                    className="flex items-center justify-center gap-2 px-4 py-2 bg-red-600 dark:bg-red-500 text-white rounded-xl hover:bg-red-700 dark:hover:bg-red-600 transition-colors text-sm"
+                    className="flex items-center justify-center gap-1.5 md:gap-2 px-3 md:px-4 py-1.5 md:py-2 bg-red-600 dark:bg-red-500 text-white rounded-lg md:rounded-xl hover:bg-red-700 dark:hover:bg-red-600 transition-colors text-xs md:text-sm"
                   >
-                    <LogOut className="w-4 h-4" />
+                    <LogOut className="w-3.5 h-3.5 md:w-4 md:h-4" />
                     <span className="sm:hidden inline">Sign Out</span>
                   </button>
                 </div>
               </div>
 
               {/* Profile Information */}
-              <div className="space-y-4 md:space-y-6 flex-1">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
-                  <div className="flex items-start gap-3 p-3 md:p-4 bg-neutral-50 dark:bg-neutral-700/80 rounded-xl">
-                    <Mail className="w-5 h-5 text-primary-600 dark:text-primary-400 flex-shrink-0 mt-0.5" />
+              <div className="space-y-3 md:space-y-6 flex-1">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-3 md:gap-6">
+                  <div className="flex items-start gap-2 md:gap-3 p-2.5 md:p-4 bg-neutral-50 dark:bg-neutral-700/80 rounded-lg md:rounded-xl">
+                    <Mail className="w-4 h-4 md:w-5 md:h-5 text-primary-600 dark:text-primary-400 flex-shrink-0 mt-0.5" />
                     <div className="min-w-0">
-                      <p className="text-xs md:text-sm text-neutral-500 dark:text-neutral-400">
+                      <p className="text-xs text-neutral-500 dark:text-neutral-400">
                         Email
                       </p>
-                      <p className="font-medium text-neutral-900 dark:text-neutral-100 text-sm md:text-base break-all">
+                      <p className="font-medium text-neutral-900 dark:text-neutral-100 text-xs md:text-base break-all">
                         {user?.primaryEmailAddress?.emailAddress}
                       </p>
                     </div>
                   </div>
 
-                  <div className="flex items-start gap-3 p-3 md:p-4 bg-neutral-50 dark:bg-neutral-700/80 rounded-xl">
-                    <Calendar className="w-5 h-5 text-primary-600 dark:text-primary-400 flex-shrink-0 mt-0.5" />
+                  <div className="flex items-start gap-2 md:gap-3 p-2.5 md:p-4 bg-neutral-50 dark:bg-neutral-700/80 rounded-lg md:rounded-xl">
+                    <Calendar className="w-4 h-4 md:w-5 md:h-5 text-primary-600 dark:text-primary-400 flex-shrink-0 mt-0.5" />
                     <div className="min-w-0">
-                      <p className="text-xs md:text-sm text-neutral-500 dark:text-neutral-400">
+                      <p className="text-xs text-neutral-500 dark:text-neutral-400">
                         Member Since
                       </p>
-                      <p className="font-medium text-neutral-900 dark:text-neutral-100 text-sm md:text-base">
+                      <p className="font-medium text-neutral-900 dark:text-neutral-100 text-xs md:text-base">
                         {user?.createdAt
                           ? new Date(user.createdAt).toLocaleDateString(
                               "en-GB",
@@ -126,18 +126,18 @@ export default function ProfilePage() {
 
                 {/* Recent Activity */}
                 <div className="pt-2 border-t border-neutral-200 dark:border-neutral-700">
-                  <h3 className="text-base md:text-lg font-semibold text-neutral-900 dark:text-neutral-100 mb-3 md:mb-4">
+                  <h3 className="text-sm md:text-lg font-semibold text-neutral-900 dark:text-neutral-100 mb-2 md:mb-4">
                     Recent Fields
                   </h3>
-                  <div className="space-y-3 mb-4">
+                  <div className="space-y-2 md:space-y-3 mb-3 md:mb-4">
                     {fields.slice(0, 3).map((field) => (
                       <div
                         key={field.id}
-                        className="flex items-center gap-3 p-2 bg-neutral-50 dark:bg-neutral-700/80 rounded-lg"
+                        className="flex items-center gap-2 md:gap-3 p-1.5 md:p-2 bg-neutral-50 dark:bg-neutral-700/80 rounded-lg"
                       >
-                        <MapPin className="w-4 h-4 text-primary-600 dark:text-primary-400 flex-shrink-0" />
+                        <MapPin className="w-3.5 h-3.5 md:w-4 md:h-4 text-primary-600 dark:text-primary-400 flex-shrink-0" />
                         <div className="min-w-0 flex-1">
-                          <p className="text-sm font-medium text-neutral-900 dark:text-neutral-100 truncate">
+                          <p className="text-xs md:text-sm font-medium text-neutral-900 dark:text-neutral-100 truncate">
                             {field.label || "Unnamed Field"}
                           </p>
                           <p className="text-xs text-neutral-500 dark:text-neutral-400">
@@ -147,7 +147,7 @@ export default function ProfilePage() {
                       </div>
                     ))}
                     {fields.length === 0 && (
-                      <p className="text-sm text-neutral-500 dark:text-neutral-400 text-center py-4">
+                      <p className="text-xs md:text-sm text-neutral-500 dark:text-neutral-400 text-center py-3 md:py-4">
                         No fields created yet
                       </p>
                     )}
@@ -155,7 +155,7 @@ export default function ProfilePage() {
                   {fields.length > 3 && (
                     <Link
                       href={`/${locale}/fields`}
-                      className="block text-center text-sm text-primary-600 dark:text-primary-400 hover:text-primary-700 dark:hover:text-primary-300 mb-4"
+                      className="block text-center text-xs md:text-sm text-primary-600 dark:text-primary-400 hover:text-primary-700 dark:hover:text-primary-300 mb-3 md:mb-4"
                     >
                       View all fields
                     </Link>
@@ -164,18 +164,18 @@ export default function ProfilePage() {
 
                 {/* Recent Jobs */}
                 <div className="pt-2 border-t border-neutral-200 dark:border-neutral-700">
-                  <h3 className="text-base md:text-lg font-semibold text-neutral-900 dark:text-neutral-100 mb-3 md:mb-4">
+                  <h3 className="text-sm md:text-lg font-semibold text-neutral-900 dark:text-neutral-100 mb-2 md:mb-4">
                     Recent Jobs
                   </h3>
-                  <div className="space-y-3 mb-4">
+                  <div className="space-y-2 md:space-y-3 mb-3 md:mb-4">
                     {jobs?.slice(0, 3).map((job) => (
                       <div
                         key={job.id}
-                        className="flex items-center gap-3 p-2 bg-neutral-50 dark:bg-neutral-700/80 rounded-lg"
+                        className="flex items-center gap-2 md:gap-3 p-1.5 md:p-2 bg-neutral-50 dark:bg-neutral-700/80 rounded-lg"
                       >
-                        <CheckCircle className="w-4 h-4 text-blue-600 dark:text-blue-400 flex-shrink-0" />
+                        <CheckCircle className="w-3.5 h-3.5 md:w-4 md:h-4 text-blue-600 dark:text-blue-400 flex-shrink-0" />
                         <div className="min-w-0 flex-1">
-                          <p className="text-sm font-medium text-neutral-900 dark:text-neutral-100 truncate">
+                          <p className="text-xs md:text-sm font-medium text-neutral-900 dark:text-neutral-100 truncate">
                             {job.title}
                           </p>
                           <p className="text-xs text-neutral-500 dark:text-neutral-400">
@@ -186,7 +186,7 @@ export default function ProfilePage() {
                       </div>
                     ))}
                     {(!jobs || jobs.length === 0) && (
-                      <p className="text-sm text-neutral-500 dark:text-neutral-400 text-center py-4">
+                      <p className="text-xs md:text-sm text-neutral-500 dark:text-neutral-400 text-center py-3 md:py-4">
                         No jobs created yet
                       </p>
                     )}
@@ -194,7 +194,7 @@ export default function ProfilePage() {
                   {jobs && jobs.length > 3 && (
                     <Link
                       href={`/${locale}/jobs`}
-                      className="block text-center text-sm text-primary-600 dark:text-primary-400 hover:text-primary-700 dark:hover:text-primary-300 mb-4"
+                      className="block text-center text-xs md:text-sm text-primary-600 dark:text-primary-400 hover:text-primary-700 dark:hover:text-primary-300 mb-3 md:mb-4"
                     >
                       View all jobs
                     </Link>
@@ -205,51 +205,51 @@ export default function ProfilePage() {
           </div>
 
           {/* Sidebar */}
-          <div className="space-y-4 md:space-y-6 flex flex-col h-full">
+          <div className="space-y-3 md:space-y-6 flex flex-col h-full">
             {/* Quick Stats */}
-            <div className="bg-white/80 dark:bg-neutral-800/90 backdrop-blur-md rounded-3xl shadow-soft border border-white/60 dark:border-neutral-700/60 p-4 md:p-6 flex-1">
-              <h3 className="text-base md:text-lg font-semibold text-neutral-900 dark:text-neutral-100 mb-3 md:mb-4">
+            <div className="bg-white/80 dark:bg-neutral-800/90 backdrop-blur-md rounded-2xl md:rounded-3xl shadow-soft border border-white/60 dark:border-neutral-700/60 p-3 md:p-6 flex-1">
+              <h3 className="text-sm md:text-lg font-semibold text-neutral-900 dark:text-neutral-100 mb-2 md:mb-4">
                 Quick Stats
               </h3>
-              <div className="space-y-3 md:space-y-4">
-                <div className="flex justify-between items-center py-2">
-                  <span className="text-sm md:text-base text-neutral-600 dark:text-neutral-400">
+              <div className="space-y-2 md:space-y-4">
+                <div className="flex justify-between items-center py-1.5 md:py-2">
+                  <span className="text-xs md:text-base text-neutral-600 dark:text-neutral-400">
                     Fields Created
                   </span>
-                  <span className="font-semibold text-primary-600 dark:text-primary-400 text-sm md:text-base">
+                  <span className="font-semibold text-primary-600 dark:text-primary-400 text-xs md:text-base">
                     {totalFields}
                   </span>
                 </div>
-                <div className="flex justify-between items-center py-2">
-                  <span className="text-sm md:text-base text-neutral-600 dark:text-neutral-400">
+                <div className="flex justify-between items-center py-1.5 md:py-2">
+                  <span className="text-xs md:text-base text-neutral-600 dark:text-neutral-400">
                     Total Area
                   </span>
-                  <span className="font-semibold text-primary-600 dark:text-primary-400 text-sm md:text-base">
+                  <span className="font-semibold text-primary-600 dark:text-primary-400 text-xs md:text-base">
                     {totalArea.toFixed(2)} m²
                   </span>
                 </div>
-                <div className="flex justify-between items-center py-2">
-                  <span className="text-sm md:text-base text-neutral-600 dark:text-neutral-400">
+                <div className="flex justify-between items-center py-1.5 md:py-2">
+                  <span className="text-xs md:text-base text-neutral-600 dark:text-neutral-400">
                     Jobs Completed
                   </span>
-                  <span className="font-semibold text-primary-600 dark:text-primary-400 text-sm md:text-base">
+                  <span className="font-semibold text-primary-600 dark:text-primary-400 text-xs md:text-base">
                     {completedJobs}
                   </span>
                 </div>
-                <div className="flex justify-between items-center py-2">
-                  <span className="text-sm md:text-base text-neutral-600 dark:text-neutral-400">
+                <div className="flex justify-between items-center py-1.5 md:py-2">
+                  <span className="text-xs md:text-base text-neutral-600 dark:text-neutral-400">
                     Active Jobs
                   </span>
-                  <span className="font-semibold text-blue-600 dark:text-blue-400 text-sm md:text-base">
+                  <span className="font-semibold text-blue-600 dark:text-blue-400 text-xs md:text-base">
                     {jobs?.filter((job) => job.status === "ONGOING").length ||
                       0}
                   </span>
                 </div>
-                <div className="flex justify-between items-center py-2">
-                  <span className="text-sm md:text-base text-neutral-600 dark:text-neutral-400">
+                <div className="flex justify-between items-center py-1.5 md:py-2">
+                  <span className="text-xs md:text-base text-neutral-600 dark:text-neutral-400">
                     Account Status
                   </span>
-                  <span className="font-semibold text-green-600 dark:text-green-400 text-sm md:text-base">
+                  <span className="font-semibold text-green-600 dark:text-green-400 text-xs md:text-base">
                     Active
                   </span>
                 </div>
@@ -257,37 +257,37 @@ export default function ProfilePage() {
             </div>
 
             {/* Preferences */}
-            <div className="bg-white/80 dark:bg-neutral-800/90 backdrop-blur-md rounded-3xl shadow-soft border border-white/60 dark:border-neutral-700/60 p-4 md:p-6 flex-1">
-              <h3 className="text-base md:text-lg font-semibold text-neutral-900 dark:text-neutral-100 mb-3 md:mb-4">
+            <div className="bg-white/80 dark:bg-neutral-800/90 backdrop-blur-md rounded-2xl md:rounded-3xl shadow-soft border border-white/60 dark:border-neutral-700/60 p-3 md:p-6 flex-1">
+              <h3 className="text-sm md:text-lg font-semibold text-neutral-900 dark:text-neutral-100 mb-2 md:mb-4">
                 Preferences
               </h3>
-              <div className="space-y-3">
-                <label className="flex items-center gap-3 py-2">
+              <div className="space-y-2 md:space-y-3">
+                <label className="flex items-center gap-2 md:gap-3 py-1.5 md:py-2">
                   <input
                     type="checkbox"
-                    className="rounded w-4 h-4 text-primary-600 dark:text-primary-400 bg-white dark:bg-neutral-700 border-neutral-300 dark:border-neutral-600 focus:ring-primary-500 dark:focus:ring-primary-400"
+                    className="rounded w-3.5 h-3.5 md:w-4 md:h-4 text-primary-600 dark:text-primary-400 bg-white dark:bg-neutral-700 border-neutral-300 dark:border-neutral-600 focus:ring-primary-500 dark:focus:ring-primary-400"
                     defaultChecked
                   />
-                  <span className="text-sm md:text-base text-neutral-700 dark:text-neutral-300">
+                  <span className="text-xs md:text-base text-neutral-700 dark:text-neutral-300">
                     Email notifications
                   </span>
                 </label>
-                <label className="flex items-center gap-3 py-2">
+                <label className="flex items-center gap-2 md:gap-3 py-1.5 md:py-2">
                   <input
                     type="checkbox"
-                    className="rounded w-4 h-4 text-primary-600 dark:text-primary-400 bg-white dark:bg-neutral-700 border-neutral-300 dark:border-neutral-600 focus:ring-primary-500 dark:focus:ring-primary-400"
+                    className="rounded w-3.5 h-3.5 md:w-4 md:h-4 text-primary-600 dark:text-primary-400 bg-white dark:bg-neutral-700 border-neutral-300 dark:border-neutral-600 focus:ring-primary-500 dark:focus:ring-primary-400"
                     defaultChecked
                   />
-                  <span className="text-sm md:text-base text-neutral-700 dark:text-neutral-300">
+                  <span className="text-xs md:text-base text-neutral-700 dark:text-neutral-300">
                     Weather alerts
                   </span>
                 </label>
-                <label className="flex items-center gap-3 py-2">
+                <label className="flex items-center gap-2 md:gap-3 py-1.5 md:py-2">
                   <input
                     type="checkbox"
-                    className="rounded w-4 h-4 text-primary-600 dark:text-primary-400 bg-white dark:bg-neutral-700 border-neutral-300 dark:border-neutral-600 focus:ring-primary-500 dark:focus:ring-primary-400"
+                    className="rounded w-3.5 h-3.5 md:w-4 md:h-4 text-primary-600 dark:text-primary-400 bg-white dark:bg-neutral-700 border-neutral-300 dark:border-neutral-600 focus:ring-primary-500 dark:focus:ring-primary-400"
                   />
-                  <span className="text-sm md:text-base text-neutral-700 dark:text-neutral-300">
+                  <span className="text-xs md:text-base text-neutral-700 dark:text-neutral-300">
                     Job reminders
                   </span>
                 </label>
@@ -298,17 +298,17 @@ export default function ProfilePage() {
       </SignedIn>
 
       <SignedOut>
-        <div className="bg-white/80 dark:bg-neutral-800/90 backdrop-blur-md rounded-3xl shadow-soft border border-white/60 dark:border-neutral-700/60 p-8 text-center">
-          <h2 className="text-2xl font-bold text-neutral-900 dark:text-neutral-100 mb-4">
+        <div className="bg-white/80 dark:bg-neutral-800/90 backdrop-blur-md rounded-2xl md:rounded-3xl shadow-soft border border-white/60 dark:border-neutral-700/60 p-4 md:p-8 text-center">
+          <h2 className="text-xl md:text-2xl font-bold text-neutral-900 dark:text-neutral-100 mb-3 md:mb-4">
             Sign In Required
           </h2>
-          <p className="text-neutral-600 dark:text-neutral-400 mb-6">
+          <p className="text-sm md:text-base text-neutral-600 dark:text-neutral-400 mb-4 md:mb-6">
             Please sign in to view your profile and manage your account
             settings.
           </p>
           <Link
             href={`/${locale}/sign-in`}
-            className="inline-flex items-center gap-2 px-6 py-3 bg-primary-600 dark:bg-primary-500 text-white rounded-xl hover:bg-primary-700 dark:hover:bg-primary-600 transition-colors"
+            className="inline-flex items-center gap-2 px-4 md:px-6 py-2 md:py-3 bg-primary-600 dark:bg-primary-500 text-white rounded-lg md:rounded-xl hover:bg-primary-700 dark:hover:bg-primary-600 transition-colors text-sm md:text-base"
           >
             Sign In
           </Link>

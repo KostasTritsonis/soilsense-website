@@ -42,13 +42,12 @@ export default function StatusBadge({ status }: StatusBadgeProps) {
 
   return (
     <span
-      className={`inline-flex items-center gap-1 px-2 py-1 md:px-2.5 md:py-0.5 rounded-full text-xs font-medium border ${getStatusColor(
+      className={`inline-flex items-center gap-0.5 sm:gap-1 px-1.5 sm:px-2 py-0.5 sm:py-1 md:px-2.5 md:py-0.5 rounded-full text-[10px] sm:text-xs font-medium border ${getStatusColor(
         status
       )}`}
     >
       {getStatusIcon(status)}
-      <span className="hidden sm:inline">{formatStatus(status)}</span>
-      <span className="sm:hidden">{formatStatus(status).charAt(0)}</span>
+      <span>{formatStatus(status)}</span>
     </span>
   );
 }

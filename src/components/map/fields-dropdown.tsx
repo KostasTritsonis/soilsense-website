@@ -68,24 +68,24 @@ export default function FieldsDropdown({
           background: rgba(0, 0, 0, 0.3);
         }
       `}</style>
-      <div className="relative" ref={dropdownRef}>
+      <div className="relative w-full" ref={dropdownRef}>
         <button
           onClick={() => setIsOpen(!isOpen)}
-          className="flex items-center justify-between gap-3 bg-white/95 dark:bg-neutral-800/90 backdrop-blur-sm border border-white/60 dark:border-neutral-700/60 rounded-xl px-4 py-3 shadow-soft hover:shadow-medium transition-all duration-200 min-w-[300px]"
+          className="flex items-center justify-between gap-1.5 sm:gap-2 md:gap-3 bg-white/95 dark:bg-neutral-800/90 backdrop-blur-sm border border-white/60 dark:border-neutral-700/60 rounded-md sm:rounded-lg md:rounded-xl px-2 sm:px-3 md:px-4 py-1.5 sm:py-2 md:py-3 shadow-soft hover:shadow-medium transition-all duration-200 w-full sm:min-w-[280px] md:min-w-[300px]"
         >
-          <div className="flex items-center gap-2 flex-1 min-w-0">
+          <div className="flex items-center gap-1 sm:gap-1.5 md:gap-2 flex-1 min-w-0">
             {selectedField ? (
               <>
                 <div
-                  className="w-4 h-4 rounded-full flex-shrink-0"
+                  className="w-2.5 h-2.5 sm:w-3 sm:h-3 md:w-4 md:h-4 rounded-full flex-shrink-0"
                   style={{ backgroundColor: selectedField.color }}
                 />
-                <span className="text-sm font-semibold text-neutral-900 dark:text-neutral-300 truncate">
+                <span className="text-[10px] sm:text-xs md:text-sm font-semibold text-neutral-900 dark:text-neutral-300 truncate">
                   {selectedField.label || t("common.unnamed")}
                 </span>
               </>
             ) : (
-              <span className="text-sm font-medium text-neutral-500 dark:text-neutral-400">
+              <span className="text-[10px] sm:text-xs md:text-sm font-medium text-neutral-500 dark:text-neutral-400 truncate">
                 {fields.length === 0
                   ? t("fields.noFields")
                   : t("fields.selectField")}
@@ -93,46 +93,46 @@ export default function FieldsDropdown({
             )}
           </div>
           <ChevronDown
-            className={`w-4 h-4 text-neutral-500 dark:text-neutral-400 transition-transform duration-200 flex-shrink-0 ${
+            className={`w-3 h-3 sm:w-3.5 sm:h-3.5 md:w-4 md:h-4 text-neutral-500 dark:text-neutral-400 transition-transform duration-200 flex-shrink-0 ${
               isOpen ? "rotate-180" : ""
             }`}
           />
         </button>
 
         {isOpen && (
-          <div className="absolute top-full left-1/2 -translate-x-1/2 mt-2 w-80 max-h-96 overflow-hidden bg-white/95 dark:bg-neutral-800/90 backdrop-blur-sm border border-white/60 dark:border-neutral-700/60 rounded-2xl shadow-large z-50">
-            <div className="scrollable-dropdown overflow-y-auto max-h-96 py-2 pr-2">
+          <div className="absolute top-full left-1/2 -translate-x-1/2 mt-1.5 sm:mt-2 w-[calc(100vw-5rem)] sm:w-96 max-h-[50vh] sm:max-h-[60vh] md:max-h-96 overflow-hidden bg-white/95 dark:bg-neutral-800/90 backdrop-blur-sm border border-white/60 dark:border-neutral-700/60 rounded-lg sm:rounded-xl md:rounded-2xl shadow-large z-50">
+            <div className="scrollable-dropdown overflow-y-auto max-h-[50vh] sm:max-h-[60vh] md:max-h-96 py-1 sm:py-2">
               {fields.length === 0 ? (
-                <div className="p-6 text-center">
-                  <div className="w-12 h-12 bg-neutral-100 dark:bg-neutral-700/90 rounded-2xl flex items-center justify-center mx-auto mb-3">
-                    <MapPin className="w-6 h-6 text-neutral-400" />
+                <div className="p-3 sm:p-4 md:p-6 text-center">
+                  <div className="w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12 bg-neutral-100 dark:bg-neutral-700/90 rounded-lg sm:rounded-xl md:rounded-2xl flex items-center justify-center mx-auto mb-1.5 sm:mb-2 md:mb-3">
+                    <MapPin className="w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6 text-neutral-400" />
                   </div>
-                  <p className="text-neutral-500 dark:text-neutral-400 font-medium">
+                  <p className="text-[10px] sm:text-xs md:text-sm text-neutral-500 dark:text-neutral-400 font-medium">
                     {t("fields.noFieldsCreated")}
                   </p>
-                  <p className="text-sm text-neutral-400">
+                  <p className="text-[9px] sm:text-[10px] md:text-xs text-neutral-400">
                     {t("fields.createFirstField")}
                   </p>
                 </div>
               ) : (
-                <div className="p-2 space-y-2">
+                <div className="p-1 sm:p-1.5 md:p-2 space-y-1 sm:space-y-1.5 md:space-y-2">
                   {fields.map((field) => (
                     <div
                       key={field.id}
                       onClick={() => handleFieldClick(field.id)}
-                      className={`cursor-pointer p-4 rounded-xl transition-all duration-200 relative ${
+                      className={`cursor-pointer flex flex-col p-2 sm:p-2.5 md:p-3 lg:p-4 rounded-md sm:rounded-lg md:rounded-xl transition-all duration-200 relative ${
                         selectedFieldId === field.id
                           ? "bg-primary-100 dark:bg-blue-500/20 border-2 border-primary-200 dark:border-blue-500/40 shadow-medium"
                           : "bg-white/80 dark:bg-neutral-800/90 backdrop-blur-sm border border-white/60 dark:border-neutral-600/70 hover:bg-white/90 hover:shadow-soft"
                       }`}
                     >
-                      <div className="flex items-center gap-3">
+                      <div className="flex items-center gap-1.5 sm:gap-2 md:gap-3 pr-20 sm:pr-8 md:pr-12">
                         <div
-                          className="w-4 h-4 rounded-full flex-shrink-0"
+                          className="w-2.5 h-2.5 sm:w-3 sm:h-3 md:w-4 md:h-4 rounded-full flex-shrink-0"
                           style={{ backgroundColor: field.color }}
                         />
                         <span
-                          className={`text-sm font-semibold truncate flex-1 ${
+                          className={`text-[10px] sm:text-xs md:text-sm font-semibold truncate flex-1 ${
                             selectedFieldId === field.id
                               ? "text-primary-900 dark:text-blue-300"
                               : "text-neutral-900 dark:text-neutral-300"
@@ -141,23 +141,26 @@ export default function FieldsDropdown({
                           {field.label || t("common.unnamed")}
                         </span>
                         <button
-                          className="w-6 h-6 bg-red-100 dark:bg-red-900/10 hover:bg-red-200 dark:hover:bg-red-900/20 rounded-lg flex items-center justify-center transition-colors flex-shrink-0"
+                          className="flex items-center justify-center gap-1 px-1.5 sm:px-0 sm:w-4  md:w-5 md:h-5 lg:w-6 lg:h-6 bg-red-100 dark:bg-red-900/10 hover:bg-red-200 dark:hover:bg-red-900/20 rounded-md sm:rounded-lg transition-colors flex-shrink-0 absolute top-2 sm:top-2.5 md:top-3 lg:top-4 right-12 sm:right-2.5 md:right-3 lg:right-4 h-5 sm:h-auto"
                           onClick={(e) => handleDeleteField(e, field.id)}
                         >
-                          <X className="w-3 h-3 text-red-600 dark:text-red-400" />
+                          <X className="w-2 h-2 sm:w-2.5 sm:h-2.5 md:w-3 md:h-3 text-red-600 dark:text-red-400 flex-shrink-0" />
+                          <span className="text-[9px] text-red-600 dark:text-red-400 font-medium sm:hidden">
+                            {t("common.delete")}
+                          </span>
                         </button>
                       </div>
 
-                      <div className="flex items-center gap-4 mt-3">
-                        <div className="flex items-center gap-2">
-                          <Ruler className="w-3 h-3 text-neutral-500 dark:text-neutral-400" />
-                          <span className="text-xs text-neutral-600 dark:text-neutral-400">
+                      <div className="flex items-center gap-1.5 sm:gap-2 md:gap-4 mt-1.5 sm:mt-2 md:mt-3 flex-wrap">
+                        <div className="flex items-center gap-1 sm:gap-1.5 md:gap-2">
+                          <Ruler className="w-2 h-2 sm:w-2.5 sm:h-2.5 md:w-3 md:h-3 text-neutral-500 dark:text-neutral-400 flex-shrink-0" />
+                          <span className="text-[9px] sm:text-[10px] md:text-xs text-neutral-600 dark:text-neutral-400">
                             {(field.area || 0).toFixed(2)} m²
                           </span>
                         </div>
-                        <div className="flex items-center gap-2">
-                          <MapPin className="w-3 h-3 text-neutral-500 dark:text-neutral-400" />
-                          <span className="text-xs text-neutral-600 dark:text-neutral-400">
+                        <div className="flex items-center gap-1 sm:gap-1.5 md:gap-2">
+                          <MapPin className="w-2 h-2 sm:w-2.5 sm:h-2.5 md:w-3 md:h-3 text-neutral-500 dark:text-neutral-400 flex-shrink-0" />
+                          <span className="text-[9px] sm:text-[10px] md:text-xs text-neutral-600 dark:text-neutral-400 truncate">
                             {field.categories?.[0]?.type ||
                               t("common.uncategorized")}
                           </span>
@@ -165,7 +168,7 @@ export default function FieldsDropdown({
                       </div>
 
                       <button
-                        className={`absolute top-4 right-12 w-6 h-6 flex items-center justify-center rounded-lg transition-colors ${
+                        className={`absolute top-2 sm:top-2.5 md:top-3 lg:top-4 right-2 sm:right-8 md:right-10 lg:right-12 flex items-center justify-center gap-1 px-1.5 sm:px-0 sm:w-4 md:w-5 md:h-5 lg:w-6 lg:h-6 rounded-md sm:rounded-lg transition-colors h-5 sm:h-auto ${
                           selectedFieldId === field.id
                             ? "bg-primary-200 dark:bg-blue-500/30 hover:bg-primary-300 dark:hover:bg-blue-500/40"
                             : "bg-neutral-100 dark:bg-neutral-700/90 hover:bg-neutral-200 dark:hover:bg-neutral-800/90"
@@ -177,12 +180,21 @@ export default function FieldsDropdown({
                         }}
                       >
                         <Edit
-                          className={`w-3 h-3 ${
+                          className={`w-2 h-2 sm:w-2.5 sm:h-2.5 md:w-3 md:h-3 flex-shrink-0 ${
                             selectedFieldId === field.id
                               ? "text-primary-700 dark:text-blue-300"
                               : "text-neutral-500 dark:text-neutral-400"
                           }`}
                         />
+                        <span
+                          className={`text-[9px] font-medium sm:hidden ${
+                            selectedFieldId === field.id
+                              ? "text-primary-700 dark:text-blue-300"
+                              : "text-neutral-500 dark:text-neutral-400"
+                          }`}
+                        >
+                          {t("common.edit")}
+                        </span>
                       </button>
                     </div>
                   ))}

@@ -32,13 +32,13 @@ export default function Page() {
   return (
     <div>
       {/* Header Section */}
-      <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4 pb-4">
-        <h1 className="sm:text-4xl text-2xl font-bold text-neutral-900 dark:text-neutral-300">
+      <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-3 sm:gap-4 pb-3 sm:pb-4">
+        <h1 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold text-neutral-900 dark:text-neutral-300">
           {t("fields.fields")}
         </h1>
         {/* Map Controls - Outside the map component */}
         {handlers && (
-          <div className=" bg-white/90 dark:bg-neutral-800/90 backdrop-blur-sm pr-4">
+          <div className="bg-white/90 dark:bg-neutral-800/90 backdrop-blur-sm rounded-xl sm:rounded-2xl p-2 sm:p-3">
             <MapControls
               onReset={handlers.handleReset}
               onSave={handlers.handleSave}
@@ -52,7 +52,7 @@ export default function Page() {
       </div>
 
       {/* Map Section */}
-      <div className="bg-white/90 backdrop-blur-sm rounded-2xl shadow-soft overflow-hidden">
+      <div className="bg-white/90 backdrop-blur-sm rounded-xl sm:rounded-2xl shadow-soft overflow-hidden">
         <MapComponent onHandlersReady={handleHandlersReady} />
       </div>
     </div>

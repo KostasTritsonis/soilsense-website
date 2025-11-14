@@ -76,27 +76,27 @@ export default function Home() {
   return (
     <div className="w-full">
       {/* Header Section */}
-      <div className="pb-8">
-        <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
+      <div className="pb-3 sm:pb-4 md:pb-6 lg:pb-8">
+        <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-2 sm:gap-3 md:gap-4">
           <div>
-            <h1 className="sm:text-4xl text-2xl font-bold text-neutral-900 dark:text-neutral-300 pb-2">
+            <h1 className="text-lg sm:text-xl md:text-2xl lg:text-3xl xl:text-4xl font-bold text-neutral-900 dark:text-neutral-300 pb-0.5 sm:pb-1 md:pb-2">
               {greeting}
             </h1>
-            <p className="text-lg text-neutral-600 dark:text-neutral-100">
+            <p className="text-xs sm:text-sm md:text-base lg:text-lg text-neutral-600 dark:text-neutral-100">
               {t("dashboard.agriculturalOperations")}
             </p>
           </div>
-          <div className="flex items-center gap-3 bg-white/80 dark:bg-neutral-800/80 backdrop-blur-sm rounded-2xl shadow-soft border border-white/60 dark:border-neutral-700/60 px-4 py-3">
-            <div className="w-8 h-8 bg-primary-100 rounded-xl flex items-center justify-center">
-              <span className="text-primary-700 dark:text-primary-300 font-semibold text-sm">
+          <div className="flex items-center gap-1.5 sm:gap-2 md:gap-3 bg-white/80 dark:bg-neutral-800/80 backdrop-blur-sm rounded-lg sm:rounded-xl md:rounded-2xl shadow-soft border border-white/60 dark:border-neutral-700/60 px-2.5 sm:px-3 md:px-4 py-1.5 sm:py-2 md:py-3">
+            <div className="w-6 h-6 sm:w-7 sm:h-7 md:w-8 md:h-8 bg-primary-100 rounded-md sm:rounded-lg md:rounded-xl flex items-center justify-center flex-shrink-0">
+              <span className="text-primary-700 dark:text-primary-300 font-semibold text-[10px] sm:text-xs md:text-sm">
                 {user?.firstName?.[0] || user?.username?.[0] || "U"}
               </span>
             </div>
-            <div>
-              <p className="font-semibold text-neutral-900 dark:text-neutral-100">
+            <div className="min-w-0">
+              <p className="font-semibold text-xs sm:text-sm md:text-base text-neutral-900 dark:text-neutral-100 truncate">
                 {user?.firstName || user?.username || t("common.user")}
               </p>
-              <p className="text-sm text-neutral-500 dark:text-neutral-400">
+              <p className="text-[10px] sm:text-xs md:text-sm text-neutral-500 dark:text-neutral-400 truncate">
                 {t("common.farmManager")}
               </p>
             </div>
@@ -105,15 +105,15 @@ export default function Home() {
       </div>
 
       {/* Dashboard Grid */}
-      <div className="grid grid-cols-1 xl:grid-cols-4 gap-8">
+      <div className="grid grid-cols-1 xl:grid-cols-4 gap-3 sm:gap-4 md:gap-6 lg:gap-8">
         {/* Main Content Area */}
-        <div className="xl:col-span-3 space-y-8">
+        <div className="xl:col-span-3 space-y-3 sm:space-y-4 md:space-y-6 lg:space-y-8">
           {/* Overview Cards */}
           <section>
-            <h2 className="text-2xl font-semibold text-neutral-900 dark:text-neutral-300 pb-6">
+            <h2 className="text-base sm:text-lg md:text-xl lg:text-2xl font-semibold text-neutral-900 dark:text-neutral-300 pb-2 sm:pb-3 md:pb-4 lg:pb-6">
               {t("dashboard.overview")}
             </h2>
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-2.5 sm:gap-3 md:gap-4 lg:gap-6">
               <Link href={`/${locale}/fields`} className="block">
                 <Card
                   props={{
@@ -157,14 +157,14 @@ export default function Home() {
 
           {/* Field Map */}
           <section>
-            <div className="bg-white/90 backdrop-blur-sm rounded-2xl shadow-soft overflow-hidden">
+            <div className="bg-white/90 dark:bg-neutral-800/90 backdrop-blur-sm rounded-xl sm:rounded-2xl shadow-soft overflow-hidden">
               <MapReadOnly />
             </div>
           </section>
         </div>
 
         {/* Sidebar Widgets */}
-        <div className="xl:col-span-1 space-y-6 pt-11">
+        <div className="xl:col-span-1 space-y-3 sm:space-y-4 md:space-y-6 pt-0 xl:pt-11">
           <CropWidget />
           <JobsWidget />
           <WeatherWidget />
