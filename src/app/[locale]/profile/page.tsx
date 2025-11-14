@@ -13,8 +13,10 @@ import {
 import Link from "next/link";
 import { useFieldsStore } from "@/lib/stores/fields-store";
 import { useJobsStore } from "@/lib/stores/jobs-store";
-import { useLocale } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 import { useEffect } from "react";
+import ThemeToggle from "@/components/theme-toggle";
+import LanguageSwitcher from "@/components/language-switcher";
 
 export default function ProfilePage() {
   const { user } = useUser();
@@ -22,6 +24,7 @@ export default function ProfilePage() {
   const { fields, fetchFields } = useFieldsStore();
   const { jobs, fetchJobs } = useJobsStore();
   const locale = useLocale();
+  const t = useTranslations();
 
   useEffect(() => {
     if (user) {
@@ -261,6 +264,27 @@ export default function ProfilePage() {
               <h3 className="text-sm md:text-lg font-semibold text-neutral-900 dark:text-neutral-100 mb-2 md:mb-4">
                 Preferences
               </h3>
+
+              {/* Mobile-only Theme and Language Settings */}
+              <div className="md:hidden space-y-2 mb-3 pb-3 border-b border-neutral-200 dark:border-neutral-700">
+                <div>
+                  <h4 className="text-xs font-semibold text-neutral-700 dark:text-neutral-300 mb-1.5">
+                    {t("theme.theme")}
+                  </h4>
+                  <div className="[&>div]:p-0.5 [&>div]:rounded-lg [&>div>button]:p-1.5 [&>div>button]:text-xs [&>div>button>svg]:w-3.5 [&>div>button>svg]:h-3.5">
+                    <ThemeToggle />
+                  </div>
+                </div>
+                <div>
+                  <h4 className="text-xs font-semibold text-neutral-700 dark:text-neutral-300 mb-1.5">
+                    {t("common.language")}
+                  </h4>
+                  <div className="[&>div]:p-0.5 [&>div]:rounded-lg [&>div>button]:px-2 [&>div>button]:py-1.5 [&>div>button]:text-xs [&>div>button>span:first-child]:text-sm">
+                    <LanguageSwitcher />
+                  </div>
+                </div>
+              </div>
+
               <div className="space-y-2 md:space-y-3">
                 <label className="flex items-center gap-2 md:gap-3 py-1.5 md:py-2">
                   <input

@@ -49,7 +49,7 @@ export default function Header() {
     <>
       {/* Mobile Layout (below md) - Bottom Navigation */}
       <div className="md:hidden fixed bottom-0 left-0 right-0 z-50 bg-white/95 dark:bg-neutral-800/95 backdrop-blur-sm border-t border-neutral-200 dark:border-neutral-700 safe-area-inset-bottom">
-        <nav className="flex gap-0.5 sm:gap-1 p-1 sm:p-2 overflow-x-auto">
+        <nav className="flex  sm:gap-1 p-1 sm:p-2 overflow-x-auto">
           {navLinks.map((link) => {
             // Show profile tab only for signed-in users, show sign-in for others
             if (link.href === `/${locale}/profile`) {
@@ -57,7 +57,7 @@ export default function Header() {
                 <SignedIn key={link.href}>
                   <Link
                     href={link.href}
-                    className={`flex flex-col items-center gap-0.5 sm:gap-1 px-1.5 sm:px-2 py-2 sm:py-3 rounded-lg text-[10px] sm:text-xs font-medium transition-all flex-shrink-0 min-w-[60px] sm:min-w-[70px] ${
+                    className={`flex flex-col items-center gap-0.5 sm:gap-1 px-1 sm:px-2 py-2 sm:py-3 rounded-lg text-[10px] sm:text-xs font-medium transition-all flex-shrink-0 min-w-[60px] sm:min-w-[70px] ${
                       pathname === link.href
                         ? "bg-primary-100 dark:bg-primary-900/30 text-primary-700 dark:text-primary-400"
                         : "text-neutral-600 dark:text-neutral-400 hover:bg-neutral-100 dark:hover:bg-neutral-700 hover:text-neutral-900 dark:hover:text-neutral-200"
@@ -93,11 +93,6 @@ export default function Header() {
               </Link>
             );
           })}
-
-          {/* Settings dropdown for mobile */}
-          <div className="flex-shrink-0 flex justify-center min-w-[60px] sm:min-w-[70px]">
-            <SettingsDropdown />
-          </div>
 
           {/* Sign In/Sign Out buttons for mobile */}
           <SignedOut>
