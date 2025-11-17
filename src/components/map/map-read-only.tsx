@@ -23,11 +23,11 @@ export default function MapReadOnly() {
   }, []);
 
   return (
-    <div className="bg-white/90 dark:bg-neutral-800/90 backdrop-blur-sm rounded-xl sm:rounded-2xl shadow-soft flex relative justify-center items-center w-full h-[400px] sm:h-[500px] md:h-[600px] lg:h-[700px] xl:h-[780px]">
+    <div className="bg-white/90 dark:bg-neutral-800/90 backdrop-blur-sm rounded-xl sm:rounded-2xl shadow-soft flex relative justify-center items-center w-full min-w-0 h-[300px] sm:h-[400px] md:h-[500px] lg:h-[600px] xl:h-[730px] overflow-hidden">
       {isLoading && <LoadingSpinner />}
       <div
         ref={mapContainer}
-        className="w-full h-full rounded-xl sm:rounded-2xl"
+        className="w-full h-full rounded-xl sm:rounded-2xl min-w-0"
       />
     </div>
   );

@@ -74,7 +74,7 @@ export default function Home() {
     : t("dashboard.welcome");
 
   return (
-    <div className="w-full">
+    <div className="w-full min-w-0">
       {/* Header Section */}
       <div className="pb-3 sm:pb-4 md:pb-6 lg:pb-8">
         <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-2 sm:gap-3 md:gap-4">
@@ -110,9 +110,6 @@ export default function Home() {
         <div className="xl:col-span-3 space-y-3 sm:space-y-4 md:space-y-6 lg:space-y-8">
           {/* Overview Cards */}
           <section>
-            <h2 className="text-base sm:text-lg md:text-xl lg:text-2xl font-semibold text-neutral-900 dark:text-neutral-300 pb-2 sm:pb-3 md:pb-4 lg:pb-6">
-              {t("dashboard.overview")}
-            </h2>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-2.5 sm:gap-3 md:gap-4 lg:gap-6">
               <Link href={`/${locale}/fields`} className="block">
                 <Card
@@ -164,7 +161,7 @@ export default function Home() {
         </div>
 
         {/* Sidebar Widgets */}
-        <div className="xl:col-span-1 space-y-3 sm:space-y-4 md:space-y-6 pt-0 xl:pt-11">
+        <div className="xl:col-span-1 space-y-2 sm:space-y-4 md:space-y-4">
           <CropWidget />
           <JobsWidget />
           <WeatherWidget />

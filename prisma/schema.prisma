@@ -13,9 +13,11 @@ datasource db {
 model User{
   id     String @id @default(cuid())
   name   String
-  email  String @unique     
+  email  String @unique
   fields Field[]
   jobs   Job[]
+  indoorPlants IndoorPlant[]
+  fieldPlants FieldPlant[]
 }
 
 model Field {
@@ -27,12 +29,14 @@ model Field {
   author      User     @relation(fields: [authorId], references: [id])
   authorId    String
   categories Category[]
+  fieldPlants FieldPlant[]
 }
 
 model Category {
-  id       String   @id @default(cuid()) 
+  id       String   @id @default(cuid())
   type     String   @unique // e.g., "Corn", "Wheat"
   fields   Field[]
+  fieldPlants FieldPlant[]
 }
 
 model Job {
@@ -48,6 +52,39 @@ model Job {
 
   assignedToId String?
   assignedTo   User?   @relation(fields: [assignedToId], references: [id])
+}
+
+model IndoorPlant {
+  id                String   @id @default(cuid())
+  type              String   // e.g., "basil", "cherryTomato", etc.
+  plantingDate      DateTime
+  harvestDays       Int
+  wateringFrequency Int      // days between watering
+  lastWatered       DateTime?
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+  author            User     @relation(fields: [authorId], references: [id])
+  authorId          String
+}
+
+model FieldPlant {
+  id                String   @id @default(cuid())
+  fieldId           String
+  field             Field    @relation(fields: [fieldId], references: [id], onDelete: Cascade)
+  categoryId        String
+  category          Category @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+  plantingDate      DateTime
+  harvestDays       Int      // days until harvest
+  wateringFrequency Int      // days between watering
+  lastWatered       DateTime?
+  lastFertilized    DateTime?
+  fertilizerFrequency Int?   // days between fertilizing
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+  author            User     @relation(fields: [authorId], references: [id])
+  authorId          String
+
+  @@unique([fieldId, categoryId])
 }
 
 enum JobStatus {

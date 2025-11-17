@@ -44,9 +44,9 @@ export default function ProfilePage() {
   };
 
   return (
-    <div className="w-full">
+    <div className="w-full min-w-0 h-full flex flex-col">
       {/* Header */}
-      <div className="pb-4 md:pb-8">
+      <div className="pb-4 md:pb-8 flex-shrink-0">
         <h1 className="text-xl md:text-3xl font-bold text-neutral-900 dark:text-neutral-100">
           Profile
         </h1>
@@ -56,10 +56,10 @@ export default function ProfilePage() {
       </div>
 
       <SignedIn>
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-3 md:gap-4 lg:gap-8">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-3 md:gap-4 lg:gap-8 flex-1 min-h-0">
           {/* Profile Card */}
-          <div className="lg:col-span-2">
-            <div className="bg-white/90 dark:bg-neutral-800/90 backdrop-blur-sm rounded-2xl md:rounded-3xl shadow-soft border border-white/60 dark:border-neutral-700/60 p-4 md:p-6 h-full flex flex-col">
+          <div className="lg:col-span-2 flex flex-col min-h-0">
+            <div className="bg-white/90 dark:bg-neutral-800/90 backdrop-blur-sm rounded-2xl md:rounded-3xl shadow-soft border border-white/60 dark:border-neutral-700/60 p-4 md:p-6 h-full flex flex-col flex-1 min-h-0">
               <div className="flex flex-col sm:flex-row items-center sm:items-start gap-3 sm:gap-6 mb-4 md:mb-8">
                 <div className="w-12 h-12 sm:w-20 sm:h-20 bg-primary-100 dark:bg-primary-900/30 rounded-lg md:rounded-xl flex items-center justify-center flex-shrink-0">
                   <User className="w-6 h-6 sm:w-10 sm:h-10 text-primary-600 dark:text-primary-400" />
@@ -208,7 +208,7 @@ export default function ProfilePage() {
           </div>
 
           {/* Sidebar */}
-          <div className="space-y-3 md:space-y-6 flex flex-col h-full">
+          <div className="space-y-3 md:space-y-6 flex flex-col min-h-0">
             {/* Quick Stats */}
             <div className="bg-white/80 dark:bg-neutral-800/90 backdrop-blur-md rounded-2xl md:rounded-3xl shadow-soft border border-white/60 dark:border-neutral-700/60 p-3 md:p-6 flex-1">
               <h3 className="text-sm md:text-lg font-semibold text-neutral-900 dark:text-neutral-100 mb-2 md:mb-4">

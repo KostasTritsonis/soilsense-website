@@ -28,7 +28,7 @@ export default function Page() {
   }, []);
 
   return (
-    <div className="w-full">
+    <div className="w-full min-w-0 h-full overflow-hidden">
       {/* Header Section */}
       <div className="pb-4 sm:pb-6 md:pb-8">
         <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-3 sm:gap-4">
@@ -83,8 +83,8 @@ export default function Page() {
             {t("jobs.jobs")} {t("time.today")}
           </span>
         </h2>
-        <div className="bg-white/90 dark:bg-neutral-800/90 backdrop-blur-sm rounded-2xl sm:rounded-3xl shadow-soft border border-white/60 dark:border-neutral-700/60 overflow-hidden">
-          <div className="h-[400px] sm:h-[500px] md:h-[600px] lg:h-[700px] p-2 sm:p-4 md:p-6">
+        <div className="bg-white/90 dark:bg-neutral-800/90 backdrop-blur-sm rounded-2xl sm:rounded-3xl shadow-soft border border-white/60 dark:border-neutral-700/60 ">
+          <div className="h-[400px] sm:h-[500px] md:h-[600px] lg:h-[650px] p-2 sm:p-4 md:p-2">
             <JobsCalendar jobs={jobs || []} onEventSelect={handleJobSelect} />
           </div>
         </div>

@@ -24,10 +24,14 @@ type MapComponentProps = {
     isSaving: boolean;
     hasFields: boolean;
   }) => void;
+  initialFieldId?: string;
 };
 
 export default function MapComponent(
-  { onHandlersReady }: MapComponentProps = {} as MapComponentProps
+  {
+    onHandlersReady,
+    initialFieldId,
+  }: MapComponentProps = {} as MapComponentProps
 ) {
   const [selectedField, setSelectedField] = useState<Field | null>(null);
   const [editingFieldId, setEditingFieldId] = useState<string | null>(null);
@@ -207,6 +211,17 @@ export default function MapComponent(
     }
   };
 
+  // Auto-select field from URL parameter when fields are loaded
+  useEffect(() => {
+    if (initialFieldId && fields.length > 0 && !selectedField) {
+      const field = fields.find((f) => f.id === initialFieldId);
+      if (field) {
+        handleFieldSelect(initialFieldId);
+      }
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [initialFieldId, fields.length, selectedField]);
+
   const handleGetDirections = async (field: Field) => {
     setIsGettingDirections(true);
 
@@ -275,7 +290,7 @@ export default function MapComponent(
   };
 
   return (
-    <div className="flex flex-col h-[calc(100vh-200px)] sm:h-[calc(100vh-180px)] md:h-[calc(100vh-160px)] lg:h-screen w-full relative overflow-hidden">
+    <div className="flex flex-col h-full w-full relative overflow-hidden">
       {/* Loading spinner */}
       {(isLoading || isSaving) && <LoadingSpinner />}
 

@@ -90,7 +90,7 @@ export default function Weather() {
   }, [location, fetchWeather]);
 
   return (
-    <div className="w-full">
+    <div className="w-full min-w-0">
       {/* Header Section */}
       <div className="pb-3 sm:pb-4 md:pb-6 lg:pb-8">
         <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-2 sm:gap-3 md:gap-4">

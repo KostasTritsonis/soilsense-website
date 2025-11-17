@@ -28,7 +28,7 @@ export default function FieldEditor({
 
   if (!field) return null;
   return (
-    <div className="absolute bottom-2 sm:bottom-4 left-2 sm:left-4 right-2 sm:right-4 md:bottom-3 md:right-14 md:left-auto z-[100] bg-white/95 dark:bg-neutral-800/90 backdrop-blur-sm rounded-2xl sm:rounded-3xl shadow-large border border-white/60 dark:border-neutral-700/60 p-3 sm:p-4 w-auto md:w-[270px] max-h-[80vh] md:max-h-[435px] md:h-[340px] overflow-y-auto">
+    <div className="absolute bottom-2 sm:bottom-4 left-2 sm:left-4 right-2 sm:right-4 md:bottom-3 md:right-14 md:left-auto z-[100] bg-white/95 dark:bg-neutral-800/90 backdrop-blur-sm rounded-2xl sm:rounded-3xl shadow-large border border-white/60 dark:border-neutral-700/60 p-3 sm:p-4 w-auto md:w-[270px] max-h-[80vh] md:max-h-[435px] md:h-[390px] overflow-y-auto">
       <div className="space-y-2 sm:space-y-3">
         {/* Label Input */}
         <div>

@@ -26,7 +26,7 @@ export default function JobsWidget() {
   };
 
   return (
-    <div className="bg-white/90 dark:bg-neutral-800/90 backdrop-blur-sm rounded-xl sm:rounded-2xl md:rounded-3xl shadow-soft border border-white/60 dark:border-neutral-700/60 p-3 sm:p-4 md:p-5 lg:p-6">
+    <div className="bg-white/90 dark:bg-neutral-800/90 backdrop-blur-sm rounded-xl sm:rounded-2xl md:rounded-3xl shadow-soft border border-white/60 dark:border-neutral-700/60 p-3 sm:p-4 md:p-5 lg:p-6 min-w-0">
       <div className="flex items-center justify-between pb-2 sm:pb-3 md:pb-4">
         <div className="flex items-center gap-1.5 sm:gap-2 md:gap-3 min-w-0">
           <div className="w-7 h-7 sm:w-8 sm:h-8 md:w-9 md:h-9 lg:w-10 lg:h-10 bg-orange-100 dark:bg-orange-900/30 rounded-lg sm:rounded-xl md:rounded-2xl flex items-center justify-center flex-shrink-0">
