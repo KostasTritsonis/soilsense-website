@@ -50,7 +50,7 @@ export default async function LocaleLayout({
           afterSignOutUrl={`/${locale}`}
         >
           <NextIntlClientProvider messages={messages}>
-            <div className="w-full max-w-7xl mx-auto px-4 md:px-6 py-4 md:py-6 flex flex-col h-screen min-h-0 overflow-hidden">
+            <div className="w-full max-w-7xl mx-auto px-4 md:px-6 py-4 md:py-6 flex flex-col">
               {/* Desktop Header - only show on md and above */}
               <div className="hidden md:block bg-white/80 dark:bg-neutral-800/80 backdrop-blur-md rounded-3xl shadow-soft border border-white/60 dark:border-neutral-700/60 p-4 pb-6 overflow-visible relative z-50 flex-shrink-0 min-w-0">
                 <Header />
@@ -73,7 +73,7 @@ export default async function LocaleLayout({
               <GlobalLoader />
 
               {/* Main content with mobile padding adjustment */}
-              <main className="bg-white/80 dark:bg-neutral-800/80 backdrop-blur-md rounded-3xl shadow-soft border border-white/60 dark:border-neutral-700/60 p-4 md:p-6 lg:p-8 mt-4 md:mt-6 pb-20 md:pb-8 relative z-10 flex flex-col flex-1 min-h-0 min-w-0 overflow-x-hidden overflow-y-auto">
+              <main className="bg-white/80 dark:bg-neutral-800/80 backdrop-blur-md rounded-3xl shadow-soft border border-white/60 dark:border-neutral-700/60 p-4 md:p-6 lg:p-8 mt-4 md:mt-6 pb-20 md:pb-8 relative z-10 flex flex-col min-w-0 overflow-x-hidden w-full">
                 {children}
               </main>
 

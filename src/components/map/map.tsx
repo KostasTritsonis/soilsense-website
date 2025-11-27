@@ -290,14 +290,17 @@ export default function MapComponent(
   };
 
   return (
-    <div className="flex flex-col h-full w-full relative overflow-hidden">
+    <div className="flex flex-col w-full h-full min-h-[600px] relative overflow-hidden">
       {/* Loading spinner */}
       {(isLoading || isSaving) && <LoadingSpinner />}
 
       {/* Main content with map */}
-      <div className="flex-1 relative min-h-0">
+      <div className="flex-1 relative min-h-0 w-full">
         {/* Map container */}
-        <div ref={mapContainer} className="w-full h-full relative">
+        <div
+          ref={mapContainer}
+          className="w-full h-full min-h-[600px] relative"
+        >
           {/* Fields Dropdown - top center */}
           <div className="absolute top-2 left-1/2 -translate-x-1/2 z-50 w-[calc(100%-2rem)] sm:w-auto max-w-[70%]">
             <FieldsDropdown

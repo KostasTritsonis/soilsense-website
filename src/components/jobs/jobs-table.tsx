@@ -4,7 +4,7 @@ import { JobStatus } from "@/lib/types";
 import StatusBadge from "./status-badge";
 import { deleteJob, updateJobStatus } from "@/actions/index";
 import { useJobsStore } from "@/lib/stores/jobs-store";
-import { LocationOn, CalendarToday, Person, Delete } from "@mui/icons-material";
+import { CalendarToday, Delete } from "@mui/icons-material";
 import { useTranslations } from "next-intl";
 
 export default function JobsTable() {
@@ -197,122 +197,83 @@ export default function JobsTable() {
       </div>
 
       {/* Mobile Card View */}
-      <div className="md:hidden space-y-4">
+      <div className="md:hidden space-y-2.5">
         {jobs.map((job) => (
           <div
             key={job.id}
-            className="bg-white/90 dark:bg-neutral-800/90 backdrop-blur-sm rounded-2xl md:rounded-3xl shadow-soft border border-white/60 dark:border-neutral-700/60 p-4 md:p-6"
+            className="bg-white/90 dark:bg-neutral-800/90 backdrop-blur-sm rounded-xl shadow-soft border border-white/60 dark:border-neutral-700/60 p-3"
           >
-            <div className="flex items-start justify-between mb-4">
-              <div className="flex-1 min-w-0">
-                <h3 className="text-lg font-semibold text-neutral-900 dark:text-neutral-100 mb-1 truncate">
+            <div className="flex items-start justify-between mb-2.5">
+              <div className="flex-1 min-w-0 pr-2">
+                <h3 className="text-sm font-semibold text-neutral-900 dark:text-neutral-100 mb-0.5 truncate">
                   {job.title}
                 </h3>
-                <p className="text-sm text-neutral-600 dark:text-neutral-400 line-clamp-2">
-                  {job.description}
+                <p className="text-xs text-neutral-600 dark:text-neutral-400 line-clamp-1">
+                  {getDaysRemaining(job.endDate, job.status)}
                 </p>
               </div>
-              <div className="flex items-center gap-2 flex-shrink-0 ml-2">
+              <div className="flex items-center gap-1.5 flex-shrink-0">
                 <StatusBadge status={job.status} />
                 <button
                   onClick={() => handleDelete(job.id)}
-                  className="w-8 h-8 bg-red-100 dark:bg-red-900/30 hover:bg-red-200 dark:hover:bg-red-900/50 rounded-xl flex items-center justify-center transition-colors"
+                  className="w-7 h-7 bg-red-100 dark:bg-red-900/30 hover:bg-red-200 dark:hover:bg-red-900/50 rounded-lg flex items-center justify-center transition-colors"
                 >
                   <Delete
-                    className="text-red-600 dark:text-red-400"
+                    className="text-red-600 dark:text-red-400 text-base"
                     fontSize="small"
                   />
                 </button>
               </div>
             </div>
 
-            <div className="space-y-3">
-              {/* Timeline */}
-              <div className="flex items-center gap-3 p-3 bg-neutral-50/80 dark:bg-neutral-700/80 rounded-2xl">
-                <div className="w-8 h-8 bg-blue-100 dark:bg-blue-900/30 rounded-xl flex items-center justify-center flex-shrink-0">
-                  <CalendarToday
-                    className="text-blue-600 dark:text-blue-400"
-                    fontSize="small"
-                  />
-                </div>
-                <div className="flex-1 min-w-0">
-                  <p className="text-sm font-medium text-neutral-900 dark:text-neutral-100 truncate">
-                    {new Date(job.startDate).toLocaleDateString()} -{" "}
-                    {new Date(job.endDate).toLocaleDateString()}
-                  </p>
-                  <p className="text-xs text-neutral-600 dark:text-neutral-400">
-                    {getDaysRemaining(job.endDate, job.status)}
-                  </p>
-                </div>
-              </div>
+            {/* Progress Bar */}
+            <div className="w-full bg-neutral-200 dark:bg-neutral-700 rounded-full h-1.5 mb-2.5">
+              <div
+                className={`h-1.5 rounded-full transition-all duration-300 ${
+                  job.status === "COMPLETED"
+                    ? "bg-green-500"
+                    : job.status === "DUE"
+                    ? "bg-red-500"
+                    : "bg-blue-500"
+                }`}
+                style={{
+                  width: `${calculateProgress(job.startDate, job.endDate)}%`,
+                }}
+              ></div>
+            </div>
 
-              {/* Progress Bar */}
-              <div className="w-full bg-neutral-200 dark:bg-neutral-700 rounded-full h-2">
-                <div
-                  className={`h-2 rounded-full transition-all duration-300 ${
-                    job.status === "COMPLETED"
-                      ? "bg-green-500"
-                      : job.status === "DUE"
-                      ? "bg-red-500"
-                      : "bg-blue-500"
-                  }`}
-                  style={{
-                    width: `${calculateProgress(job.startDate, job.endDate)}%`,
-                  }}
-                ></div>
+            {/* Timeline - Compact */}
+            <div className="flex items-center gap-2 p-2 bg-neutral-50/80 dark:bg-neutral-700/80 rounded-lg">
+              <CalendarToday
+                className="text-blue-600 dark:text-blue-400 flex-shrink-0 text-sm"
+                fontSize="small"
+              />
+              <div className="flex-1 min-w-0">
+                <p className="text-xs text-neutral-900 dark:text-neutral-100 truncate">
+                  {new Date(job.startDate).toLocaleDateString("en-GB", {
+                    day: "numeric",
+                    month: "short",
+                  })}{" "}
+                  -{" "}
+                  {new Date(job.endDate).toLocaleDateString("en-GB", {
+                    day: "numeric",
+                    month: "short",
+                  })}
+                </p>
               </div>
+            </div>
 
-              {/* Location */}
-              <div className="flex items-center gap-3 p-3 bg-neutral-50/80 dark:bg-neutral-700/80 rounded-2xl">
-                <div className="w-8 h-8 bg-green-100 dark:bg-green-900/30 rounded-xl flex items-center justify-center flex-shrink-0">
-                  <LocationOn
-                    className="text-green-600 dark:text-green-400"
-                    fontSize="small"
-                  />
-                </div>
-                <div className="min-w-0">
-                  <p className="text-sm font-medium text-neutral-900 dark:text-neutral-100 truncate">
-                    Location
-                  </p>
-                  <p className="text-xs text-neutral-600 dark:text-neutral-400 truncate">
-                    {job.location || "Not specified"}
-                  </p>
-                </div>
-              </div>
-
-              {/* Assigned To */}
-              <div className="flex items-center gap-3 p-3 bg-neutral-50/80 dark:bg-neutral-700/80 rounded-2xl">
-                <div className="w-8 h-8 bg-purple-100 dark:bg-purple-900/30 rounded-xl flex items-center justify-center flex-shrink-0">
-                  <Person
-                    className="text-purple-600 dark:text-purple-400"
-                    fontSize="small"
-                  />
-                </div>
-                <div className="min-w-0">
-                  <p className="text-sm font-medium text-neutral-900 dark:text-neutral-100 truncate">
-                    Assigned To
-                  </p>
-                  <p className="text-xs text-neutral-600 dark:text-neutral-400 truncate">
-                    {job.assignedTo?.name || "Unassigned"}
-                  </p>
-                </div>
-              </div>
-
-              {/* Status Change */}
-              <div className="pt-2">
-                <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-2">
-                  Update Status
-                </label>
-                <select
-                  value={job.status}
-                  onChange={(e) => handleStatusChange(job.id, e.target.value)}
-                  className="w-full text-sm border border-neutral-300 dark:border-neutral-600 rounded-xl md:rounded-2xl px-4 py-2 md:py-3 bg-white dark:bg-neutral-700 dark:text-neutral-100 focus:border-primary-500 dark:focus:border-primary-400 focus:outline-none focus:ring-2 focus:ring-primary-500/20 dark:focus:ring-primary-400/20"
-                >
-                  <option value="ONGOING">Ongoing</option>
-                  <option value="DUE">Due</option>
-                  <option value="COMPLETED">Completed</option>
-                </select>
-              </div>
+            {/* Status Change - Compact */}
+            <div className="pt-2">
+              <select
+                value={job.status}
+                onChange={(e) => handleStatusChange(job.id, e.target.value)}
+                className="w-full text-xs border border-neutral-300 dark:border-neutral-600 rounded-lg px-2.5 py-1.5 bg-white dark:bg-neutral-700 dark:text-neutral-100 focus:border-primary-500 dark:focus:border-primary-400 focus:outline-none focus:ring-1 focus:ring-primary-500/20 dark:focus:ring-primary-400/20"
+              >
+                <option value="ONGOING">Ongoing</option>
+                <option value="DUE">Due</option>
+                <option value="COMPLETED">Completed</option>
+              </select>
             </div>
           </div>
         ))}

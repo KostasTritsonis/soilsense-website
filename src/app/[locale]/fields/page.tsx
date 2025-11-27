@@ -33,7 +33,7 @@ export default function Page() {
   );
 
   return (
-    <div className="flex flex-col h-full min-h-0 min-w-0 overflow-hidden">
+    <div className="flex flex-col w-full min-h-[600px] min-w-0">
       {/* Header Section */}
       <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-3 md:gap-4 pb-4 flex-shrink-0 min-w-0">
         <h1 className="text-xl md:text-2xl lg:text-3xl xl:text-4xl font-bold text-neutral-900 dark:text-neutral-300 break-words min-w-0">
@@ -55,7 +55,7 @@ export default function Page() {
       </div>
 
       {/* Map Section */}
-      <div className="bg-white/90 backdrop-blur-sm rounded-2xl shadow-soft overflow-hidden flex-1 min-h-0 min-w-0">
+      <div className="bg-white/90 dark:bg-neutral-800/90 backdrop-blur-sm rounded-2xl shadow-soft overflow-hidden min-h-[600px] md:min-h-[700px] lg:min-h-[800px] min-w-0 w-full">
         <MapComponent
           onHandlersReady={handleHandlersReady}
           initialFieldId={fieldIdFromUrl || undefined}

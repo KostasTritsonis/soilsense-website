@@ -45,8 +45,8 @@ export default function LanguageSwitcher() {
           }`}
           title={language.name}
         >
-          <span className="text-lg">{language.flag}</span>
-          <span className="hidden sm:inline">{language.name}</span>
+          <span className="hidden sm:inline text-lg">{language.flag}</span>
+          <span>{language.name}</span>
         </button>
       ))}
     </div>

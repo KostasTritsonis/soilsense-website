@@ -103,25 +103,27 @@ export default function JobsCalendar({
   );
 
   return (
-    <Calendar
-      localizer={localizer}
-      events={events}
-      startAccessor="start"
-      endAccessor="end"
-      view={view}
-      onView={handleViewChange}
-      views={CALENDAR_CONFIG.views}
-      className="h-full rbc-calendar"
-      onSelectEvent={handleSelectEvent}
-      eventPropGetter={eventStyleGetter}
-      tooltipAccessor={tooltipAccessor}
-      popup
-      selectable
-      step={CALENDAR_CONFIG.step}
-      timeslots={CALENDAR_CONFIG.timeslots}
-      defaultView={CALENDAR_CONFIG.defaultView}
-      min={CALENDAR_CONFIG.min}
-      max={CALENDAR_CONFIG.max}
-    />
+    <div className="h-full w-full min-h-0 flex flex-col">
+      <Calendar
+        localizer={localizer}
+        events={events}
+        startAccessor="start"
+        endAccessor="end"
+        view={view}
+        onView={handleViewChange}
+        views={CALENDAR_CONFIG.views}
+        className="h-full w-full rbc-calendar flex-1 min-h-0"
+        onSelectEvent={handleSelectEvent}
+        eventPropGetter={eventStyleGetter}
+        tooltipAccessor={tooltipAccessor}
+        popup
+        selectable
+        step={CALENDAR_CONFIG.step}
+        timeslots={CALENDAR_CONFIG.timeslots}
+        defaultView={CALENDAR_CONFIG.defaultView}
+        min={CALENDAR_CONFIG.min}
+        max={CALENDAR_CONFIG.max}
+      />
+    </div>
   );
 }
