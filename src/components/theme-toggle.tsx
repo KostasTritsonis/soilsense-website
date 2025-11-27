@@ -1,6 +1,6 @@
 "use client";
 
-import { Sun, Moon } from "lucide-react";
+import { LightMode, DarkMode } from "@mui/icons-material";
 import { useThemeStore } from "@/lib/stores/theme-store";
 import { useTranslations } from "next-intl";
 
@@ -9,8 +9,8 @@ export default function ThemeToggle() {
   const t = useTranslations();
 
   const themes = [
-    { value: "light" as const, icon: Sun, label: t("theme.light") },
-    { value: "dark" as const, icon: Moon, label: t("theme.dark") },
+    { value: "light" as const, icon: LightMode, label: t("theme.light") },
+    { value: "dark" as const, icon: DarkMode, label: t("theme.dark") },
   ];
 
   return (
@@ -26,7 +26,7 @@ export default function ThemeToggle() {
           }`}
           title={label}
         >
-          <Icon className="w-5 h-5" />
+          <Icon fontSize="small" />
           <span className="hidden sm:inline">{label}</span>
         </button>
       ))}

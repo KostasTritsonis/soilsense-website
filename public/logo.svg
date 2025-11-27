@@ -1,0 +1,52 @@
+<svg viewBox="0 0 400 400" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="leafGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#4CAF50;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#2E7D32;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  
+  <!-- Main circular emblem -->
+  <circle cx="200" cy="200" r="140" fill="#1a1a1a"/>
+  <circle cx="200" cy="200" r="135" fill="#0a0a0a"/>
+  
+  <!-- Stylized leaf/sprout icon -->
+  <g transform="translate(200, 200)">
+    <!-- Central stem -->
+    <rect x="-3" y="-20" width="6" height="80" fill="#4CAF50" rx="3"/>
+    
+    <!-- Left leaf -->
+    <path d="M -3 10 Q -60 0 -70 -20 Q -65 -35 -30 -25 Q -10 -15 -3 0 Z" 
+          fill="url(#leafGrad)" opacity="0.95"/>
+    <path d="M -3 10 Q -40 15 -50 10" stroke="#2E7D32" stroke-width="1.5" fill="none" opacity="0.6"/>
+    
+    <!-- Right leaf -->
+    <path d="M 3 -10 Q 60 -20 70 -40 Q 65 -55 30 -45 Q 10 -35 3 -20 Z" 
+          fill="url(#leafGrad)" opacity="0.95"/>
+    <path d="M 3 -10 Q 40 -5 50 -15" stroke="#2E7D32" stroke-width="1.5" fill="none" opacity="0.6"/>
+    
+    <!-- Digital hex pattern overlay -->
+    <g opacity="0.15">
+      <polygon points="-20,-50 -10,-56 0,-50 0,-38 -10,-32 -20,-38" fill="#4CAF50"/>
+      <polygon points="20,-70 30,-76 40,-70 40,-58 30,-52 20,-58" fill="#4CAF50"/>
+      <polygon points="-45,5 -35,-1 -25,5 -25,17 -35,23 -45,17" fill="#4CAF50"/>
+      <polygon points="35,0 45,-6 55,0 55,12 45,18 35,12" fill="#4CAF50"/>
+    </g>
+    
+    <!-- Small data points -->
+    <circle cx="-50" cy="-10" r="3" fill="#4CAF50" opacity="0.8"/>
+    <circle cx="50" cy="-30" r="3" fill="#4CAF50" opacity="0.8"/>
+    <circle cx="-35" cy="15" r="2.5" fill="#4CAF50" opacity="0.6"/>
+    <circle cx="40" cy="8" r="2.5" fill="#4CAF50" opacity="0.6"/>
+  </g>
+  
+  <!-- Outer ring accent -->
+  <circle cx="200" cy="200" r="140" fill="none" stroke="#4CAF50" stroke-width="2" opacity="0.3"/>
+  <circle cx="200" cy="200" r="148" fill="none" stroke="#4CAF50" stroke-width="1" opacity="0.2"/>
+  
+  <!-- App name with modern styling -->
+  <text x="200" y="370" font-family="'Helvetica Neue', Arial, sans-serif" font-size="48" font-weight="300" fill="#1a1a1a" text-anchor="middle" letter-spacing="1">
+    soil<tspan font-weight="600" fill="#4CAF50">Sense</tspan>
+  </text>
+</svg>
+

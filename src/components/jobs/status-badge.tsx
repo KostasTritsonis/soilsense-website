@@ -1,5 +1,5 @@
 import React from "react";
-import { Check, Clock, AlertCircle } from "lucide-react";
+import { Check, AccessTime, Error } from "@mui/icons-material";
 import { JobStatus } from "@/lib/types";
 
 type StatusBadgeProps = {
@@ -25,11 +25,11 @@ export default function StatusBadge({ status }: StatusBadgeProps) {
   const getStatusIcon = (status: JobStatus) => {
     switch (status) {
       case "COMPLETED":
-        return <Check className="w-3 h-3 md:w-4 md:h-4" />;
+        return <Check fontSize="small" />;
       case "DUE":
-        return <AlertCircle className="w-3 h-3 md:w-4 md:h-4" />;
+        return <Error fontSize="small" />;
       case "ONGOING":
-        return <Clock className="w-3 h-3 md:w-4 md:h-4" />;
+        return <AccessTime fontSize="small" />;
       default:
         return null;
     }
@@ -42,7 +42,7 @@ export default function StatusBadge({ status }: StatusBadgeProps) {
 
   return (
     <span
-      className={`inline-flex items-center gap-0.5 sm:gap-1 px-1.5 sm:px-2 py-0.5 sm:py-1 md:px-2.5 md:py-0.5 rounded-full text-[10px] sm:text-xs font-medium border ${getStatusColor(
+      className={`inline-flex items-center gap-1 px-2 py-1 rounded-full text-xs font-medium border ${getStatusColor(
         status
       )}`}
     >

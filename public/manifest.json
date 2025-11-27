@@ -9,6 +9,17 @@
   "orientation": "portrait",
   "icons": [
     {
+      "src": "logo.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "logo.svg",
+      "sizes": "400x400",
+      "type": "image/svg+xml"
+    },
+    {
       "src": "windows11/SmallTile.scale-100.png",
       "sizes": "71x71"
     },

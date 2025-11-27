@@ -70,18 +70,18 @@ export default function JobForm({ onCancel }: JobFormProps) {
   };
 
   return (
-    <div className="bg-white/90 dark:bg-neutral-800/90 backdrop-blur-sm rounded-xl sm:rounded-2xl md:rounded-3xl shadow-soft border border-white/60 dark:border-neutral-700/60 p-3 sm:p-4 md:p-5 lg:p-6 xl:p-8">
-      <h2 className="text-base sm:text-lg md:text-xl lg:text-2xl font-semibold text-neutral-900 dark:text-neutral-100 mb-3 sm:mb-4 md:mb-5 lg:mb-6">
+    <div className="bg-white/90 dark:bg-neutral-800/90 backdrop-blur-sm rounded-2xl md:rounded-3xl shadow-soft border border-white/60 dark:border-neutral-700/60 p-4 md:p-5 lg:p-6 xl:p-8">
+      <h2 className="text-lg md:text-xl lg:text-2xl font-semibold text-neutral-900 dark:text-neutral-100 mb-4 md:mb-5 lg:mb-6">
         {t("jobs.jobFormTitle")}
       </h2>
       <form
         onSubmit={handleSubmit}
-        className="space-y-4 sm:space-y-5 md:space-y-6"
+        className="space-y-4 md:space-y-5 lg:space-y-6"
       >
         {/* Basic Information */}
-        <div className="space-y-3 sm:space-y-4">
+        <div className="space-y-4">
           <div>
-            <label className="block text-xs sm:text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1.5 sm:mb-2">
+            <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-2">
               {t("jobs.jobTitle")} *
             </label>
             <input
@@ -90,13 +90,13 @@ export default function JobForm({ onCancel }: JobFormProps) {
               value={formData.title}
               onChange={handleInputChange}
               required
-              className="w-full px-3 sm:px-4 py-2.5 sm:py-3 border border-neutral-300 dark:border-neutral-600 rounded-xl sm:rounded-2xl bg-white/80 dark:bg-neutral-700/80 focus:border-primary-500 dark:focus:border-primary-400 focus:outline-none focus:ring-2 focus:ring-primary-500/20 dark:focus:ring-primary-400/20 text-neutral-900 dark:text-neutral-100 placeholder-neutral-400 dark:placeholder-neutral-500 text-sm sm:text-base"
+              className="w-full px-4 py-3 border border-neutral-300 dark:border-neutral-600 rounded-xl md:rounded-2xl bg-white/80 dark:bg-neutral-700/80 focus:border-primary-500 dark:focus:border-primary-400 focus:outline-none focus:ring-2 focus:ring-primary-500/20 dark:focus:ring-primary-400/20 text-neutral-900 dark:text-neutral-100 placeholder-neutral-400 dark:placeholder-neutral-500 text-sm md:text-base"
               placeholder={t("jobs.jobTitle")}
             />
           </div>
 
           <div>
-            <label className="block text-xs sm:text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1.5 sm:mb-2">
+            <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-2">
               {t("jobs.jobDescription")}
             </label>
             <textarea
@@ -104,16 +104,16 @@ export default function JobForm({ onCancel }: JobFormProps) {
               value={formData.description}
               onChange={handleInputChange}
               rows={3}
-              className="w-full px-3 sm:px-4 py-2.5 sm:py-3 border border-neutral-300 dark:border-neutral-600 rounded-xl sm:rounded-2xl bg-white/80 dark:bg-neutral-700/80 focus:border-primary-500 dark:focus:border-primary-400 focus:outline-none focus:ring-2 focus:ring-primary-500/20 dark:focus:ring-primary-400/20 text-neutral-900 dark:text-neutral-100 placeholder-neutral-400 dark:placeholder-neutral-500 resize-none text-sm sm:text-base"
+              className="w-full px-4 py-3 border border-neutral-300 dark:border-neutral-600 rounded-xl md:rounded-2xl bg-white/80 dark:bg-neutral-700/80 focus:border-primary-500 dark:focus:border-primary-400 focus:outline-none focus:ring-2 focus:ring-primary-500/20 dark:focus:ring-primary-400/20 text-neutral-900 dark:text-neutral-100 placeholder-neutral-400 dark:placeholder-neutral-500 resize-none text-sm md:text-base"
               placeholder={t("jobs.jobDescription")}
             ></textarea>
           </div>
         </div>
 
         {/* Location and Assignment */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-3 sm:gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div>
-            <label className="block text-xs sm:text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1.5 sm:mb-2">
+            <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-2">
               {t("jobs.jobLocation")}
             </label>
             <input
@@ -121,20 +121,20 @@ export default function JobForm({ onCancel }: JobFormProps) {
               name="location"
               value={formData.location || ""}
               onChange={handleInputChange}
-              className="w-full px-3 sm:px-4 py-2.5 sm:py-3 border border-neutral-300 dark:border-neutral-600 rounded-xl sm:rounded-2xl bg-white/80 dark:bg-neutral-700/80 focus:border-primary-500 dark:focus:border-primary-400 focus:outline-none focus:ring-2 focus:ring-primary-500/20 dark:focus:ring-primary-400/20 text-neutral-900 dark:text-neutral-100 placeholder-neutral-400 dark:placeholder-neutral-500 text-sm sm:text-base"
+              className="w-full px-4 py-3 border border-neutral-300 dark:border-neutral-600 rounded-xl md:rounded-2xl bg-white/80 dark:bg-neutral-700/80 focus:border-primary-500 dark:focus:border-primary-400 focus:outline-none focus:ring-2 focus:ring-primary-500/20 dark:focus:ring-primary-400/20 text-neutral-900 dark:text-neutral-100 placeholder-neutral-400 dark:placeholder-neutral-500 text-sm md:text-base"
               placeholder={t("jobs.jobLocation")}
             />
           </div>
 
           <div>
-            <label className="block text-xs sm:text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1.5 sm:mb-2">
+            <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-2">
               {t("jobs.jobAssignedTo")}
             </label>
             <select
               name="assignedToId"
               value={formData.assignedToId || ""}
               onChange={handleInputChange}
-              className="w-full px-3 sm:px-4 py-2.5 sm:py-3 border border-neutral-300 dark:border-neutral-600 rounded-xl sm:rounded-2xl bg-white/80 dark:bg-neutral-700/80 focus:border-primary-500 dark:focus:border-primary-400 focus:outline-none focus:ring-2 focus:ring-primary-500/20 dark:focus:ring-primary-400/20 text-neutral-900 dark:text-neutral-100 text-sm sm:text-base"
+              className="w-full px-4 py-3 border border-neutral-300 dark:border-neutral-600 rounded-xl md:rounded-2xl bg-white/80 dark:bg-neutral-700/80 focus:border-primary-500 dark:focus:border-primary-400 focus:outline-none focus:ring-2 focus:ring-primary-500/20 dark:focus:ring-primary-400/20 text-neutral-900 dark:text-neutral-100 text-sm md:text-base"
             >
               <option value="">{t("jobs.selectUser")}</option>
               {users.map((user) => (
@@ -147,9 +147,9 @@ export default function JobForm({ onCancel }: JobFormProps) {
         </div>
 
         {/* Dates and Status */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3 sm:gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
           <div>
-            <label className="block text-xs sm:text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1.5 sm:mb-2">
+            <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-2">
               {t("jobs.jobStartDate")} *
             </label>
             <input
@@ -158,12 +158,12 @@ export default function JobForm({ onCancel }: JobFormProps) {
               value={formData.startDate.toISOString().split("T")[0]}
               onChange={handleInputChange}
               required
-              className="w-full px-3 sm:px-4 py-2.5 sm:py-3 border border-neutral-300 dark:border-neutral-600 rounded-xl sm:rounded-2xl bg-white/80 dark:bg-neutral-700/80 focus:border-primary-500 dark:focus:border-primary-400 focus:outline-none focus:ring-2 focus:ring-primary-500/20 dark:focus:ring-primary-400/20 text-neutral-900 dark:text-neutral-100 text-sm sm:text-base"
+              className="w-full px-4 py-3 border border-neutral-300 dark:border-neutral-600 rounded-xl md:rounded-2xl bg-white/80 dark:bg-neutral-700/80 focus:border-primary-500 dark:focus:border-primary-400 focus:outline-none focus:ring-2 focus:ring-primary-500/20 dark:focus:ring-primary-400/20 text-neutral-900 dark:text-neutral-100 text-sm md:text-base"
             />
           </div>
 
           <div>
-            <label className="block text-xs sm:text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1.5 sm:mb-2">
+            <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-2">
               {t("jobs.jobEndDate")} *
             </label>
             <input
@@ -172,19 +172,19 @@ export default function JobForm({ onCancel }: JobFormProps) {
               value={formData.endDate.toISOString().split("T")[0]}
               onChange={handleInputChange}
               required
-              className="w-full px-3 sm:px-4 py-2.5 sm:py-3 border border-neutral-300 dark:border-neutral-600 rounded-xl sm:rounded-2xl bg-white/80 dark:bg-neutral-700/80 focus:border-primary-500 dark:focus:border-primary-400 focus:outline-none focus:ring-2 focus:ring-primary-500/20 dark:focus:ring-primary-400/20 text-neutral-900 dark:text-neutral-100 text-sm sm:text-base"
+              className="w-full px-4 py-3 border border-neutral-300 dark:border-neutral-600 rounded-xl md:rounded-2xl bg-white/80 dark:bg-neutral-700/80 focus:border-primary-500 dark:focus:border-primary-400 focus:outline-none focus:ring-2 focus:ring-primary-500/20 dark:focus:ring-primary-400/20 text-neutral-900 dark:text-neutral-100 text-sm md:text-base"
             />
           </div>
 
           <div>
-            <label className="block text-xs sm:text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1.5 sm:mb-2">
+            <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-2">
               {t("jobs.jobStatus")}
             </label>
             <select
               name="status"
               value={formData.status}
               onChange={handleInputChange}
-              className="w-full px-3 sm:px-4 py-2.5 sm:py-3 border border-neutral-300 dark:border-neutral-600 rounded-xl sm:rounded-2xl bg-white/80 dark:bg-neutral-700/80 focus:border-primary-500 dark:focus:border-primary-400 focus:outline-none focus:ring-2 focus:ring-primary-500/20 dark:focus:ring-primary-400/20 text-neutral-900 dark:text-neutral-100 text-sm sm:text-base"
+              className="w-full px-4 py-3 border border-neutral-300 dark:border-neutral-600 rounded-xl md:rounded-2xl bg-white/80 dark:bg-neutral-700/80 focus:border-primary-500 dark:focus:border-primary-400 focus:outline-none focus:ring-2 focus:ring-primary-500/20 dark:focus:ring-primary-400/20 text-neutral-900 dark:text-neutral-100 text-sm md:text-base"
             >
               <option value="ONGOING">{t("jobs.ongoing")}</option>
               <option value="DUE">{t("jobs.due")}</option>
@@ -194,11 +194,11 @@ export default function JobForm({ onCancel }: JobFormProps) {
         </div>
 
         {/* Action Buttons */}
-        <div className="flex flex-col sm:flex-row justify-end gap-2 sm:gap-3 pt-3 sm:pt-4">
+        <div className="flex flex-col sm:flex-row justify-end gap-3 pt-4">
           <button
             type="button"
             onClick={onCancel}
-            className="w-full sm:w-auto px-3 sm:px-4 md:px-5 lg:px-6 h-9 sm:h-10 md:h-11 flex items-center justify-center border border-neutral-300 dark:border-neutral-600 rounded-md sm:rounded-lg md:rounded-xl text-neutral-700 dark:text-neutral-300 hover:bg-neutral-50 dark:hover:bg-neutral-700 transition-colors font-medium text-xs sm:text-sm md:text-base"
+            className="w-full sm:w-auto px-4 md:px-5 lg:px-6 h-10 md:h-11 flex items-center justify-center border border-neutral-300 dark:border-neutral-600 rounded-lg md:rounded-xl text-neutral-700 dark:text-neutral-300 hover:bg-neutral-50 dark:hover:bg-neutral-700 transition-colors font-medium text-sm md:text-base"
             disabled={isSubmitting}
           >
             {t("common.cancel")}
@@ -207,7 +207,7 @@ export default function JobForm({ onCancel }: JobFormProps) {
             type="submit"
             isLoading={isSubmitting}
             loadingText={t("common.creating")}
-            className="w-full sm:w-auto px-3 sm:px-4 md:px-5 lg:px-6 h-9 sm:h-10 md:h-11 bg-primary-600 dark:bg-primary-500 hover:bg-primary-700 dark:hover:bg-primary-600 text-white rounded-md sm:rounded-lg md:rounded-xl font-semibold transition-colors shadow-soft hover:shadow-medium disabled:bg-neutral-400 dark:disabled:bg-neutral-600 disabled:cursor-not-allowed text-xs sm:text-sm md:text-base"
+            className="w-full sm:w-auto px-4 md:px-5 lg:px-6 h-10 md:h-11 bg-primary-600 dark:bg-primary-500 hover:bg-primary-700 dark:hover:bg-primary-600 text-white rounded-lg md:rounded-xl font-semibold transition-colors shadow-soft hover:shadow-medium disabled:bg-neutral-400 dark:disabled:bg-neutral-600 disabled:cursor-not-allowed text-sm md:text-base"
           >
             {t("jobs.createJob")}
           </ButtonLoader>

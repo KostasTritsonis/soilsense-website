@@ -2,11 +2,11 @@
 import React, { useEffect, useState } from "react";
 import {
   Cloud,
-  Droplets,
-  Sun,
-  ThermometerSun,
-  ArrowRightIcon,
-} from "lucide-react";
+  WaterDrop,
+  WbSunny,
+  Thermostat,
+  ArrowForward,
+} from "@mui/icons-material";
 import { fetchWeatherData } from "@/lib/weather";
 import Link from "next/link";
 import { CurrentWeather } from "@/lib/types";
@@ -50,7 +50,10 @@ export default function WeatherWidget() {
         <div className="flex items-center justify-between pb-4">
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 bg-blue-100 dark:bg-blue-900/30 rounded-2xl flex items-center justify-center">
-              <Cloud className="w-5 h-5 text-blue-600 dark:text-blue-400" />
+              <Cloud
+                className="text-blue-600 dark:text-blue-400"
+                fontSize="small"
+              />
             </div>
             <h2 className="text-lg font-semibold text-neutral-900 dark:text-neutral-100">
               {t("weather.weather")}
@@ -70,7 +73,10 @@ export default function WeatherWidget() {
         <div className="flex items-center justify-between pb-4">
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 bg-blue-100 dark:bg-blue-900/30 rounded-2xl flex items-center justify-center">
-              <Cloud className="w-5 h-5 text-blue-600 dark:text-blue-400" />
+              <Cloud
+                className="text-blue-600 dark:text-blue-400"
+                fontSize="small"
+              />
             </div>
             <h2 className="text-lg font-semibold text-neutral-900 dark:text-neutral-100">
               {t("weather.weather")}
@@ -87,70 +93,82 @@ export default function WeatherWidget() {
   }
 
   return (
-    <div className="bg-white/90 dark:bg-neutral-800/90 backdrop-blur-sm rounded-2xl sm:rounded-3xl shadow-soft border border-white/60 dark:border-neutral-700/60 p-4 sm:p-5 md:p-6 min-w-0">
-      <div className="flex items-center justify-between pb-3 sm:pb-4">
-        <div className="flex items-center gap-2 sm:gap-3 min-w-0">
-          <div className="w-8 h-8 sm:w-9 sm:h-9 md:w-10 md:h-10 bg-blue-100 dark:bg-blue-900/30 rounded-xl sm:rounded-2xl flex items-center justify-center flex-shrink-0">
-            <Cloud className="w-4 h-4 sm:w-5 sm:h-5 text-blue-600 dark:text-blue-400" />
+    <div className="bg-white/90 dark:bg-neutral-800/90 backdrop-blur-sm rounded-2xl md:rounded-3xl shadow-soft border border-white/60 dark:border-neutral-700/60 p-4 md:p-6 min-w-0">
+      <div className="flex items-center justify-between pb-4">
+        <div className="flex items-center gap-3 min-w-0">
+          <div className="w-10 h-10 bg-blue-100 dark:bg-blue-900/30 rounded-2xl flex items-center justify-center flex-shrink-0">
+            <Cloud
+              className="text-blue-600 dark:text-blue-400"
+              fontSize="small"
+            />
           </div>
-          <h2 className="text-base sm:text-lg font-semibold text-neutral-900 dark:text-neutral-100 truncate">
+          <h2 className="text-lg font-semibold text-neutral-900 dark:text-neutral-100 truncate">
             Weather
           </h2>
         </div>
         <Link
           href={`/${locale}/weather`}
-          className="flex items-center gap-1 text-xs sm:text-sm text-primary-600 dark:text-primary-400 font-medium hover:text-primary-700 dark:hover:text-primary-300 transition-colors flex-shrink-0 ml-2"
+          className="flex items-center gap-1 text-sm text-primary-600 dark:text-primary-400 font-medium hover:text-primary-700 dark:hover:text-primary-300 transition-colors flex-shrink-0 ml-2"
         >
           <span className="hidden sm:inline">{t("weather.viewAll")}</span>
-          <ArrowRightIcon className="w-4 h-4 sm:w-5 sm:h-5" />
+          <ArrowForward fontSize="small" />
         </Link>
       </div>
 
-      <div className="space-y-2 sm:space-y-3 md:space-y-4">
-        <div className="flex items-center justify-between p-2.5 sm:p-3 bg-neutral-50/80 dark:bg-neutral-700/80 rounded-xl sm:rounded-2xl">
-          <div className="flex items-center gap-2 sm:gap-3 min-w-0">
-            <ThermometerSun className="w-4 h-4 sm:w-5 sm:h-5 text-red-500 flex-shrink-0" />
-            <span className="text-xs sm:text-sm text-neutral-600 dark:text-neutral-400 truncate">
+      <div className="space-y-3">
+        <div className="flex items-center justify-between p-3 bg-neutral-50/80 dark:bg-neutral-700/80 rounded-2xl">
+          <div className="flex items-center gap-3 min-w-0">
+            <Thermostat
+              className="text-red-500 flex-shrink-0"
+              fontSize="small"
+            />
+            <span className="text-sm text-neutral-600 dark:text-neutral-400 truncate">
               {t("weather.temperature")}
             </span>
           </div>
-          <span className="font-semibold text-xs sm:text-sm text-neutral-900 dark:text-neutral-100 flex-shrink-0 ml-2">
+          <span className="font-semibold text-sm text-neutral-900 dark:text-neutral-100 flex-shrink-0 ml-2">
             {weather.temperature}
           </span>
         </div>
 
-        <div className="flex items-center justify-between p-2.5 sm:p-3 bg-neutral-50/80 dark:bg-neutral-700/80 rounded-xl sm:rounded-2xl">
-          <div className="flex items-center gap-2 sm:gap-3 min-w-0">
-            <Droplets className="w-4 h-4 sm:w-5 sm:h-5 text-blue-500 flex-shrink-0" />
-            <span className="text-xs sm:text-sm text-neutral-600 dark:text-neutral-400 truncate">
+        <div className="flex items-center justify-between p-3 bg-neutral-50/80 dark:bg-neutral-700/80 rounded-2xl">
+          <div className="flex items-center gap-3 min-w-0">
+            <WaterDrop
+              className="text-blue-500 flex-shrink-0"
+              fontSize="small"
+            />
+            <span className="text-sm text-neutral-600 dark:text-neutral-400 truncate">
               {t("weather.humidity")}
             </span>
           </div>
-          <span className="font-semibold text-xs sm:text-sm text-neutral-900 dark:text-neutral-100 flex-shrink-0 ml-2">
+          <span className="font-semibold text-sm text-neutral-900 dark:text-neutral-100 flex-shrink-0 ml-2">
             {weather.humidity}
           </span>
         </div>
 
-        <div className="flex items-center justify-between p-2.5 sm:p-3 bg-neutral-50/80 dark:bg-neutral-700/80 rounded-xl sm:rounded-2xl">
-          <div className="flex items-center gap-2 sm:gap-3 min-w-0">
-            <Sun className="w-4 h-4 sm:w-5 sm:h-5 text-yellow-500 flex-shrink-0" />
-            <span className="text-xs sm:text-sm text-neutral-600 dark:text-neutral-400 truncate">
+        <div className="flex items-center justify-between p-3 bg-neutral-50/80 dark:bg-neutral-700/80 rounded-2xl">
+          <div className="flex items-center gap-3 min-w-0">
+            <WbSunny
+              className="text-yellow-500 flex-shrink-0"
+              fontSize="small"
+            />
+            <span className="text-sm text-neutral-600 dark:text-neutral-400 truncate">
               {t("weather.weatherForecast")}
             </span>
           </div>
-          <span className="font-semibold text-xs sm:text-sm text-neutral-900 dark:text-neutral-100 flex-shrink-0 ml-2">
+          <span className="font-semibold text-sm text-neutral-900 dark:text-neutral-100 flex-shrink-0 ml-2">
             {weather.forecast}
           </span>
         </div>
 
-        <div className="flex items-center justify-between p-2.5 sm:p-3 bg-neutral-50/80 dark:bg-neutral-700/80 rounded-xl sm:rounded-2xl">
-          <div className="flex items-center gap-2 sm:gap-3 min-w-0">
-            <Cloud className="w-4 h-4 sm:w-5 sm:h-5 text-gray-500 flex-shrink-0" />
-            <span className="text-xs sm:text-sm text-neutral-600 dark:text-neutral-400 truncate">
+        <div className="flex items-center justify-between p-3 bg-neutral-50/80 dark:bg-neutral-700/80 rounded-2xl">
+          <div className="flex items-center gap-3 min-w-0">
+            <Cloud className="text-gray-500 flex-shrink-0" fontSize="small" />
+            <span className="text-sm text-neutral-600 dark:text-neutral-400 truncate">
               {t("weather.precipitation")}
             </span>
           </div>
-          <span className="font-semibold text-xs sm:text-sm text-neutral-900 dark:text-neutral-100 flex-shrink-0 ml-2">
+          <span className="font-semibold text-sm text-neutral-900 dark:text-neutral-100 flex-shrink-0 ml-2">
             {weather.rainfall}
           </span>
         </div>

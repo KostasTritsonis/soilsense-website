@@ -1,7 +1,7 @@
 "use client";
-import { RotateCcw, Save, Upload, Loader2 } from "lucide-react";
+import { Refresh, Save, Upload } from "@mui/icons-material";
 import { useTranslations } from "next-intl";
-import { Tooltip } from "@mui/material";
+import { Tooltip, CircularProgress } from "@mui/material";
 import { useEffect, useState } from "react";
 
 type MapControlsProps = {
@@ -43,10 +43,10 @@ export default function MapControls({
       >
         <button
           onClick={onReset}
-          className="flex items-center justify-center gap-2 bg-red-600 hover:bg-red-700 disabled:bg-neutral-400 text-white font-semibold p-1 sm:px-2 rounded-md transition-colors disabled:opacity-50 w-full shadow-soft hover:shadow-medium h-10"
+          className="flex items-center justify-center gap-2 bg-red-600 hover:bg-red-700 disabled:bg-neutral-400 text-white font-semibold px-2 rounded-md transition-colors disabled:opacity-50 w-full shadow-soft hover:shadow-medium h-10"
           disabled={isLoading || isSaving || !hasFields}
         >
-          <RotateCcw className="w-4 h-4 md:w-5 md:h-5 flex-shrink-0" />
+          <Refresh className="flex-shrink-0" fontSize="small" />
           <span className="md:hidden text-sm">{t("fields.reset")}</span>
         </button>
       </Tooltip>
@@ -58,17 +58,17 @@ export default function MapControls({
       >
         <button
           onClick={onSave}
-          className="flex items-center justify-center gap-2 bg-primary-600 hover:bg-primary-700 disabled:bg-neutral-400 text-white font-semibold p-1 sm:px-2 rounded-md transition-colors disabled:opacity-50 w-full shadow-soft hover:shadow-medium h-10"
+          className="flex items-center justify-center gap-2 bg-primary-600 hover:bg-primary-700 disabled:bg-neutral-400 text-white font-semibold px-2 rounded-md transition-colors disabled:opacity-50 w-full shadow-soft hover:shadow-medium h-10"
           disabled={isLoading || isSaving || !hasFields}
         >
           {isSaving ? (
             <>
-              <Loader2 className="w-4 h-4 md:w-5 md:h-5 animate-spin flex-shrink-0" />
+              <CircularProgress className="flex-shrink-0" size={20} />
               <span className="md:hidden text-sm">{t("common.creating")}</span>
             </>
           ) : (
             <>
-              <Save className="w-4 h-4 md:w-5 md:h-5 flex-shrink-0" />
+              <Save className="flex-shrink-0" fontSize="small" />
               <span className="md:hidden text-sm">{t("fields.save")}</span>
             </>
           )}
@@ -82,17 +82,17 @@ export default function MapControls({
       >
         <button
           onClick={onLoad}
-          className="flex items-center justify-center gap-2 bg-blue-600 hover:bg-blue-700 disabled:bg-neutral-400 text-white font-semibold p-1 sm:px-2 rounded-md transition-colors disabled:opacity-50 w-full shadow-soft hover:shadow-medium h-10"
+          className="flex items-center justify-center gap-2 bg-blue-600 hover:bg-blue-700 disabled:bg-neutral-400 text-white font-semibold px-2 rounded-md transition-colors disabled:opacity-50 w-full shadow-soft hover:shadow-medium h-10"
           disabled={isLoading || isSaving}
         >
           {isLoading ? (
             <>
-              <Loader2 className="w-4 h-4 md:w-5 md:h-5 animate-spin flex-shrink-0" />
+              <CircularProgress className="flex-shrink-0" size={20} />
               <span className="md:hidden text-sm">{t("common.loading")}</span>
             </>
           ) : (
             <>
-              <Upload className="w-4 h-4 md:w-5 md:h-5 flex-shrink-0" />
+              <Upload className="flex-shrink-0" fontSize="small" />
               <span className="md:hidden text-sm">{t("fields.load")}</span>
             </>
           )}

@@ -3,7 +3,8 @@ import { getAllCategories } from "@/actions";
 import { Field } from "@/lib/types";
 import { Category } from "@prisma/client";
 import { useEffect, useState } from "react";
-import { Loader2, Palette } from "lucide-react";
+import { Palette } from "@mui/icons-material";
+import { CircularProgress } from "@mui/material";
 import { useTranslations } from "next-intl";
 
 type FieldEditorProps = {
@@ -28,28 +29,28 @@ export default function FieldEditor({
 
   if (!field) return null;
   return (
-    <div className="absolute bottom-2 sm:bottom-4 left-2 sm:left-4 right-2 sm:right-4 md:bottom-3 md:right-14 md:left-auto z-[100] bg-white/95 dark:bg-neutral-800/90 backdrop-blur-sm rounded-2xl sm:rounded-3xl shadow-large border border-white/60 dark:border-neutral-700/60 p-3 sm:p-4 w-auto md:w-[270px] max-h-[80vh] md:max-h-[435px] md:h-[390px] overflow-y-auto">
-      <div className="space-y-2 sm:space-y-3">
+    <div className="absolute bottom-4 left-4 right-4 md:bottom-3 md:right-14 md:left-auto z-[100] bg-white/95 dark:bg-neutral-800/90 backdrop-blur-sm rounded-2xl md:rounded-3xl shadow-large border border-white/60 dark:border-neutral-700/60 p-4 w-auto md:w-[270px] max-h-[80vh] md:max-h-[435px] md:h-[390px] overflow-y-auto">
+      <div className="space-y-3">
         {/* Label Input */}
         <div>
-          <label className="block text-neutral-700 dark:text-neutral-300 text-xs sm:text-sm mb-1.5 sm:mb-2">
+          <label className="block text-neutral-700 dark:text-neutral-300 text-sm mb-2">
             {t("fields.fieldLabel")}
           </label>
           <input
             type="text"
             value={field.label || ""}
             onChange={(e) => onUpdate(field.id, { label: e.target.value })}
-            className="w-full px-3 sm:px-4 py-2 sm:py-2.5 rounded-lg sm:rounded-xl bg-white/80 dark:bg-neutral-700/80 border border-neutral-200 dark:border-neutral-600 text-neutral-900 dark:text-neutral-100 focus:border-primary-500 dark:focus:border-primary-400 focus:outline-none focus:ring-2 focus:ring-primary-500/20 dark:focus:ring-primary-400/20 text-sm sm:text-base"
+            className="w-full px-4 py-2.5 rounded-xl bg-white/80 dark:bg-neutral-700/80 border border-neutral-200 dark:border-neutral-600 text-neutral-900 dark:text-neutral-100 focus:border-primary-500 dark:focus:border-primary-400 focus:outline-none focus:ring-2 focus:ring-primary-500/20 dark:focus:ring-primary-400/20 text-sm md:text-base"
             disabled={field.isUpdating}
           />
         </div>
 
         <div>
-          <label className="block text-neutral-700 dark:text-neutral-300 text-xs sm:text-sm mb-1.5 sm:mb-2">
+          <label className="block text-neutral-700 dark:text-neutral-300 text-sm mb-2">
             {t("fields.fieldCategory")}
           </label>
           <select
-            className="w-full px-3 sm:px-4 py-2 sm:py-2.5 rounded-lg sm:rounded-xl bg-white/80 dark:bg-neutral-700/80 border border-neutral-200 dark:border-neutral-600 text-neutral-900 dark:text-neutral-100 focus:border-primary-500 dark:focus:border-primary-400 focus:outline-none focus:ring-2 focus:ring-primary-500/20 dark:focus:ring-primary-400/20 text-sm sm:text-base"
+            className="w-full px-4 py-2.5 rounded-xl bg-white/80 dark:bg-neutral-700/80 border border-neutral-200 dark:border-neutral-600 text-neutral-900 dark:text-neutral-100 focus:border-primary-500 dark:focus:border-primary-400 focus:outline-none focus:ring-2 focus:ring-primary-500/20 dark:focus:ring-primary-400/20 text-sm md:text-base"
             value={field.categories?.[0]?.type || ""}
             onChange={(e) =>
               onUpdate(field.id, { categories: [{ type: e.target.value }] })
@@ -66,28 +67,31 @@ export default function FieldEditor({
 
         {/* Color Picker */}
 
-        <label className="flex items-center gap-1.5 sm:gap-2 text-neutral-700 dark:text-neutral-300 text-xs sm:text-sm mb-1.5 sm:mb-2">
-          <Palette className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-neutral-600 dark:text-neutral-300 flex-shrink-0" />
+        <label className="flex items-center gap-2 text-neutral-700 dark:text-neutral-300 text-sm mb-2">
+          <Palette
+            className="text-neutral-600 dark:text-neutral-300 flex-shrink-0"
+            fontSize="small"
+          />
           {t("fields.fieldColor")}
         </label>
         <input
           type="color"
           value={field.color || "#22c55e"}
           onChange={(e) => onUpdate(field.id, { color: e.target.value })}
-          className="w-full h-9 sm:h-10 cursor-pointer bg-white dark:bg-neutral-700/80 border border-neutral-200 dark:border-neutral-600 rounded-lg sm:rounded-xl"
+          className="w-full h-10 cursor-pointer bg-white dark:bg-neutral-700/80 border border-neutral-200 dark:border-neutral-600 rounded-xl"
           disabled={field.isUpdating}
         />
 
         {/* Updating Spinner */}
         {field.isUpdating && (
-          <div className="text-primary-600 dark:text-primary-400 text-xs sm:text-sm flex items-center gap-2">
-            <Loader2 className="animate-spin w-3.5 h-3.5 sm:w-4 sm:h-4" />
+          <div className="text-primary-600 dark:text-primary-400 text-sm flex items-center gap-2">
+            <CircularProgress size={16} />
             {t("common.saving")}
           </div>
         )}
 
         {/* Area Display */}
-        <div className="text-neutral-700 dark:text-neutral-300 text-xs sm:text-sm">
+        <div className="text-neutral-700 dark:text-neutral-300 text-sm">
           {t("fields.area")}: {field.area?.toFixed(2) || 0}{" "}
           {t("units.squareMeters")} <br />
           {t("fields.fieldCategory")}:{" "}
@@ -95,9 +99,9 @@ export default function FieldEditor({
         </div>
 
         {/* Action Buttons */}
-        <div className="flex flex-col sm:flex-row gap-2 sm:gap-2.5 mt-3 sm:mt-4">
+        <div className="flex flex-col sm:flex-row gap-2.5 mt-4">
           <button
-            className="w-full bg-primary-600 hover:bg-primary-700 dark:bg-primary-500 dark:hover:bg-primary-600 text-white font-semibold px-3 sm:px-4 py-2 sm:py-2.5 rounded-xl sm:rounded-2xl transition-colors shadow-soft hover:shadow-medium disabled:bg-neutral-400 dark:disabled:bg-neutral-600 disabled:opacity-60 text-sm sm:text-base"
+            className="w-full bg-primary-600 hover:bg-primary-700 dark:bg-primary-500 dark:hover:bg-primary-600 text-white font-semibold px-4 py-2.5 rounded-xl md:rounded-2xl transition-colors shadow-soft hover:shadow-medium disabled:bg-neutral-400 dark:disabled:bg-neutral-600 disabled:opacity-60 text-sm md:text-base"
             onClick={() => {
               onSave(field, {
                 label: field.label,
@@ -115,7 +119,7 @@ export default function FieldEditor({
           </button>
 
           <button
-            className="w-full bg-neutral-100 dark:bg-neutral-700 hover:bg-neutral-200 dark:hover:bg-neutral-600 text-neutral-700 dark:text-neutral-200 font-semibold px-3 sm:px-4 py-2 sm:py-2.5 rounded-xl sm:rounded-2xl transition-colors text-sm sm:text-base"
+            className="w-full bg-neutral-100 dark:bg-neutral-700 hover:bg-neutral-200 dark:hover:bg-neutral-600 text-neutral-700 dark:text-neutral-200 font-semibold px-4 py-2.5 rounded-xl md:rounded-2xl transition-colors text-sm md:text-base"
             onClick={onClose}
           >
             {t("common.cancel")}

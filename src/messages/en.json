@@ -230,7 +230,8 @@
     "selectUser": "Select User",
     "unassigned": "Unassigned",
     "unexpectedError": "An unexpected error occurred.",
-    "updateJob": "Update Job"
+    "updateJob": "Update Job",
+    "viewCalendar": "View Calendar"
   },
   "navigation": {
     "dashboard": "Dashboard",

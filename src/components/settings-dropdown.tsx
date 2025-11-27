@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useRef, useEffect } from "react";
-import { Settings, ChevronDown } from "lucide-react";
+import { Settings, ExpandMore } from "@mui/icons-material";
 import { useTranslations, useLocale } from "next-intl";
 import { SignedIn, useClerk } from "@clerk/nextjs";
 import LanguageSwitcher from "./language-switcher";
@@ -49,12 +49,11 @@ export default function SettingsDropdown() {
         onClick={() => setIsOpen((prev) => !prev)}
         className="flex items-center gap-2 px-4 py-3 rounded-xl text-sm font-medium transition-all bg-neutral-100/80 dark:bg-neutral-700/80 hover:bg-white/60 dark:hover:bg-neutral-600/60 text-neutral-600 dark:text-neutral-400 hover:text-neutral-900 dark:hover:text-neutral-200"
       >
-        <Settings className="w-4 h-4" />
+        <Settings fontSize="small" />
         <span className="hidden sm:inline">{t("common.settings")}</span>
-        <ChevronDown
-          className={`w-4 h-4 transition-transform ${
-            isOpen ? "rotate-180" : ""
-          }`}
+        <ExpandMore
+          className={`transition-transform ${isOpen ? "rotate-180" : ""}`}
+          fontSize="small"
         />
       </button>
 

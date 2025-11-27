@@ -308,7 +308,7 @@ export default function MapComponent(
           </div>
 
           {/* Info Panel - bottom left */}
-          <div className="absolute bottom-2 sm:bottom-2 right-12 sm:right-14 z-10">
+          <div className="absolute bottom-2 right-12 sm:right-14 z-10">
             <InfoPanel
               lng={lng}
               lat={lat}
@@ -343,7 +343,7 @@ export default function MapComponent(
         {!isSignedIn && (
           <div className="absolute z-50 inset-0 flex items-center justify-center bg-black/70">
             <div className="bg-white/95 backdrop-blur-sm rounded-3xl shadow-large border border-white/60 p-6 md:p-8 mx-4">
-              <p className="text-base md:text-lg text-neutral-900 font-semibold text-center">
+              <p className="text-base md:text-lg text-neutral-900 dark:text-neutral-100 font-semibold text-center">
                 Please sign in to access the map
               </p>
             </div>

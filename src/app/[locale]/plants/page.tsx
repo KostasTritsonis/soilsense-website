@@ -1,6 +1,6 @@
 "use client";
-import React, { useState, useEffect } from "react";
-import { Sprout } from "lucide-react";
+import React, { useState, useEffect, useCallback } from "react";
+import { LocalFlorist } from "@mui/icons-material";
 import { useTranslations } from "next-intl";
 import PlantSuggestionInput from "@/components/plants/plant-suggestion-input";
 import IndoorPlantCard from "@/components/plants/indoor-plant-card";
@@ -14,36 +14,57 @@ import {
   FieldPlantData,
 } from "@/actions/plant-actions";
 import { useRouter } from "next/navigation";
+import { useUser } from "@clerk/nextjs";
 
 type PlantSection = "indoor" | "field";
 
 export default function PlantsPage() {
   const t = useTranslations();
   const router = useRouter();
+  const { user, isLoaded } = useUser();
   const [activeSection, setActiveSection] = useState<PlantSection>("indoor");
   const [indoorPlants, setIndoorPlants] = useState<IndoorPlantData[]>([]);
   const [fieldPlants, setFieldPlants] = useState<FieldPlantData[]>([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
-  useEffect(() => {
-    loadPlants();
-  }, []);
+  const loadPlants = useCallback(async () => {
+    if (!user) return;
 
-  const loadPlants = async () => {
     setLoading(true);
+    setError(null);
     try {
+      console.log("Loading plants...");
       const [indoor, field] = await Promise.all([
         getIndoorPlantsByUser(),
         getFieldPlantsByUser(),
       ]);
-      setIndoorPlants(indoor);
-      setFieldPlants(field);
+      console.log("Indoor plants:", indoor);
+      console.log("Field plants:", field);
+      setIndoorPlants(indoor || []);
+      setFieldPlants(field || []);
     } catch (error) {
       console.error("Error loading plants:", error);
+      setError(
+        error instanceof Error
+          ? error.message
+          : t("common.errorLoadingData") || "Failed to load plants"
+      );
     } finally {
       setLoading(false);
     }
-  };
+  }, [user, t]);
+
+  useEffect(() => {
+    if (isLoaded) {
+      if (user) {
+        loadPlants();
+      } else {
+        setLoading(false);
+        setError("Please sign in to view your plants");
+      }
+    }
+  }, [isLoaded, user, loadPlants]);
 
   const handlePlantSelect = async (plantType: PlantType) => {
     const plantInfo = PLANT_TYPES[plantType];
@@ -61,22 +82,25 @@ export default function PlantsPage() {
   };
 
   return (
-    <div className="w-full min-w-0 h-full flex flex-col">
+    <div className="w-full min-w-0 flex flex-col">
       {/* Header Section */}
-      <div className="pb-6 md:pb-8 flex-shrink-0">
-        <div className="flex items-center gap-3 mb-4">
-          <Sprout className="w-8 h-8 text-primary-600" />
-          <h1 className="text-2xl md:text-4xl font-bold text-neutral-900 dark:text-neutral-300">
+      <div className="pb-4 md:pb-6 lg:pb-8 flex-shrink-0 min-w-0">
+        <div className="flex items-center gap-3 mb-4 min-w-0">
+          <LocalFlorist
+            className="text-primary-600 flex-shrink-0"
+            sx={{ fontSize: "2rem" }}
+          />
+          <h1 className="text-2xl md:text-3xl lg:text-4xl font-bold text-neutral-900 dark:text-neutral-300 break-words min-w-0">
             {t("navigation.plants")}
           </h1>
         </div>
-        <p className="text-base md:text-lg text-neutral-600 dark:text-neutral-200">
+        <p className="text-base md:text-lg text-neutral-600 dark:text-neutral-200 break-words">
           {t("plants.myPlants")}
         </p>
       </div>
 
       {/* Toggle Section */}
-      <div className="mb-6 md:mb-8 flex-shrink-0">
+      <div className="mb-6 md:mb-8 flex-shrink-0 min-w-0">
         <div className="inline-flex rounded-lg bg-neutral-100 dark:bg-neutral-800 p-1 border border-neutral-200 dark:border-neutral-700">
           <button
             onClick={() => setActiveSection("indoor")}
@@ -102,12 +126,26 @@ export default function PlantsPage() {
       </div>
 
       {/* Scrollable Content Area */}
-      <div className="flex-1 min-h-0 overflow-y-auto overflow-x-hidden">
+      <div className="min-w-0 overflow-x-hidden">
         {loading ? (
           <div className="text-center py-12">
             <p className="text-neutral-500 dark:text-neutral-400">
               {t("common.loading")}
             </p>
+          </div>
+        ) : error ? (
+          <div className="text-center py-12">
+            <div className="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-2xl p-6 max-w-md mx-auto">
+              <p className="text-red-700 dark:text-red-300 font-medium mb-4">
+                {error}
+              </p>
+              <button
+                onClick={loadPlants}
+                className="bg-red-600 hover:bg-red-700 dark:bg-red-500 dark:hover:bg-red-600 text-white px-4 py-2 rounded-xl font-semibold transition-colors"
+              >
+                {t("common.tryAgain") || "Try Again"}
+              </button>
+            </div>
           </div>
         ) : (
           <>
@@ -119,7 +157,10 @@ export default function PlantsPage() {
                   <div className="pb-8">
                     <div className="text-center">
                       <div className="mb-6">
-                        <Sprout className="w-16 h-16 text-neutral-300 mx-auto mb-4" />
+                        <LocalFlorist
+                          className="text-neutral-300 mx-auto mb-4"
+                          sx={{ fontSize: "4rem" }}
+                        />
                         <h2 className="text-xl font-semibold text-neutral-700 dark:text-neutral-300 mb-2">
                           {t("plants.noPlantsYet")}
                         </h2>
@@ -159,7 +200,10 @@ export default function PlantsPage() {
               <>
                 {fieldPlants.length === 0 ? (
                   <div className="text-center py-12">
-                    <Sprout className="w-16 h-16 text-neutral-300 mx-auto mb-4" />
+                    <LocalFlorist
+                      className="text-neutral-300 mx-auto mb-4"
+                      sx={{ fontSize: "4rem" }}
+                    />
                     <h2 className="text-xl font-semibold text-neutral-700 dark:text-neutral-300 mb-2">
                       {t("plants.noFieldPlants")}
                     </h2>
