@@ -10,7 +10,11 @@ import {
 import { useTranslations } from "next-intl";
 import { FieldPlantData } from "@/actions/plant-actions";
 import { getFieldPlantTypeInfo } from "@/lib/field-plant-types";
-import { waterFieldPlant, fertilizeFieldPlant } from "@/actions/plant-actions";
+import {
+  waterFieldPlant,
+  fertilizeFieldPlant,
+  createOrUpdateFieldPlant,
+} from "@/actions/plant-actions";
 import { useRouter } from "next/navigation";
 
 interface FieldPlantCardProps {
@@ -98,6 +102,22 @@ export default function FieldPlantCard({
     }
   };
 
+  const handleInitializePlant = async () => {
+    const result = await createOrUpdateFieldPlant({
+      fieldId: plant.fieldId,
+      categoryId: plant.categoryId,
+      plantingDate: new Date(),
+      harvestDays: plantInfo.harvestDays,
+      wateringFrequency: plantInfo.wateringFrequency,
+      fertilizerFrequency: plantInfo.fertilizerFrequency,
+    });
+
+    if (result.success) {
+      router.refresh();
+      onUpdate?.();
+    }
+  };
+
   return (
     <div className="bg-white/90 dark:bg-neutral-800/90 backdrop-blur-sm rounded-2xl md:rounded-3xl shadow-soft border border-white/60 dark:border-neutral-700/60 p-4 md:p-6 hover:shadow-medium transition-all">
       {/* Header */}
@@ -177,11 +197,14 @@ export default function FieldPlantCard({
 
       {/* Not Initialized Message */}
       {!isInitialized && (
-        <div className="mb-5 md:mb-6 p-4 bg-amber-50/50 dark:bg-amber-900/20 rounded-xl border border-amber-200/50 dark:border-amber-800/50">
-          <p className="text-sm text-amber-800 dark:text-amber-200">
+        <button
+          onClick={handleInitializePlant}
+          className="mb-5 md:mb-6 p-4 bg-primary-50/50 dark:bg-primary-900/20 rounded-xl border border-primary-200/50 dark:border-primary-800/50 hover:bg-primary-100/50 dark:hover:bg-primary-900/30 transition-colors w-full text-left"
+        >
+          <p className="text-sm text-neutral-900 dark:text-neutral-100">
             {t("plants.initializeFieldPlant")}
           </p>
-        </div>
+        </button>
       )}
 
       {/* Care Info - Only show if initialized */}
